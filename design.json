@@ -1,0 +1,950 @@
+{
+    "designSystem": {
+      "name": "Managed Web Services - Squarespace-Inspired Design Template",
+      "description": "A professional cloud and website management service design template based on Squarespace's modern aesthetic. Extracted from www.squarespace.com analysis.",
+      "squarespaceNotes": {
+        "font": "Squarespace uses 'Clarkson' custom font. Using Inter as close alternative.",
+        "heroStyle": "Full viewport height with blurred background video/image, white text on dark, single prominent CTA",
+        "spacing": "Extremely generous whitespace - much more than typical websites",
+        "colors": "High contrast black/white foundation with minimal color accents",
+        "typography": "Large, bold headlines with generous line-height and letter-spacing",
+        "buttons": "White buttons with black text, rounded corners, substantial padding",
+        "layout": "Centered content with generous margins, minimal navigation"
+      },
+      "colors": {
+        "primary": {
+          "black": "#000000",
+          "white": "#FFFFFF",
+          "description": "High contrast black and white foundation - Squarespace's primary palette"
+        },
+        "neutral": {
+          "gray50": "#FAFAFA",
+          "gray100": "#F5F5F5",
+          "gray200": "#E5E5E5",
+          "gray300": "#D4D4D4",
+          "gray400": "#A3A3A3",
+          "gray500": "#737373",
+          "gray600": "#525252",
+          "gray700": "#404040",
+          "gray800": "#262626",
+          "gray900": "#171717",
+          "description": "Extended neutral palette for subtle backgrounds and text"
+        },
+        "accent": {
+          "primary": "#000000",
+          "primaryHover": "#262626",
+          "description": "Black as primary accent (Squarespace style - minimal color)"
+        },
+        "semantic": {
+          "success": "#10B981",
+          "warning": "#F59E0B",
+          "error": "#EF4444",
+          "info": "#3B82F6",
+          "description": "Used sparingly, only when necessary"
+        }
+      },
+      "typography": {
+        "fonts": {
+          "primary": {
+            "family": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            "weights": [400, 500, 600, 700],
+            "description": "Inter as close alternative to Squarespace's Clarkson font. Clean, modern sans-serif."
+          },
+          "headings": {
+            "family": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            "weights": [600, 700, 800],
+            "description": "Same font family for consistency, bold weights for headlines"
+          }
+        },
+        "scale": {
+          "hero": {
+            "size": "clamp(3rem, 10vw, 6rem)",
+            "lineHeight": "1.15",
+            "weight": 700,
+            "letterSpacing": "-0.03em",
+            "description": "Squarespace-style large hero text with generous spacing"
+          },
+          "h1": {
+            "size": "clamp(2.25rem, 6vw, 4rem)",
+            "lineHeight": "1.2",
+            "weight": 700,
+            "letterSpacing": "-0.02em"
+          },
+          "h2": {
+            "size": "clamp(1.75rem, 4vw, 3rem)",
+            "lineHeight": "1.3",
+            "weight": 600,
+            "letterSpacing": "-0.015em"
+          },
+          "h3": {
+            "size": "clamp(1.5rem, 3vw, 2.25rem)",
+            "lineHeight": "1.4",
+            "weight": 600,
+            "letterSpacing": "-0.01em"
+          },
+          "body": {
+            "size": "1rem",
+            "lineHeight": "1.75",
+            "weight": 400,
+            "letterSpacing": "0",
+            "description": "Generous line-height for readability"
+          },
+          "bodyLarge": {
+            "size": "1.125rem",
+            "lineHeight": "1.8",
+            "weight": 400,
+            "letterSpacing": "0"
+          },
+          "small": {
+            "size": "0.875rem",
+            "lineHeight": "1.6",
+            "weight": 400,
+            "letterSpacing": "0.01em"
+          }
+        }
+      },
+      "spacing": {
+        "scale": {
+          "xs": "0.5rem",
+          "sm": "1rem",
+          "md": "2rem",
+          "lg": "3rem",
+          "xl": "4rem",
+          "2xl": "6rem",
+          "3xl": "8rem",
+          "4xl": "12rem",
+          "5xl": "16rem",
+          "description": "Generous spacing scale matching Squarespace's aesthetic"
+        },
+        "sections": {
+          "small": "6rem",
+          "medium": "10rem",
+          "large": "14rem",
+          "hero": "0",
+          "description": "Large section padding - Squarespace uses very generous vertical spacing"
+        },
+        "content": {
+          "maxWidth": "1200px",
+          "padding": {
+            "mobile": "1.5rem",
+            "tablet": "2.5rem",
+            "desktop": "4rem"
+          },
+          "description": "Centered content with generous horizontal padding"
+        }
+      },
+      "borders": {
+        "radius": {
+          "none": "0",
+          "sm": "0.25rem",
+          "md": "0.5rem",
+          "lg": "0.75rem",
+          "xl": "1rem",
+          "full": "9999px"
+        },
+        "width": {
+          "thin": "1px",
+          "medium": "2px",
+          "thick": "4px"
+        }
+      },
+      "shadows": {
+        "sm": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+        "md": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        "lg": "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+        "xl": "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
+        "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+      },
+      "animation": {
+        "duration": {
+          "fast": "150ms",
+          "normal": "300ms",
+          "slow": "500ms"
+        },
+        "easing": {
+          "default": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "in": "cubic-bezier(0.4, 0, 1, 1)",
+          "out": "cubic-bezier(0, 0, 0.2, 1)",
+          "inOut": "cubic-bezier(0.4, 0, 0.2, 1)"
+        }
+      }
+    },
+    "layoutStructure": {
+      "navigation": {
+        "type": "sticky-header",
+        "layout": "minimal-horizontal",
+        "position": "top",
+        "background": "transparent",
+        "backgroundOnScroll": "white",
+        "backdropBlur": false,
+        "shadow": "on-scroll",
+        "height": "80px",
+        "padding": {
+          "horizontal": "2rem",
+          "vertical": "1rem"
+        },
+        "description": "Squarespace uses minimal navigation - transparent on hero, white on scroll",
+        "elements": {
+          "logo": {
+            "position": "left",
+            "maxWidth": "180px",
+            "type": "svg-or-text",
+            "color": "white",
+            "colorOnScroll": "black"
+          },
+          "mainMenu": {
+            "position": "center",
+            "type": "horizontal-links",
+            "spacing": "2.5rem",
+            "color": "white",
+            "colorOnScroll": "black",
+            "fontWeight": 500,
+            "fontSize": "0.9375rem",
+            "items": [
+              {
+                "label": "Services",
+                "hasDropdown": true,
+                "items": ["Website Management", "Cloud Infrastructure", "Security & Monitoring", "Performance Optimization"]
+              },
+              {
+                "label": "Solutions",
+                "hasDropdown": true,
+                "items": ["Small Business", "Ecommerce", "Enterprise", "Agencies"]
+              },
+              {
+                "label": "Pricing",
+                "hasDropdown": false
+              },
+              {
+                "label": "Resources",
+                "hasDropdown": true,
+                "items": ["Blog", "Help Center", "Case Studies", "Documentation"]
+              }
+            ]
+          },
+          "cta": {
+            "position": "right",
+            "items": [
+              {
+                "type": "link",
+                "label": "Log In",
+                "style": "text",
+                "color": "white",
+                "colorOnScroll": "black"
+              },
+              {
+                "type": "button",
+                "label": "Get Started",
+                "style": "white-primary",
+                "description": "White button on transparent nav, black button on white nav"
+              }
+            ]
+          }
+        },
+        "responsive": {
+          "breakpoint": "1024px",
+          "mobileMenu": "hamburger",
+          "mobileMenuType": "fullscreen-overlay",
+          "hamburgerColor": "white",
+          "hamburgerColorOnScroll": "black"
+        }
+      },
+      "hero": {
+        "type": "full-width-centered",
+        "layout": "text-over-media",
+        "minHeight": "100vh",
+        "background": {
+          "type": "video-or-image",
+          "overlay": true,
+          "blur": true,
+          "overlayOpacity": 0.4,
+          "description": "Squarespace uses blurred background videos/images with dark overlay"
+        },
+        "content": {
+          "alignment": "center",
+          "maxWidth": "900px",
+          "verticalAlignment": "center",
+          "padding": {
+            "horizontal": "2rem",
+            "vertical": "0"
+          },
+          "elements": [
+            {
+              "type": "headline",
+              "tag": "h1",
+              "text": "Your website, fully managed",
+              "style": "hero",
+              "color": "white",
+              "marginBottom": "2rem",
+              "description": "Large, bold white text - Squarespace style"
+            },
+            {
+              "type": "subheadline",
+              "tag": "p",
+              "text": "Professional engineers managing your website and cloud infrastructure—affordable, competitive, and worry-free.",
+              "style": "bodyLarge",
+              "color": "white",
+              "marginTop": "0",
+              "marginBottom": "3rem",
+              "opacity": 0.95,
+              "description": "Supporting text with slight opacity"
+            },
+            {
+              "type": "cta-group",
+              "layout": "vertical",
+              "marginTop": "0",
+              "marginBottom": "2rem",
+              "buttons": [
+                {
+                  "label": "GET STARTED",
+                  "style": "white-primary-large",
+                  "link": "/start",
+                  "description": "Single prominent CTA - white button with black text (Squarespace style)"
+                }
+              ]
+            },
+            {
+              "type": "trust-indicators",
+              "marginTop": "0",
+              "text": "Start for free. No credit card required.",
+              "style": "small",
+              "color": "white",
+              "opacity": 0.9
+            }
+          ]
+        },
+        "media": {
+          "type": "video-or-image",
+          "position": "background-full",
+          "aspectRatio": "16:9",
+          "description": "Background video/image fills entire hero section"
+        }
+      },
+      "statsBar": {
+        "type": "horizontal-metrics",
+        "background": "gray50",
+        "padding": {
+          "top": "4rem",
+          "bottom": "4rem"
+        },
+        "layout": "3-column-grid",
+        "items": [
+          {
+            "number": "500+",
+            "label": "Websites Managed",
+            "animateNumber": true
+          },
+          {
+            "number": "99.9%",
+            "label": "Uptime Guarantee",
+            "animateNumber": true
+          },
+          {
+            "number": "24/7",
+            "label": "Expert Support",
+            "animateNumber": false
+          }
+        ]
+      },
+      "servicesSection": {
+        "type": "feature-grid",
+        "layout": "grid",
+        "columns": {
+          "desktop": 3,
+          "tablet": 2,
+          "mobile": 1
+        },
+        "gap": "2rem",
+        "padding": {
+          "top": "6rem",
+          "bottom": "6rem"
+        },
+        "sectionHeader": {
+          "alignment": "center",
+          "maxWidth": "700px",
+          "elements": [
+            {
+              "type": "overline",
+              "text": "WHAT WE DO",
+              "style": "uppercase-small-spaced"
+            },
+            {
+              "type": "headline",
+              "text": "Everything you need, fully managed",
+              "tag": "h2",
+              "marginTop": "1rem"
+            },
+            {
+              "type": "description",
+              "text": "Our team of expert engineers handles all your website and cloud infrastructure needs so you can focus on your business.",
+              "marginTop": "1.5rem"
+            }
+          ]
+        },
+        "cards": [
+          {
+            "icon": "globe",
+            "title": "Website Management",
+            "description": "Complete website maintenance, updates, and optimization handled by our team.",
+            "link": "/services/website-management",
+            "style": "hover-lift"
+          },
+          {
+            "icon": "cloud",
+            "title": "Cloud Infrastructure",
+            "description": "Scalable cloud solutions with automatic backups and disaster recovery.",
+            "link": "/services/cloud",
+            "style": "hover-lift"
+          },
+          {
+            "icon": "shield",
+            "title": "Security & Monitoring",
+            "description": "24/7 security monitoring, SSL certificates, and proactive threat prevention.",
+            "link": "/services/security",
+            "style": "hover-lift"
+          },
+          {
+            "icon": "zap",
+            "title": "Performance Optimization",
+            "description": "Lightning-fast load times with CDN, caching, and code optimization.",
+            "link": "/services/performance",
+            "style": "hover-lift"
+          },
+          {
+            "icon": "code",
+            "title": "Custom Development",
+            "description": "Tailored features and integrations built specifically for your needs.",
+            "link": "/services/development",
+            "style": "hover-lift"
+          },
+          {
+            "icon": "headphones",
+            "title": "Expert Support",
+            "description": "Direct access to senior engineers, not chatbots or offshore support.",
+            "link": "/services/support",
+            "style": "hover-lift"
+          }
+        ]
+      },
+      "comparisonSection": {
+        "type": "comparison-table",
+        "background": "white",
+        "padding": {
+          "top": "6rem",
+          "bottom": "6rem"
+        },
+        "sectionHeader": {
+          "alignment": "center",
+          "headline": "Why choose managed over DIY?",
+          "subheadline": "Get the benefits of platforms like Squarespace, Wix, and GoDaddy—with expert engineers doing all the work."
+        },
+        "table": {
+          "columns": ["Feature", "DIY Platforms", "Our Managed Service"],
+          "rows": [
+            {
+              "feature": "Monthly Cost",
+              "diy": "$16-50/mo",
+              "managed": "$99-299/mo"
+            },
+            {
+              "feature": "Your Time Required",
+              "diy": "5-20 hours/month",
+              "managed": "0 hours"
+            },
+            {
+              "feature": "Technical Expertise Needed",
+              "diy": "Yes",
+              "managed": "No"
+            },
+            {
+              "feature": "Custom Features",
+              "diy": "Limited",
+              "managed": "Unlimited"
+            },
+            {
+              "feature": "Dedicated Engineer",
+              "diy": "No",
+              "managed": "Yes"
+            },
+            {
+              "feature": "Proactive Monitoring",
+              "diy": "No",
+              "managed": "24/7"
+            }
+          ]
+        }
+      },
+      "processSection": {
+        "type": "step-by-step",
+        "background": "gray50",
+        "padding": {
+          "top": "6rem",
+          "bottom": "6rem"
+        },
+        "sectionHeader": {
+          "alignment": "center",
+          "headline": "How it works",
+          "subheadline": "Get started in minutes, not hours"
+        },
+        "steps": [
+          {
+            "number": "01",
+            "title": "Tell us about your needs",
+            "description": "Quick consultation to understand your website goals and requirements.",
+            "icon": "message-circle"
+          },
+          {
+            "number": "02",
+            "title": "We build or migrate",
+            "description": "Our engineers create your site or seamlessly migrate from your current platform.",
+            "icon": "settings"
+          },
+          {
+            "number": "03",
+            "title": "Launch and grow",
+            "description": "Your site goes live with ongoing optimization and support from our team.",
+            "icon": "rocket"
+          }
+        ],
+        "layout": "horizontal-cards"
+      },
+      "pricingSection": {
+        "type": "pricing-table",
+        "layout": "3-column",
+        "background": "white",
+        "padding": {
+          "top": "6rem",
+          "bottom": "6rem"
+        },
+        "sectionHeader": {
+          "alignment": "center",
+          "headline": "Simple, transparent pricing",
+          "subheadline": "All plans include expert engineering support and managed infrastructure"
+        },
+        "plans": [
+          {
+            "name": "Starter",
+            "price": "$99",
+            "period": "per month",
+            "description": "Perfect for small businesses and blogs",
+            "features": [
+              "Up to 5,000 visitors/month",
+              "Custom domain & SSL",
+              "Weekly updates & backups",
+              "Email support (24hr response)",
+              "Basic SEO optimization",
+              "Content updates (2 hrs/month)"
+            ],
+            "cta": {
+              "label": "Start Free Trial",
+              "style": "secondary"
+            },
+            "highlighted": false
+          },
+          {
+            "name": "Professional",
+            "price": "$199",
+            "period": "per month",
+            "description": "For growing businesses and ecommerce",
+            "features": [
+              "Up to 25,000 visitors/month",
+              "Everything in Starter",
+              "Daily backups & monitoring",
+              "Priority support (4hr response)",
+              "Advanced SEO & analytics",
+              "Content updates (5 hrs/month)",
+              "Custom integrations",
+              "Performance optimization"
+            ],
+            "cta": {
+              "label": "Start Free Trial",
+              "style": "primary"
+            },
+            "highlighted": true,
+            "badge": "Most Popular"
+          },
+          {
+            "name": "Enterprise",
+            "price": "$299+",
+            "period": "per month",
+            "description": "For high-traffic sites and agencies",
+            "features": [
+              "Unlimited visitors",
+              "Everything in Professional",
+              "Dedicated engineer",
+              "24/7 support (1hr response)",
+              "White-label options",
+              "Unlimited content updates",
+              "Custom development",
+              "SLA guarantee"
+            ],
+            "cta": {
+              "label": "Contact Sales",
+              "style": "secondary"
+            },
+            "highlighted": false
+          }
+        ]
+      },
+      "testimonialSection": {
+        "type": "testimonials-carousel",
+        "background": "gray50",
+        "padding": {
+          "top": "6rem",
+          "bottom": "6rem"
+        },
+        "sectionHeader": {
+          "alignment": "center",
+          "headline": "Trusted by businesses like yours"
+        },
+        "testimonials": [
+          {
+            "quote": "Switching to managed service was the best decision. Our website is faster, more secure, and I finally have time to focus on my business.",
+            "author": "Sarah Chen",
+            "role": "Founder, Modern Designs Co",
+            "avatar": "/images/testimonials/sarah.jpg"
+          },
+          {
+            "quote": "The team is incredibly responsive and knowledgeable. It's like having an in-house developer for a fraction of the cost.",
+            "author": "Michael Rodriguez",
+            "role": "CEO, TechStart Inc",
+            "avatar": "/images/testimonials/michael.jpg"
+          },
+          {
+            "quote": "We migrated from Squarespace and couldn't be happier. Same ease of use, but with unlimited customization and expert support.",
+            "author": "Emily Thompson",
+            "role": "Marketing Director, Bloom & Co",
+            "avatar": "/images/testimonials/emily.jpg"
+          }
+        ],
+        "layout": "slider-with-navigation"
+      },
+      "ctaSection": {
+        "type": "centered-cta",
+        "background": "black",
+        "textColor": "white",
+        "padding": {
+          "top": "6rem",
+          "bottom": "6rem"
+        },
+        "content": {
+          "headline": "Ready to go fully managed?",
+          "subheadline": "Start your 14-day free trial. No credit card required.",
+          "buttons": [
+            {
+              "label": "Get Started Free",
+              "style": "white-primary",
+              "link": "/start"
+            },
+            {
+              "label": "Schedule a Demo",
+              "style": "white-secondary",
+              "link": "/demo"
+            }
+          ]
+        }
+      },
+      "footer": {
+        "type": "multi-column",
+        "background": "gray900",
+        "textColor": "white",
+        "padding": {
+          "top": "4rem",
+          "bottom": "2rem"
+        },
+        "layout": {
+          "columns": [
+            {
+              "title": "Services",
+              "links": [
+                {"label": "Website Management", "url": "/services/website"},
+                {"label": "Cloud Infrastructure", "url": "/services/cloud"},
+                {"label": "Security & Monitoring", "url": "/services/security"},
+                {"label": "Custom Development", "url": "/services/development"}
+              ]
+            },
+            {
+              "title": "Solutions",
+              "links": [
+                {"label": "Small Business", "url": "/solutions/small-business"},
+                {"label": "Ecommerce", "url": "/solutions/ecommerce"},
+                {"label": "Enterprise", "url": "/solutions/enterprise"},
+                {"label": "Agencies", "url": "/solutions/agencies"}
+              ]
+            },
+            {
+              "title": "Resources",
+              "links": [
+                {"label": "Blog", "url": "/blog"},
+                {"label": "Help Center", "url": "/help"},
+                {"label": "Case Studies", "url": "/case-studies"},
+                {"label": "Documentation", "url": "/docs"}
+              ]
+            },
+            {
+              "title": "Company",
+              "links": [
+                {"label": "About Us", "url": "/about"},
+                {"label": "Careers", "url": "/careers"},
+                {"label": "Contact", "url": "/contact"},
+                {"label": "Partners", "url": "/partners"}
+              ]
+            }
+          ]
+        },
+        "bottom": {
+          "left": {
+            "type": "logo-and-copyright",
+            "logo": "/logo-white.svg",
+            "copyright": "© 2026 YourCompany. All rights reserved."
+          },
+          "right": {
+            "type": "social-and-legal",
+            "social": [
+              {"platform": "twitter", "url": "https://twitter.com/yourcompany"},
+              {"platform": "linkedin", "url": "https://linkedin.com/company/yourcompany"},
+              {"platform": "github", "url": "https://github.com/yourcompany"}
+            ],
+            "legal": [
+              {"label": "Privacy", "url": "/privacy"},
+              {"label": "Terms", "url": "/terms"},
+              {"label": "Security", "url": "/security"}
+            ]
+          }
+        }
+      }
+    },
+    "componentStyles": {
+      "buttons": {
+        "primary": {
+          "background": "black",
+          "color": "white",
+          "padding": "1rem 2.5rem",
+          "fontSize": "1rem",
+          "fontWeight": 600,
+          "borderRadius": "0.5rem",
+          "border": "none",
+          "cursor": "pointer",
+          "transition": "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+          "letterSpacing": "0.02em",
+          "textTransform": "uppercase",
+          "hover": {
+            "background": "#262626",
+            "transform": "translateY(-1px)"
+          },
+          "description": "Standard primary button"
+        },
+        "white-primary": {
+          "background": "white",
+          "color": "black",
+          "padding": "1rem 2.5rem",
+          "fontSize": "1rem",
+          "fontWeight": 600,
+          "borderRadius": "0.5rem",
+          "border": "none",
+          "cursor": "pointer",
+          "transition": "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+          "letterSpacing": "0.02em",
+          "textTransform": "uppercase",
+          "hover": {
+            "background": "#F5F5F5",
+            "transform": "translateY(-1px)"
+          },
+          "description": "Squarespace-style white button with black text (hero CTA)"
+        },
+        "white-primary-large": {
+          "background": "white",
+          "color": "black",
+          "padding": "1.125rem 3rem",
+          "fontSize": "1.125rem",
+          "fontWeight": 600,
+          "borderRadius": "0.5rem",
+          "border": "none",
+          "cursor": "pointer",
+          "transition": "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+          "letterSpacing": "0.02em",
+          "textTransform": "uppercase",
+          "hover": {
+            "background": "#F5F5F5",
+            "transform": "translateY(-1px)"
+          },
+          "description": "Large hero CTA button - Squarespace style"
+        },
+        "secondary": {
+          "background": "transparent",
+          "color": "black",
+          "padding": "1rem 2.5rem",
+          "fontSize": "1rem",
+          "fontWeight": 600,
+          "borderRadius": "0.5rem",
+          "border": "2px solid black",
+          "cursor": "pointer",
+          "transition": "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+          "letterSpacing": "0.02em",
+          "textTransform": "uppercase",
+          "hover": {
+            "background": "black",
+            "color": "white"
+          },
+          "description": "Outlined secondary button"
+        },
+        "text": {
+          "background": "transparent",
+          "color": "inherit",
+          "padding": "0.5rem 1rem",
+          "fontSize": "1rem",
+          "fontWeight": 500,
+          "border": "none",
+          "cursor": "pointer",
+          "textDecoration": "none",
+          "transition": "opacity 0.3s ease",
+          "hover": {
+            "opacity": 0.7
+          },
+          "description": "Text link button"
+        }
+      },
+      "cards": {
+        "default": {
+          "background": "white",
+          "padding": "2rem",
+          "borderRadius": "0.75rem",
+          "border": "1px solid #E5E7EB",
+          "transition": "all 0.3s ease",
+          "hover": {
+            "transform": "translateY(-4px)",
+            "boxShadow": "0 20px 25px -5px rgba(0, 0, 0, 0.1)"
+          }
+        },
+        "minimal": {
+          "background": "transparent",
+          "padding": "0",
+          "borderRadius": "0",
+          "border": "none"
+        }
+      },
+      "inputs": {
+        "default": {
+          "padding": "0.875rem 1rem",
+          "fontSize": "1rem",
+          "border": "2px solid #E5E7EB",
+          "borderRadius": "0.5rem",
+          "background": "white",
+          "transition": "border-color 0.3s ease",
+          "focus": {
+            "borderColor": "black",
+            "outline": "none"
+          }
+        }
+      }
+    },
+    "responsiveBreakpoints": {
+      "mobile": "640px",
+      "tablet": "768px",
+      "desktop": "1024px",
+      "wide": "1280px",
+      "ultrawide": "1536px"
+    },
+    "gridSystem": {
+      "maxWidth": "1280px",
+      "columns": 12,
+      "gutter": "2rem",
+      "margin": {
+        "mobile": "1.5rem",
+        "tablet": "2rem",
+        "desktop": "3rem"
+      }
+    },
+    "designPrinciples": {
+      "whitespace": "Use generous whitespace to create breathing room and visual hierarchy",
+      "typography": "Use clear hierarchy with bold headlines and readable body text",
+      "imagery": "High-quality images with consistent aspect ratios and professional photography",
+      "consistency": "Maintain consistent spacing, colors, and component styles throughout",
+      "simplicity": "Keep layouts clean and focused; avoid clutter and unnecessary elements",
+      "accessibility": "Ensure WCAG 2.1 AA compliance with proper contrast ratios and semantic HTML",
+      "performance": "Optimize images, minimize animations, and prioritize fast load times",
+      "mobile-first": "Design for mobile devices first, then enhance for larger screens"
+    },
+    "contentGuidelines": {
+      "headlines": {
+        "style": "Clear, benefit-driven, and actionable",
+        "length": "4-8 words for maximum impact",
+        "examples": [
+          "Your website, fully managed",
+          "Expert engineers, affordable pricing",
+          "Focus on business, not website management"
+        ]
+      },
+      "subheadlines": {
+        "style": "Explanatory and supporting, adding context to headlines",
+        "length": "10-20 words",
+        "examples": [
+          "Professional engineers managing your website and cloud infrastructure—affordable, competitive, and worry-free."
+        ]
+      },
+      "cta": {
+        "style": "Action-oriented and clear value proposition",
+        "examples": [
+          "Start Free Trial",
+          "Get Started",
+          "Schedule a Demo",
+          "See Pricing"
+        ]
+      },
+      "tone": {
+        "voice": "Professional yet approachable",
+        "characteristics": [
+          "Confident without being arrogant",
+          "Helpful without being condescending",
+          "Technical when needed, simple when possible",
+          "Human and warm, not robotic"
+        ]
+      }
+    },
+    "implementationNotes": {
+      "technologies": [
+        "Next.js 16+ with App Router for modern web framework",
+        "TypeScript for type safety",
+        "Tailwind CSS v4 for utility-first styling",
+        "shadcn/ui components (https://ui.shadcn.com/) for consistent UI elements",
+        "Framer Motion for smooth animations (optional, can use reactbits.dev)",
+        "Next.js Image for optimized images"
+      ],
+      "squarespaceDesignPatterns": {
+        "hero": "Full viewport height with blurred background video/image. White text centered. Single prominent white CTA button. Minimal navigation that becomes white on scroll.",
+        "spacing": "Use 2-3x more spacing than typical websites. Sections should have 6-10rem vertical padding. Content should have generous horizontal padding (2-4rem).",
+        "typography": "Large, bold headlines (clamp for responsive). Generous line-height (1.75-1.8 for body). Negative letter-spacing for headlines. Uppercase buttons with letter-spacing.",
+        "colors": "Black and white foundation. Minimal color use. High contrast. White buttons on dark backgrounds, black buttons on light backgrounds.",
+        "layout": "Centered content with max-width. Generous margins. Clean, minimal design. No clutter.",
+        "buttons": "Substantial padding (1rem+ vertical, 2.5rem+ horizontal). Rounded corners (0.5rem). Uppercase text with letter-spacing. Subtle hover effects.",
+        "navigation": "Transparent on hero section (white text). Becomes white background with black text on scroll. Minimal, clean design."
+      },
+      "componentLibraries": {
+        "shadcn": "Use shadcn/ui components from https://ui.shadcn.com/ for buttons, cards, navigation, etc. Customize to match Squarespace aesthetic.",
+        "reactbits": "Optional: Use https://www.reactbits.dev/ for advanced animations if needed.",
+        "fonts": "Use Inter font (Google Fonts) as close alternative to Squarespace's Clarkson. Load via next/font/google."
+      },
+      "performance": {
+        "targets": {
+          "firstContentfulPaint": "< 1.5s",
+          "largestContentfulPaint": "< 2.5s",
+          "cumulativeLayoutShift": "< 0.1",
+          "firstInputDelay": "< 100ms"
+        },
+        "optimization": "Lazy load background videos. Optimize images with Next.js Image. Minimize animations on mobile."
+      },
+      "seo": {
+        "meta": "Include proper meta tags, Open Graph, and Twitter Cards",
+        "schema": "Implement structured data (Schema.org)",
+        "sitemap": "Generate XML sitemap automatically",
+        "robots": "Configure robots.txt appropriately"
+      },
+      "keyReminders": {
+        "spacing": "MOST IMPORTANT: Use extremely generous spacing throughout. This is the #1 Squarespace design characteristic.",
+        "centering": "Always center content with max-width containers. Use mx-auto for centering.",
+        "buttons": "Buttons should NOT stretch edge-to-edge. Use proper padding and max-width. Text should NOT stretch.",
+        "typography": "Large, bold headlines. Generous line-height. Negative letter-spacing for headlines.",
+        "colors": "Black/white foundation. Minimal color. High contrast."
+      }
+    }
+  }
