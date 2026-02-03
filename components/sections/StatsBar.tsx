@@ -6,18 +6,15 @@ export default function StatsBar() {
   ];
 
   return (
-    <section className="bg-gray-50 py-16 lg:py-24">
+    <section className="bg-surface-muted py-16 lg:py-24">
       <div className="mx-auto max-w-[1200px] px-8 lg:px-16">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-12">
           {stats.map((stat, index) => (
-            <div
-              key={index}
-              className="text-center"
-            >
-              <div className="mb-2 text-4xl font-bold text-black lg:text-5xl">
+            <div key={index} className="text-center">
+              <div className="font-heading mb-2 text-4xl font-semibold text-foreground lg:text-5xl">
                 {stat.number}
               </div>
-              <div className="text-base text-gray-600 lg:text-lg">
+              <div className="text-base text-foreground/70 lg:text-lg">
                 {stat.label}
               </div>
             </div>

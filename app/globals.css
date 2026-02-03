@@ -4,34 +4,62 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
-    
-    /* Design system colors */
-    --black: 0 0% 0%;
-    --white: 0 0% 100%;
-    
-    /* Neutral grays */
-    --gray-50: 0 0% 98%;
-    --gray-100: 0 0% 96%;
-    --gray-200: 0 0% 90%;
-    --gray-300: 0 0% 83%;
-    --gray-400: 0 0% 64%;
-    --gray-500: 0 0% 45%;
-    --gray-600: 0 0% 32%;
-    --gray-700: 0 0% 25%;
-    --gray-800: 0 0% 15%;
-    --gray-900: 0 0% 9%;
+    /* Obsidian Forest – Light Mode (content sections) */
+    --background: #F2F4F2;
+    --foreground: #080A08;
+    --foreground-muted: #1A1F1A;
+    --surface: #F2F4F2;
+    --surface-muted: #E8ECE8;
+    --primary: #15803D;
+    --primary-foreground: #FFFFFF;
+    --primary-hover: #052E16;
+    --border: #E2E8E2;
+    --border-subtle: #E2E8E2;
+    --input: #E2E8E2;
+    --ring: #22C55E;
+    --muted: #1A1F1A;
+
+    /* Obsidian Forest – Dark Mode (Hero, CTA, footer) */
+    --dark: #080A08;
+    --dark-foreground: #E2E8E2;
+    --dark-muted: #1A1F1A;
+    --dark-border: rgba(26, 31, 26, 0.5);
+    --accent: #052E16;
+    --emerald: #22C55E;
+
+    /* Card surface (Railway-style – slightly lighter obsidian) */
+    --card-obsidian: #0C0F0C;
+
+    /* Radius & shadows */
+    --radius: 1rem;
+    --radius-sm: 0.75rem;
+    --radius-lg: 1.25rem;
+    --shadow-soft: 0 2px 15px -3px rgb(0 0 0 / 0.04), 0 10px 20px -2px rgb(0 0 0 / 0.04);
+    --shadow-card: 0 4px 24px -4px rgb(0 0 0 / 0.06), 0 8px 32px -4px rgb(0 0 0 / 0.04);
+    --shadow-card-hover: 0 12px 40px -8px rgb(0 0 0 / 0.08), 0 20px 48px -8px rgb(0 0 0 / 0.06);
+    --shadow-emerald: 0 0 20px rgba(34, 197, 94, 0.3);
   }
 
   body {
-    @apply bg-white text-black;
-    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body), system-ui, -apple-system, sans-serif;
+  }
+
+  /* Serif for h1–h3, letter-spacing -0.02em (premium Squarespace look) */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading), var(--font-body), serif;
+    letter-spacing: -0.02em;
   }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -100;
   }
 }

@@ -1,5 +1,9 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icons } from "@/components/icons";
+import { ScrambleHeading } from "@/components/ui/ScrambleHeading";
 
 const steps = [
   {
@@ -24,33 +28,42 @@ const steps = [
 
 export default function Process() {
   return (
-    <section className="bg-gray-50 py-24 lg:py-32">
+    <section className="bg-surface-muted py-24 lg:py-32">
       <div className="mx-auto max-w-[1200px] px-8 lg:px-16">
-        {/* Section Header */}
-        <div className="mb-16 text-center lg:mb-20">
-          <h2 className="mb-6 text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-[1.3] tracking-[-0.015em] text-black">
+        <motion.div
+          className="mb-16 text-center lg:mb-20"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <p className="mb-4 font-mono text-[10px] font-medium uppercase tracking-wider text-primary">
+            [PROCESS]
+          </p>
+          <ScrambleHeading
+            as="h2"
+            className="font-heading mb-6 text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-[1.3] tracking-[-0.02em] text-foreground"
+          >
             How it works
-          </h2>
-          <p className="mx-auto max-w-[700px] text-lg leading-[1.8] text-gray-600">
+          </ScrambleHeading>
+          <p className="mx-auto max-w-[700px] text-lg leading-[1.8] text-foreground-muted">
             Get started in minutes, not hours
           </p>
-        </div>
+        </motion.div>
 
-        {/* Steps Grid */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {steps.map((step, index) => {
             const Icon = step.icon;
             return (
               <Card
                 key={index}
-                className="border-gray-200 transition-all duration-300 hover:shadow-lg"
+                className="transition-all duration-300 hover:shadow-card-hover"
               >
                 <CardHeader>
                   <div className="mb-4 flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-black text-2xl font-bold text-white">
+                    <div className="font-heading flex h-12 w-12 items-center justify-center rounded-[var(--radius)] bg-primary text-xl font-semibold text-primary-foreground">
                       {step.number}
                     </div>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-100 text-black">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-[var(--radius)] bg-surface-muted text-foreground">
                       <Icon className="h-6 w-6" />
                     </div>
                   </div>

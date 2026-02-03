@@ -1,0 +1,9 @@
+# Design system – Obsidian Forest / Editorial Tech
+
+- **Palette (Obsidian Forest):** Dark sections use deep forest black (#080A08), silver-tinted white (#E2E8E2). Light sections use soft mist white (#F2F4F2), forest black text (#080A08). **Emerald** (#22C55E) for active/hero; **Deep Emerald** (#15803D) for light-section primary; **Dark Forest** (#052E16) for hover. Borders: deep olive (#1A1F1A) or silver (#E2E8E2). Card obsidian: #0C0F0C.
+- Use **Inter** for sans-serif and **Instrument Serif** for headings (h1–h3). Use **JetBrains Mono** for Service IDs, status badges, and technical metadata. Apply **letter-spacing: -0.02em** to headings.
+- Favor subtle **glassmorphism** (backdrop-blur) over solid backgrounds for nav and overlays.
+- All interactive elements must have a **Framer Motion** hover or scroll state (e.g. border-beam, staggered reveal).
+- Keep borders **thin** (0.5px) and use Obsidian Forest tokens; avoid bulky shadows—use **shadow-emerald** or soft blurs for glow.
+- Hero: **Forest Mist** glow (emerald radial rgba(34, 197, 94, 0.08)); grid pattern with mask fading toward bottom; Get Started button: subtle emerald box-shadow (20px blur, 0.3 opacity).
+- Feature cards (Railway-style): obsidian background (#0C0F0C), Service ID (e.g. SRV-01, CLD-02) in muted silver, small emerald icons, grain/scanline texture overlay.

@@ -61,27 +61,28 @@ const plans = [
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="bg-white py-24 lg:py-32">
+    <section id="pricing" className="bg-background py-24 lg:py-32">
       <div className="mx-auto max-w-[1200px] px-8 lg:px-16">
-        {/* Section Header */}
         <div className="mb-16 text-center lg:mb-20">
-          <h2 className="mb-6 text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-[1.3] tracking-[-0.015em] text-black">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-primary">
+            Pricing
+          </p>
+          <h2 className="font-heading mb-6 text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-[1.3] tracking-[-0.02em] text-foreground">
             Simple, transparent pricing
           </h2>
-          <p className="mx-auto max-w-[700px] text-lg leading-[1.8] text-gray-600">
+          <p className="mx-auto max-w-[700px] text-lg leading-[1.8] text-foreground/70">
             All plans include expert engineering support and managed infrastructure
           </p>
         </div>
 
-        {/* Pricing Grid */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {plans.map((plan, index) => (
             <Card
               key={index}
-              className={`relative border-2 transition-all duration-300 hover:shadow-xl ${
+              className={`relative transition-all duration-300 hover:shadow-card-hover ${
                 plan.highlighted
-                  ? "border-black shadow-lg"
-                  : "border-gray-200"
+                  ? "border-2 border-primary shadow-card"
+                  : ""
               }`}
             >
               {plan.badge && (
@@ -92,8 +93,8 @@ export default function Pricing() {
               <CardHeader className="text-center">
                 <CardTitle className="text-2xl">{plan.name}</CardTitle>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold">{plan.price}</span>
-                  <span className="ml-2 text-gray-600">{plan.period}</span>
+                  <span className="font-heading text-4xl font-semibold text-foreground">{plan.price}</span>
+                  <span className="ml-2 text-foreground/70">{plan.period}</span>
                 </div>
                 <CardDescription className="mt-4 text-base">
                   {plan.description}
@@ -103,8 +104,8 @@ export default function Pricing() {
                 <ul className="space-y-3">
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start gap-2">
-                      <span className="mt-1 text-black">✓</span>
-                      <span className="text-gray-700">{feature}</span>
+                      <span className="mt-1 text-primary">✓</span>
+                      <span className="text-foreground/80">{feature}</span>
                     </li>
                   ))}
                 </ul>

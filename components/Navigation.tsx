@@ -28,30 +28,28 @@ export default function Navigation() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-white shadow-sm"
+          ? "bg-background/80 shadow-soft backdrop-blur-xl border-b border-border/50"
           : "bg-transparent"
       }`}
     >
       <div className="mx-auto max-w-[1200px] px-8 lg:px-16">
         <div className="flex h-20 items-center justify-between">
-          {/* Logo */}
           <Link
             href="/"
-            className={`text-2xl font-bold transition-colors ${
-              scrolled ? "text-black" : "text-white"
+            className={`font-heading text-2xl font-semibold transition-colors ${
+              scrolled ? "text-foreground" : "text-dark-foreground"
             }`}
           >
             YourCompany
           </Link>
 
-          {/* Desktop Menu */}
           <div className="hidden items-center gap-10 lg:flex">
             {navItems.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
                 className={`text-sm font-medium transition-opacity hover:opacity-70 ${
-                  scrolled ? "text-black" : "text-white"
+                  scrolled ? "text-foreground" : "text-dark-foreground"
                 }`}
               >
                 {item.label}
@@ -59,12 +57,11 @@ export default function Navigation() {
             ))}
           </div>
 
-          {/* Desktop CTA */}
           <div className="hidden items-center gap-4 lg:flex">
             <Link
               href="/login"
               className={`text-sm font-medium transition-opacity hover:opacity-70 ${
-                scrolled ? "text-black" : "text-white"
+                scrolled ? "text-foreground" : "text-dark-foreground"
               }`}
             >
               Log In
@@ -78,12 +75,9 @@ export default function Navigation() {
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`lg:hidden ${
-              scrolled ? "text-black" : "text-white"
-            }`}
+            className={`lg:hidden ${scrolled ? "text-foreground" : "text-dark-foreground"}`}
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? (
@@ -95,24 +89,23 @@ export default function Navigation() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="bg-white lg:hidden">
+        <div className="bg-background/95 backdrop-blur-xl border-b border-border lg:hidden">
           <div className="mx-auto max-w-[1200px] px-8 py-6">
             {navItems.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className="block py-3 text-base font-medium text-black"
+                className="block py-3 text-base font-medium text-foreground"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.label}
               </Link>
             ))}
-            <div className="mt-6 space-y-3 border-t border-gray-200 pt-6">
+            <div className="mt-6 space-y-3 border-t border-border pt-6">
               <Link
                 href="/login"
-                className="block text-base font-medium text-black"
+                className="block text-base font-medium text-foreground"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Log In

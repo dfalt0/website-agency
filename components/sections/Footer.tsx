@@ -22,6 +22,7 @@ const footerColumns = [
   {
     title: "Resources",
     links: [
+      { label: "Tech Stack Scanner", url: "/scan" },
       { label: "Blog", url: "/blog" },
       { label: "Help Center", url: "/help" },
       { label: "Case Studies", url: "/case-studies" },
@@ -47,14 +48,13 @@ const legalLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-dark text-dark-foreground">
       <div className="mx-auto max-w-[1200px] px-8 lg:px-16">
-        {/* Main Footer Content */}
-        <div className="border-b border-gray-800 py-16">
+        <div className="border-b border-dark-foreground/10 py-16">
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             {footerColumns.map((column, index) => (
               <div key={index}>
-                <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider">
+                <h3 className="font-heading mb-4 text-sm font-semibold uppercase tracking-wider text-dark-foreground">
                   {column.title}
                 </h3>
                 <ul className="space-y-3">
@@ -62,7 +62,7 @@ export default function Footer() {
                     <li key={linkIndex}>
                       <Link
                         href={link.url}
-                        className="text-sm text-gray-400 transition-colors hover:text-white"
+                        className="text-sm text-dark-foreground/60 transition-colors hover:text-dark-foreground"
                       >
                         {link.label}
                       </Link>
@@ -74,9 +74,8 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Footer */}
         <div className="flex flex-col items-center justify-between gap-6 py-8 md:flex-row">
-          <div className="text-sm text-gray-400">
+          <div className="text-sm text-dark-foreground/60">
             © 2026 YourCompany. All rights reserved.
           </div>
           <div className="flex gap-6">
@@ -84,7 +83,7 @@ export default function Footer() {
               <Link
                 key={index}
                 href={link.url}
-                className="text-sm text-gray-400 transition-colors hover:text-white"
+                className="text-sm text-dark-foreground/60 transition-colors hover:text-dark-foreground"
               >
                 {link.label}
               </Link>

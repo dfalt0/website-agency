@@ -24,24 +24,25 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="bg-gray-50 py-24 lg:py-32">
+    <section className="bg-surface-muted py-24 lg:py-32">
       <div className="mx-auto max-w-[1200px] px-8 lg:px-16">
-        {/* Section Header */}
         <div className="mb-16 text-center lg:mb-20">
-          <h2 className="text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-[1.3] tracking-[-0.015em] text-black">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-primary">
+            Testimonials
+          </p>
+          <h2 className="font-heading text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-[1.3] tracking-[-0.02em] text-foreground">
             Trusted by businesses like yours
           </h2>
         </div>
 
-        {/* Testimonials Grid */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {testimonials.map((testimonial, index) => (
             <Card
               key={index}
-              className="border-gray-200 transition-all duration-300 hover:shadow-lg"
+              className="transition-all duration-300 hover:shadow-card-hover"
             >
               <CardContent className="p-8">
-                <p className="mb-6 text-lg leading-relaxed text-gray-700">
+                <p className="mb-6 text-lg leading-relaxed text-foreground/80">
                   &ldquo;{testimonial.quote}&rdquo;
                 </p>
                 <div className="flex items-center gap-4">
@@ -55,10 +56,10 @@ export default function Testimonials() {
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <div className="font-semibold text-black">
+                    <div className="font-semibold text-foreground">
                       {testimonial.author}
                     </div>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-foreground/70">
                       {testimonial.role}
                     </div>
                   </div>
