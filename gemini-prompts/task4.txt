@@ -1,0 +1,41 @@
+To turn this into a truly high-fidelity scanner, we need to go beyond the "obvious" tags. Professional tools look for HTTP headers, DOM artifacts, and specific file paths that reveal the infrastructure even when the site tries to hide it.Here is a refined, comprehensive detection library for your app/api/scan/route.ts.1. Expanded Detection FingerprintsThis expanded SIGNATURES object covers high-value targets like AWS, DigitalOcean, and specialized Headless CMS platforms.TypeScriptconst SIGNATURES = {
+  cloud_infrastructure: [
+    { name: "AWS CloudFront", header: "x-cache", value: /cloudfront/i },
+    { name: "DigitalOcean", header: "server", value: /do-iron/i },
+    { name: "Google Cloud Storage", header: "x-goog-generation" },
+    { name: "Azure Front Door", header: "x-azure-ref" },
+    { name: "Heroku", header: "server", value: /cowboy/i },
+  ],
+  security_performance: [
+    { name: "Cloudflare", header: "cf-ray" },
+    { name: "Sucuri", header: "x-sucuri-id" },
+    { name: "Akamai", header: "x-akamai-transformed" },
+    { name: "Varnish Cache", header: "x-varnish" },
+    { name: "Google Analytics", test: /googletagmanager\.com|ua-|gtm-/i },
+  ],
+  modern_stacks: [
+    { name: "Supabase", test: /supabase\.co/i, selector: 'script[src*="supabase"]' },
+    { name: "Firebase", test: /firebaseapp\.com/i },
+    { name: "Sanity CMS", test: /cdn\.sanity\.io/i },
+    { name: "Strapi", test: /strapi/i, selector: 'link[href*="strapi"]' },
+    { name: "Prismic", test: /static\.cdn\.prismic\.io/i },
+  ],
+  frontend_libs: [
+    { name: "Svelte", test: /svelte-/i, selector: '[class*="svelte-"]' },
+    { name: "SolidJS", test: /_solid/i },
+    { name: "GSAP", test: /gsap/i, selector: 'script[src*="gsap"]' },
+    { name: "Three.js", test: /three\.js/i, selector: 'script[src*="three"]' },
+  ]
+};
+2. Implementation: The "Header + DOM" LogicTo catch these, you should use a hybrid approach in your API route. Headers are fast; DOM checking via Puppeteer is accurate.CategoryDetection MethodWhy it's useful for youAWS/AzureHTTP HeadersShows they have a "real" enterprise budget.DigitalOceanServer HeaderOften indicates a self-managed (messy) VPS setup—perfect for migration.Svelte/SolidClass Name RegexTells you they care about performance and modern tech.Sanity/StrapiAsset URLsIndicates they are using a Headless CMS that needs specialized management.3. Pro-Level Detection: "The Script Sniffer"Add this logic into your page.evaluate() block in the API. It looks at every script loaded on the page to find trackers and databases that don't appear in the HTML source code.JavaScript// Add this inside page.evaluate() in your API route
+const scriptSources = Array.from(document.querySelectorAll('script')).map(s => s.src);
+
+if (scriptSources.some(src => src.includes('intercom.io'))) 
+  results.push({ name: "Intercom", type: "CUSTOMER SERVICE" });
+
+if (scriptSources.some(src => src.includes('hubspot.com'))) 
+  results.push({ name: "HubSpot", type: "MARKETING" });
+
+if (scriptSources.some(src => src.includes('stripe.com'))) 
+  results.push({ name: "Stripe", type: "PAYMENTS" });
+Why these fingerprints matter for your "Closing"The goal of this scanner is to give you ammunition.Detected Heroku? Pitch: "Heroku is getting expensive and slow. We can migrate you to a dedicated VPC for half the cost."Detected DigitalOcean? Pitch: "Managing your own Droplets is a security risk. Let our engineers handle the OS-level hardening for you."Detected 5+ Trackers (HubSpot, Google, Intercom)? Pitch: "Your site is bloated with scripts. Our managed edge logic can defer these to improve your SEO scores by 20 points."

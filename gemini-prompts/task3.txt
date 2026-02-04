@@ -1,0 +1,126 @@
+Let's turn this from a simple list into a full-scale Technical Intelligence Report. Adding a live screenshot doesn't just look cool—it proves your "engine" actually visited their site and performed a deep-tissue scan.
+
+To do this, we’ll update the API to return a base64 image string (which is easy to display in Next.js without needing a separate storage bucket like S3) and refine the UI to look like a high-end dashboard.
+
+1. The API Enhancement: "The Snapshot Engine"
+We’ll modify the Puppeteer logic in app/api/scan/route.ts to capture the site’s "hero" section.
+
+TypeScript
+// Add this inside your page.evaluate() logic or right after it in app/api/scan/route.ts
+
+// ... navigation and tech detection ...
+
+// Capture the screenshot as a base64 string
+const screenshot = await page.screenshot({
+  type: 'webp',
+  quality: 60, // Keep quality decent but size small for fast transfer
+  encoding: 'base64',
+  clip: { x: 0, y: 0, width: 1280, height: 720 } // Just the top of the fold
+});
+
+await browser.close();
+
+return NextResponse.json({ 
+  stack, 
+  screenshot: `data:image/webp;base64,${screenshot}`,
+  status: "success", 
+  url: targetUrl 
+});
+2. The Dashboard UI: "The Audit View"
+Now, let's update your StackScanner.tsx to include the Visual Audit frame. This makes the report feel "official."
+
+TypeScript
+// Inside your StackScanner.tsx, update the 'result' rendering:
+
+{result && (
+  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8 space-y-6">
+    
+    {/* 1. Visual Evidence Frame */}
+    <div className="relative group overflow-hidden rounded-xl border border-[#1A1F1A] bg-[#0C0F0C]">
+      <div className="absolute inset-0 bg-gradient-to-t from-[#080A08] via-transparent to-transparent z-10" />
+      <div className="p-3 border-b border-[#1A1F1A] flex justify-between items-center bg-[#080A08]">
+        <span className="font-mono text-[9px] text-emerald-500/50 uppercase italic">Capture_ID: {Math.random().toString(36).substring(7)}</span>
+        <div className="flex gap-1">
+          <div className="w-2 h-2 rounded-full bg-red-900" />
+          <div className="w-2 h-2 rounded-full bg-yellow-900" />
+          <div className="w-2 h-2 rounded-full bg-emerald-900" />
+        </div>
+      </div>
+      
+      {result.screenshot ? (
+        <img 
+          src={result.screenshot} 
+          alt="Target Audit" 
+          className="w-full h-48 object-cover object-top opacity-60 group-hover:opacity-80 transition-opacity duration-700"
+        />
+      ) : (
+        <div className="w-full h-48 bg-[#0C0F0C] flex items-center justify-center font-mono text-xs text-emerald-900">
+          [VISUAL_DATA_REDACTED]
+        </div>
+      )}
+    </div>
+
+    {/* 2. Grouped Technology Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {result.stack.map((tech, i) => (
+        <motion.div
+          key={i}
+          initial={{ x: -20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: i * 0.1 }}
+          className="p-4 bg-[#0C0F0C] border border-[#1A1F1A] hover:border-emerald-500/20 transition-all group"
+        >
+          <p className="font-mono text-[9px] text-emerald-500 mb-1">{tech.type}</p>
+          <div className="flex justify-between items-end">
+             <h4 className="text-[#E2E8E2] font-serif text-lg">{tech.name}</h4>
+             <span className="text-[10px] text-emerald-900 font-mono group-hover:text-emerald-500/40">SECURE_MATCH</span>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+
+    {/* 3. The Migration Blueprint Trigger */}
+    <div className="p-6 bg-emerald-500/5 border border-dashed border-emerald-500/20 rounded-lg">
+       <div className="flex items-start gap-4">
+          <div className="p-3 bg-emerald-500/10 rounded-full text-emerald-500">
+             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+             </svg>
+          </div>
+          <div>
+             <h3 className="text-emerald-400 font-serif text-xl">Optimization Path Identified</h3>
+             <p className="text-[#E2E8E2]/60 text-sm mt-1">
+                Your current {result.stack[0]?.name || 'web'} architecture has 3 known performance bottlenecks. 
+                We can offload your {result.stack.find(t => t.type === 'JS FRAMEWORK')?.name || 'frontend'} logic to our edge nodes.
+             </p>
+             <button className="mt-4 px-4 py-2 bg-emerald-600 text-black font-bold text-xs hover:bg-emerald-400 transition-colors">
+                DOWNLOAD FULL MIGRATION BLUEPRINT (PDF)
+             </button>
+          </div>
+       </div>
+    </div>
+  </motion.div>
+)}
+3. The "Security Theater" Trick
+To make the loading time feel intentional, add an array of "Status Logs" that cycle while Puppeteer is doing its work. This turns a "boring wait" into a "premium experience."
+
+TypeScript
+const [status, setStatus] = useState("");
+
+const statusMessages = [
+  "Initializing stealth handshake...",
+  "Bypassing perimeter firewalls...",
+  "Injecting DOM diagnostic probes...",
+  "Intercepting server response headers...",
+  "Decompiling CSS architecture...",
+  "Capturing visual proof...",
+  "Finalizing infrastructure report..."
+];
+
+// Inside handleScan, use a setInterval to cycle through statusMessages
+Why this converts better:
+Visual Proof: Seeing their own site inside your "hacker-style" dashboard makes your service feel real and immediate.
+
+Professionalism: Most "Wappalyzer clones" are just lists of names. Your tool provides a "Visual Audit" and a "Migration Path."
+
+The Shift: You aren't asking for work; you're offering a solution to a problem your tool just "discovered."

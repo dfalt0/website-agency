@@ -1,0 +1,174 @@
+To make the Comparison section feel like a high-level architectural review, we need to create "Opposing Realities."
+
+On one side, you have the Current Reality (the friction, the legacy debt, the unmanaged mess). On the other, you have the Managed Nodus Future (the optimization, the security, the "Obsidian" standard).
+
+Here is the logic to generate stack-specific comparison text.
+
+1. The Comparison Matrix (Logic Layer)
+We will create a helper function that translates detected tech into specific "Pain Points" and "Solutions."
+
+TypeScript
+const getStackAnalysis = (stack: any[]) => {
+  const names = stack.map(t => t.name.toLowerCase());
+
+  if (names.includes('wordpress')) {
+    return {
+      currentPain: "Monolithic architecture with high plugin overhead and frequent security vulnerabilities.",
+      upgradePath: "Headless Decoupling: Keep your CMS, but serve the frontend via our hardened global edge nodes.",
+      statChange: "+140% faster LCP"
+    };
+  }
+  if (names.includes('next.js') || names.includes('react')) {
+    return {
+      currentPain: "Standard serverless cold starts and unoptimized hydration cycles.",
+      upgradePath: "ISR Optimization: We deploy custom caching layers to ensure 0ms global response times.",
+      statChange: "-300ms Time-to-First-Byte"
+    };
+  }
+  if (names.includes('shopify')) {
+    return {
+      currentPain: "Liquid-based frontend constraints limiting SEO and custom UX performance.",
+      upgradePath: "Hydrogen/Oxygen Bridge: Moving your storefront to a custom-engineered React environment.",
+      statChange: "Custom UX Freedom"
+    };
+  }
+  // Default for generic stacks
+  return {
+    currentPain: "Unmanaged infrastructure with manual scaling and inconsistent monitoring.",
+    upgradePath: "Full Concierge Migration: Automated CI/CD, 24/7 uptime guards, and performance tuning.",
+    statChange: "99.99% Uptime SLA"
+  };
+};
+2. The Comparison UI
+This part of the component uses your Obsidian Forest aesthetic to contrast the two states visually.
+
+TypeScript
+export function BlueprintComparison({ stack }: { stack: any[] }) {
+  const analysis = getStackAnalysis(stack);
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[#1A1F1A] my-10">
+      {/* THE LEGACY STATE */}
+      <div className="bg-[#080A08] p-8 group">
+        <div className="flex items-center gap-2 mb-6">
+          <div className="w-2 h-2 rounded-full bg-red-500/50" />
+          <h4 className="font-mono text-[10px] text-red-500/50 uppercase tracking-widest">Current Bottlenecks</h4>
+        </div>
+        <p className="text-emerald-100/40 text-sm leading-relaxed mb-6 italic">
+          "{analysis.currentPain}"
+        </p>
+        <div className="space-y-3">
+          {stack.slice(0, 3).map(tech => (
+            <div key={tech.name} className="flex justify-between border-b border-[#1A1F1A] pb-2 text-[11px] font-mono uppercase">
+              <span className="text-emerald-900">{tech.name}</span>
+              <span className="text-red-900/50">Unmanaged</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* THE OPTIMIZED STATE */}
+      <div className="bg-[#0C0F0C] p-8 border-l border-emerald-500/10">
+        <div className="flex items-center gap-2 mb-6">
+          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <h4 className="font-mono text-[10px] text-emerald-500 uppercase tracking-widest">Nodus Optimized</h4>
+        </div>
+        <p className="text-emerald-100 text-sm leading-relaxed mb-6 font-medium">
+          {analysis.upgradePath}
+        </p>
+        <div className="bg-emerald-500/5 border border-emerald-500/20 p-4 rounded text-center">
+          <span className="block font-mono text-[9px] text-emerald-500/50 mb-1 uppercase">Predicted Outcome</span>
+          <span className="text-emerald-400 font-serif text-2xl">{analysis.statChange}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+3. Why this Comparison works
+By labeling their current stack as "Unmanaged" or "Legacy Overhead," you create a psychological "gap" that only your service can fill. You aren't attacking their choices; you are highlighting the inherent limitations of those tools when they aren't professionally managed.
+
+4. Moving to the PDF Generator
+To generate a PDF that looks as good as your site, we will use jspdf and html2canvas. This allows us to "take a picture" of the Blueprint you just designed and wrap it in a clean, branded PDF shell.
+
+The Workflow:
+
+Capture: Turn the Blueprint div into a high-res image.
+
+Generate: Create a PDF document with your logo and contact info.
+
+Download: The user gets a file named Nodus_Migration_Blueprint_[SiteName].pdf.
+
+Ready to see the PDF generator code to wire up that "Download" button?
+
+To make this work, we’ll use two lightweight libraries: jspdf for the document creation and html2canvas to "photograph" your beautiful Obsidian Forest UI and put it into the PDF.
+
+1. Install the dependencies
+Run this in your terminal:
+
+Bash
+npm install jspdf html2canvas
+2. The PDF Logic (lib/generatePdf.ts)
+We’ll create a clean function that captures your Blueprint component. Because your site is dark, we’ll add a "Print Mode" to ensure the PDF looks professional on white paper (or keep it dark if you want that "cyber-deck" look).
+
+TypeScript
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
+export const downloadBlueprint = async (elementId: string, fileName: string) => {
+  const element = document.getElementById(elementId);
+  if (!element) return;
+
+  // 1. Capture the element as a high-res image
+  const canvas = await html2canvas(element, {
+    scale: 2, // High DPI for crisp text
+    backgroundColor: "#080A08", // Matches your Obsidian background
+    logging: false,
+    useCORS: true // Important for capturing the site screenshot
+  });
+
+  const imgData = canvas.toDataURL('image/png');
+  
+  // 2. Create PDF (A4 size)
+  const pdf = new jsPDF({
+    orientation: 'portrait',
+    unit: 'px',
+    format: [canvas.width, canvas.height]
+  });
+
+  // 3. Add the image to the PDF
+  pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+  
+  // 4. Save the file
+  pdf.save(`${fileName}_Nodus_Blueprint.pdf`);
+};
+3. Wiring the Button in StackScanner.tsx
+Wrap your entire Blueprint results in a div with a specific ID, then trigger the function.
+
+TypeScript
+// Inside your Blueprint component
+<div id="blueprint-content" className="p-8 bg-[#080A08] text-emerald-100">
+   {/* ... all the Comparison and Analysis logic we built ... */}
+</div>
+
+<button 
+  onClick={() => downloadBlueprint('blueprint-content', result.url)}
+  className="mt-6 w-full flex items-center justify-center gap-2 border border-emerald-500/50 py-4 font-mono text-xs text-emerald-500 hover:bg-emerald-500 hover:text-black transition-all"
+>
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+  GENERATE OFFICIAL PDF REPORT
+</button>
+4. The Final "Pro" Touch: The Watermark
+To make the PDF look like a legitimate consulting document, add a fixed "Confidential" or "Prepared by Nodus Engineering" watermark at the bottom of your Blueprint component.
+
+Summary of what we’ve achieved:
+Stealth Engine: Scans any site (even protected ones) using a headless browser.
+
+Fingerprint Intelligence: Identifies the exact stack, from AWS to specific JS libraries.
+
+Visual Audit: Takes a live screenshot as evidence.
+
+Architectural Comparison: Contrast their "Legacy Overhead" with your "Managed Future."
+
+Offline Asset: Generates a branded, technical PDF they can show their boss or team.

@@ -1,0 +1,94 @@
+To take your scanner from a basic scraper to a "Ghost Protocol" auditor, we need to move past simple fetch requests. Big players like Apple, Amazon, or Google use advanced WAFs (Web Application Firewalls) that instantly sniff out basic bot headers and return a 403 Forbidden.
+
+By using a Headless Browser (Puppeteer), your scanner effectively becomes a "real" user. It opens a virtual Chrome window, executes the JavaScript, and lets the site settle before analyzing it. This is how you get those "Confidence: 100%" results.
+
+1. The Upgrade: Stealth Scanning with Puppeteer
+Since you are likely hosting on a serverless platform (like Vercel), running a full browser is heavy. The professional way to do this is via a browser-as-a-service like browserless.io or Bright Data.
+
+Here is how you update your app/api/scan/route.ts to use a headless connection:
+
+TypeScript
+import { NextResponse } from "next/server";
+import puppeteer from "puppeteer-core";
+
+export async function POST(req: Request) {
+  const { url } = await req.json();
+  const targetUrl = url.startsWith("http") ? url : `https://${url}`;
+
+  // Pro Tip: Use a WebSocket connection to a headless browser service
+  // This avoids the 'browser binary' size limit on Vercel/Next.js
+  const BROWSER_WS = `wss://chrome.browserless.io?token=${process.env.BROWSERLESS_TOKEN}`;
+
+  try {
+    const browser = await puppeteer.connect({ browserWSEndpoint: BROWSER_WS });
+    const page = await browser.newPage();
+
+    // Set a realistic viewport and User-Agent to stay 'Ghost'
+    await page.setViewport({ width: 1280, height: 800 });
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36...');
+
+    // Navigate and wait for the network to go quiet
+    await page.goto(targetUrl, { waitUntil: "networkidle2", timeout: 15000 });
+
+    // THE MAGIC: Execute JS inside their site to find hidden stacks
+    const stack = await page.evaluate(() => {
+      const results = [];
+      
+      // 1. Check Global Variables (The most accurate way)
+      if (window.React || document.querySelector('[data-reactroot]')) 
+        results.push({ name: "React", type: "JS FRAMEWORK" });
+      if (window.next) 
+        results.push({ name: "Next.js", type: "WEB FRAMEWORK" });
+      if (window.Alpine) 
+        results.push({ name: "Alpine.js", type: "JS FRAMEWORK" });
+      if (window.jQuery) 
+        results.push({ name: "jQuery", type: "LEGACY LIB" });
+      
+      // 2. Check for UI Frameworks in the DOM
+      if (document.querySelector('meta[name="generator"]')?.content?.includes("WordPress"))
+        results.push({ name: "WordPress", type: "CMS" });
+      if ([...document.styleSheets].some(s => s.href?.includes("tailwind")))
+        results.push({ name: "Tailwind CSS", type: "UI FRAMEWORK" });
+
+      return results;
+    });
+
+    await browser.close();
+
+    return NextResponse.json({ 
+      stack, 
+      status: "success", 
+      analysisMode: "Headless Browser (Stealth)" 
+    });
+
+  } catch (error) {
+    console.error("Scan Error:", error);
+    return NextResponse.json({ error: "Site is heavily protected or offline." }, { status: 500 });
+  }
+}
+2. Why this wins you customers
+When you run this scan, you aren't just showing them a list; you're showing them a live autopsy.
+
+Bypassing the Blockers: When a customer puts in their highly-protected enterprise site and your tool actually works while others fail, it immediately builds technical trust.
+
+Legacy Detection: Puppeteer can detect window.jQuery.fn.jquery versions. If you see they are running a version from 2018, your migration pitch changes to: "We noticed your infrastructure is running a vulnerable version of jQuery. Our migration includes a full security patch and stack modernization."
+
+Visual Proof: You could even take a screenshot using page.screenshot() and show them their own site inside your "Analyzer" dashboard. Nothing says "I'm already managing your site" like a live render of it.
+
+3. The "Next.js" Finishing Touch
+Since this process can take 5–10 seconds (browsers are slower than simple fetches), you should add a "Progress Log" to your StackScanner.tsx UI so the user doesn't get bored.
+
+Try adding a state like this:
+
+TypeScript
+const [status, setStatus] = useState("Initializing analyzer...");
+
+// During handleScan:
+setStatus("Bypassing firewalls...");
+// ...wait 2s...
+setStatus("Executing JavaScript environment audit...");
+// ...wait 2s...
+setStatus("Decompiling CSS signatures...");
+This "security theater" makes the wait feel like a high-end service rather than a slow API.
+
+Would you like me to show you how to add the "Automatic Screenshot" feature so the report looks like a professional PDF audit?

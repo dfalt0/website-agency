@@ -1,0 +1,97 @@
+Since we’ve dialed in the detection logic, the Migration Blueprint needs to feel like a high-value, bespoke document—not just a list of results. This is the moment where you transition from "AI Scanner" to "Human Concierge."
+
+Here is the design for the Migration Blueprint results view. It’s structured to highlight "Pain Points" and "The Upgrade Path" based on what the scanner found.
+
+1. The Blueprint Layout
+The UI should be split into a "Current State" (Red/Neutral) and an "Optimized State" (Emerald).
+
+TypeScript
+// Inside your StackScanner.tsx or a new MigrationBlueprint.tsx component
+
+export default function MigrationBlueprint({ result }: { result: any }) {
+  // Logic to determine the 'Optimization' pitch based on findings
+  const hasLegacy = result.stack.some((t: any) => t.name === "WordPress" || t.name === "jQuery");
+  const isCloud = result.stack.some((t: any) => t.type === "CLOUD_INFRASTRUCTURE");
+
+  return (
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      {/* 1. Executive Summary Header */}
+      <div className="flex flex-col md:flex-row justify-between items-end border-b border-[#1A1F1A] pb-6">
+        <div>
+          <h2 className="text-3xl font-serif text-emerald-100 mb-2">Migration Blueprint</h2>
+          <p className="font-mono text-xs text-emerald-500/50 uppercase tracking-widest">
+            Prepared for: {result.url} • Case ID: {Math.random().toString(36).slice(2, 7)}
+          </p>
+        </div>
+        <div className="mt-4 md:mt-0 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded text-emerald-500 font-mono text-xs">
+          STABILITY RATING: {hasLegacy ? "64%" : "91%"}
+        </div>
+      </div>
+
+      {/* 2. Side-by-Side Comparison (The 'Hook') */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[#1A1F1A] border border-[#1A1F1A]">
+        {/* Left: Current Reality */}
+        <div className="bg-[#080A08] p-8">
+          <h3 className="text-sm font-mono text-emerald-900 uppercase mb-6 tracking-tighter">Current Architecture</h3>
+          <ul className="space-y-4">
+            {result.stack.map((tech: any) => (
+              <li key={tech.name} className="flex items-center gap-3">
+                <div className="w-1.5 h-1.5 bg-red-900 rounded-full" />
+                <span className="text-emerald-100/40 text-sm">{tech.name}</span>
+                <span className="text-[10px] font-mono text-red-900/50 underline decoration-red-900/20">Legacy Overhead</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Right: The Managed Future */}
+        <div className="bg-[#0C0F0C] p-8">
+          <h3 className="text-sm font-mono text-emerald-500 uppercase mb-6 tracking-tighter">The Upgrade Path</h3>
+          <ul className="space-y-4">
+            <li className="flex items-center gap-3">
+              <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+              <span className="text-emerald-100 text-sm">Automated Edge Scaling</span>
+            </li>
+            <li className="flex items-center gap-3">
+              <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+              <span className="text-emerald-100 text-sm">Hardened Infrastructure (SOC2 Ready)</span>
+            </li>
+            <li className="flex items-center gap-3">
+              <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+              <span className="text-emerald-100 text-sm">Zero-Latency Deployment</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* 3. Personalized Advice Card */}
+      <div className="p-8 bg-[#0C0F0C] border border-[#1A1F1A] relative overflow-hidden group">
+        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+           <svg className="w-24 h-24 text-emerald-500" fill="currentColor" viewBox="0 0 24 24">
+             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+           </svg>
+        </div>
+        
+        <h4 className="text-emerald-400 font-serif text-xl mb-4">Engineer's Note:</h4>
+        <p className="text-[#E2E8E2]/70 text-sm leading-relaxed max-w-2xl">
+          {hasLegacy 
+            ? `Your site relies on ${result.stack[0].name}. While functional, it’s currently a bottleneck for core web vitals. We recommend offloading your backend processing to a headless architecture to improve load times by ~40%.`
+            : `You've got a great foundation with ${result.stack[0].name}. Our managed service would focus on cost-optimization and 24/7 security monitoring rather than a full rewrite.`}
+        </p>
+      </div>
+    </div>
+  );
+}
+2. Strategy: The "Audit Conclusion"
+To make this work as a sales tool, you want the user to feel like they are reading an exclusive internal memo.
+
+The "Rating": Give them a score (e.g., 64%). People hate being "below average" and will want to reach out to see how to get to 100%.
+
+The "Engineer's Note": Use simple conditional logic to write a "note" that mentions their specific tech. It feels like you (the human) are talking to them, even if it's automated.
+
+The "Blueprint": Use words like Infrastructure, Hardened, Edge Scaling, and Zero-Downtime. These are professional buzzwords that justify a high-end price point.
+
+3. Next Step: Adding the "PDF Trigger"
+If you want to go the extra mile, you can use a library like jsPDF or a service like Browserless to actually generate a branded PDF of this blueprint.
+
+Imagine your customer downloading a PDF with your logo, their site's screenshot, and a custom migration plan. It’s the ultimate business card.
