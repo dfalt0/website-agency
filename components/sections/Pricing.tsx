@@ -93,7 +93,7 @@ export default function Pricing() {
           {plans.map((plan, index) => (
             <Card
               key={index}
-              className={`relative transition-all duration-300 hover:shadow-card-hover ${
+              className={`relative flex flex-col h-full transition-all duration-300 hover:shadow-card-hover ${
                 plan.highlighted
                   ? "border-2 border-primary shadow-card"
                   : ""
@@ -114,8 +114,8 @@ export default function Pricing() {
                   {plan.description}
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <ul className="space-y-3">
+              <CardContent className="flex-1 flex flex-col">
+                <ul className="space-y-3 flex-1">
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start gap-2">
                       <span className="mt-1 text-primary">✓</span>
