@@ -16,7 +16,12 @@ export default function CTA() {
             <Button variant="white-primary" size="lg" asChild>
               <Link href="/start">Get started free</Link>
             </Button>
-            <Button variant="secondary" size="lg" className="border-dark-foreground/50 text-dark-foreground hover:bg-dark-foreground hover:text-dark" asChild>
+            <Button
+              variant="secondary"
+              size="lg"
+              className="border-dark-foreground/50 text-dark-foreground transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground hover:border-primary"
+              asChild
+            >
               <Link href="/demo">Schedule a demo</Link>
             </Button>
           </div>
