@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import TrueFocus from "@/components/ui/TrueFocus";
 
 const plans = [
   {
@@ -67,9 +70,20 @@ export default function Pricing() {
           <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-primary">
             Pricing
           </p>
-          <h2 className="font-heading mb-6 text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-[1.3] tracking-[-0.02em] text-foreground">
-            Simple, transparent pricing
-          </h2>
+          <div className="mb-6 flex justify-center">
+            <TrueFocus
+              sentence="Simple,|transparent pricing"
+              separator="|"
+              manualMode={false}
+              blurAmount={5}
+              borderColor="var(--primary)"
+              glowColor="rgba(21, 128, 61, 0.5)"
+              animationDuration={0.5}
+              pauseBetweenAnimations={3}
+              className="text-center"
+              wordClassName="relative font-heading text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-[1.3] tracking-[-0.02em] text-foreground cursor-default"
+            />
+          </div>
           <p className="mx-auto max-w-[700px] text-lg leading-[1.8] text-foreground/70">
             All plans include expert engineering support and managed infrastructure
           </p>

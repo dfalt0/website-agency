@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import PixelCard from "@/components/ui/PixelCard";
 
 const PLATFORMS = [
   { id: "aws", name: "AWS", slug: "aws" },
@@ -15,11 +15,9 @@ const PLATFORMS = [
 ];
 
 /**
- * Nodus-style Infrastructure Cloud: grayscale logos, hover = emerald glow + Connected badge, "Connect your stack" with Moving Border.
+ * Your stack, connected: platform cards with pixel-card hover animation (green variant).
  */
 export default function InfrastructureCloud() {
-  const [hovered, setHovered] = useState<string | null>(null);
-
   return (
     <section className="bg-background py-24 lg:py-32">
       <div className="mx-auto max-w-[1200px] px-8 lg:px-16">
@@ -44,30 +42,24 @@ export default function InfrastructureCloud() {
           {PLATFORMS.map((platform) => (
             <motion.div
               key={platform.id}
-              className="group relative flex flex-col items-center rounded-lg border border-[rgba(26,31,26,0.15)] bg-surface py-8 transition-all duration-300 hover:border-emerald/30 hover:shadow-[0_0_24px_rgba(34,197,94,0.12)]"
-              style={{ borderWidth: "0.5px" }}
-              onMouseEnter={() => setHovered(platform.id)}
-              onMouseLeave={() => setHovered(null)}
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
+              className="min-h-[140px]"
             >
-              <div
-                className={`font-mono text-xl font-semibold transition-all duration-300 ${
-                  hovered === platform.id ? "text-emerald" : "text-foreground-muted"
-                }`}
+              <Link
+                href={`/integrations#${platform.slug}`}
+                className="block h-full rounded-[var(--radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
-                {platform.name}
-              </div>
-              {hovered === platform.id && (
-                <motion.span
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 font-mono text-[10px] font-medium uppercase tracking-wider text-emerald"
+                <PixelCard
+                  variant="green"
+                  className="group min-h-[140px] w-full bg-surface transition-colors duration-200 hover:bg-[#166534]"
                 >
-                  Connected
-                </motion.span>
-              )}
+                  <div className="relative z-10 font-mono text-xl font-semibold text-foreground transition-colors duration-200 group-hover:text-white">
+                    {platform.name}
+                  </div>
+                </PixelCard>
+              </Link>
             </motion.div>
           ))}
         </div>

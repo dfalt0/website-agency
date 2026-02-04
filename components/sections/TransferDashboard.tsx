@@ -10,8 +10,8 @@ const DETECTED_SERVICES = [
 ];
 
 /**
- * Nodus-style Transfer Dashboard: Detected Services (left) | Migration Beam (center) | Managed Cloud (right).
- * Obsidian Forest palette, mono text, pulsing emerald status dots.
+ * Visual: "Your current services" (left) → migration beam (center) → "Our managed cloud" (right).
+ * Communicates: we detect what you use (WordPress, AWS, etc.) and migrate it to our managed cloud.
  */
 export default function TransferDashboard() {
   return (
@@ -22,11 +22,14 @@ export default function TransferDashboard() {
       transition={{ duration: 0.6, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
       style={{ borderWidth: "0.5px" }}
     >
+      <p className="mb-4 text-center font-mono text-[10px] uppercase tracking-wider text-[#E2E8E2]/60">
+        We migrate your existing stack → our managed cloud
+      </p>
       <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-8">
-        {/* Left: Detected Services */}
+        {/* Left: Your current services (what we detect) */}
         <div>
           <p className="font-mono text-[10px] uppercase tracking-wider text-[#E2E8E2]/50">
-            Detected services
+            Your current services
           </p>
           <ul className="mt-3 space-y-2">
             {DETECTED_SERVICES.map((svc) => (
@@ -66,10 +69,10 @@ export default function TransferDashboard() {
           <div className="mt-1 h-16 w-px bg-gradient-to-b from-transparent via-[#1A1F1A] to-transparent" />
         </div>
 
-        {/* Right: Managed Cloud destination */}
+        {/* Right: Where we move everything */}
         <div className="text-right">
           <p className="font-mono text-[10px] uppercase tracking-wider text-[#E2E8E2]/50">
-            Destination
+            We manage it here
           </p>
           <p className="mt-3 font-mono text-sm font-medium text-[#E2E8E2]">
             Managed Cloud
