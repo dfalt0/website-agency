@@ -8,6 +8,7 @@ type NavVariant = "dark" | "light";
 
 export default function Navigation({ navVariant }: { navVariant?: NavVariant } = {}) {
   const pathname = usePathname();
+  const [hasScrolled, setHasScrolled] = useState(false);
   const [hasScrolledPastHero, setHasScrolledPastHero] = useState(false);
 
   // navVariant overrides: "dark" = dark background page (white nav text), "light" = light page (black nav text).
@@ -17,7 +18,11 @@ export default function Navigation({ navVariant }: { navVariant?: NavVariant } =
     navVariant === "dark" ? false : navVariant === "light" ? true : isLightPage || hasScrolledPastHero;
 
   useEffect(() => {
-    const handleScroll = () => setHasScrolledPastHero(window.scrollY > window.innerHeight);
+    const handleScroll = () => {
+      const y = window.scrollY;
+      setHasScrolled(y > 10);
+      setHasScrolledPastHero(y > window.innerHeight);
+    };
     handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -69,6 +74,7 @@ export default function Navigation({ navVariant }: { navVariant?: NavVariant } =
     <CardNav
       items={items}
       scrolled={scrolled}
+      glass={hasScrolled}
       theme="dark"
       buttonBgColor={scrolled ? "var(--primary)" : "#E2E8E2"}
       buttonTextColor={scrolled ? "var(--primary-foreground)" : "var(--dark)"}

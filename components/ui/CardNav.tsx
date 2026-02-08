@@ -30,6 +30,8 @@ interface CardNavProps {
   theme?: "light" | "dark";
   className?: string;
   scrolled?: boolean;
+  /** When true, nav always has backdrop blur and subtle background (e.g. over hero). */
+  glass?: boolean;
 }
 
 export function CardNav({
@@ -43,7 +45,9 @@ export function CardNav({
   theme = "dark",
   className,
   scrolled = false,
+  glass,
 }: CardNavProps) {
+  const showGlass = glass ?? scrolled;
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
@@ -66,7 +70,7 @@ export function CardNav({
       ref={navRef}
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        scrolled && "bg-background/80 shadow-soft backdrop-blur-xl border-b border-border/50",
+        showGlass && "bg-background/80 shadow-soft backdrop-blur-xl",
         className
       )}
     >

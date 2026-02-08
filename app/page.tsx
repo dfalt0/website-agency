@@ -1,7 +1,6 @@
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/sections/Hero";
 import ConnectionBeam from "@/components/sections/ConnectionBeam";
-import TransferFlowDivider from "@/components/sections/TransferFlowDivider";
 import StatsBar from "@/components/sections/StatsBar";
 import BentoFeatures from "@/components/sections/BentoFeatures";
 import InfrastructureCloud from "@/components/sections/InfrastructureCloud";
@@ -19,7 +18,6 @@ export default function Home() {
       <div className="relative z-10">
         <Navigation />
         <Hero />
-        <TransferFlowDivider />
         <StatsBar />
         <BentoFeatures />
         <InfrastructureCloud />

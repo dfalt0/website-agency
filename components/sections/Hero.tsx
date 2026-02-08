@@ -8,7 +8,7 @@ import RotatingText from "@/components/ui/RotatingText";
 import TransferDashboard from "@/components/sections/TransferDashboard";
 import HeroCommandLine from "@/components/sections/HeroCommandLine";
 
-/* Forest Mist – large blurred emerald radial gradient (no purple/blue) */
+/* Forest Mist – large blurred emerald radial gradient */
 const FOREST_MIST = "rgba(34, 197, 94, 0.08)";
 
 /* SVG grid pattern – mask fades toward the bottom (Linear depth) */
@@ -16,7 +16,7 @@ function GridPattern() {
   const size = 48;
   return (
     <div
-      className="absolute inset-0 opacity-[0.12]"
+      className="absolute inset-0 opacity-[0.22]"
       style={{
         maskImage: "linear-gradient(to bottom, black 0%, black 40%, transparent 85%)",
         WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 40%, transparent 85%)",
@@ -36,7 +36,7 @@ function GridPattern() {
               fill="none"
               stroke="var(--dark-foreground)"
               strokeWidth="0.5"
-              strokeOpacity="0.4"
+              strokeOpacity="0.55"
             />
           </pattern>
         </defs>
