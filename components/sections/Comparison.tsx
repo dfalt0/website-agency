@@ -41,9 +41,9 @@ export default function Comparison() {
         <Card className="overflow-hidden">
           <CardHeader className="bg-surface-muted">
             <div className="grid grid-cols-3 gap-4">
-              <CardTitle className="text-lg font-semibold">Feature</CardTitle>
-              <CardTitle className="text-lg font-semibold">DIY Platforms</CardTitle>
-              <CardTitle className="text-lg font-semibold">Our Managed Service</CardTitle>
+              <CardTitle className="text-xl font-semibold tracking-wide">Feature</CardTitle>
+              <CardTitle className="text-xl font-semibold tracking-wide">DIY Platforms</CardTitle>
+              <CardTitle className="text-xl font-semibold tracking-wide">Our Managed Service</CardTitle>
             </div>
           </CardHeader>
           <CardContent className="p-0">
@@ -57,6 +57,13 @@ export default function Comparison() {
                 {index < comparisonData.length - 1 && <Separator />}
               </div>
             ))}
+            <Separator />
+            <div className="grid grid-cols-3 gap-4 px-6 py-4">
+              <p className="col-span-3 text-xs leading-relaxed text-foreground-muted/80">
+                <span className="font-medium text-foreground-muted">†</span>{" "}
+                “Unlimited” custom features under our managed service means we add and implement whatever is within scope and scale for your project—we’re not miracle workers, but we’ll build what makes sense for you as a custom feature.
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>

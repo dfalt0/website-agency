@@ -1,9 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Globe, Cloud, Shield, Zap, Code, Headphones } from "lucide-react";
 import { ScrambleHeading } from "@/components/ui/ScrambleHeading";
+import MagicBento, { type MagicBentoCard } from "@/components/ui/MagicBento";
+
+/** Static lines shown above the active (rotating) line – fills the log pane */
+const LOG_PREAMBLE = [
+  "Connected to deploy target",
+  "Running pre-flight checks...",
+  "Environment: production",
+  "Branch: main → verified",
+  "Build cache: hit",
+];
 
 const MIGRATION_LOGS = [
   "Analyzing SSL certificates...",
@@ -16,18 +24,24 @@ const MIGRATION_LOGS = [
   "Enabling WAF rules...",
 ];
 
-const BENEFITS = [
-  { tag: "SYSTEM_LOG", title: "Real-time Migration Feed", icon: null },
-  { tag: "PERFORMANCE_METRIC", title: "Website Management", icon: Globe },
-  { tag: "SECURITY_LAYER", title: "Security & Monitoring", icon: Shield },
-  { tag: "CDN_STATUS", title: "Performance Optimization", icon: Zap },
-  { tag: "CLOUD_SYNC", title: "Cloud Infrastructure", icon: Cloud },
-  { tag: "CUSTOM_BUILD", title: "Custom Development", icon: Code },
-  { tag: "SUPPORT_TIER", title: "Expert Support", icon: Headphones },
-];
+/** Bento tray – between primary and primary-hover, slightly darker */
+const BENTO_TRAY_BG = "#0f5528"; // between #15803D and #052E16
+
+/** Bento card shades of green matching the site (idea 2) – Obsidian Forest greens */
+const GREEN_CARDS = [
+  "#e8f5ec", // mint / lightest
+  "#d4edda", // pale green
+  "#c8e6d0", // soft sage
+  "#b8dfc4", // light green
+  "#a7d9b8", // medium-light green
+  "#d0e9d6", // alternate pale
+] as const;
+
+/** Surface color for system log card (matches light card on tray) */
+const LOG_CARD_BG = "var(--surface)";
 
 /**
- * Nodus-style Bento Grid: technical headers [TAG], one card = scrolling Migration Feed, 0.5px borders, glassmorphism.
+ * Benefits section: "Everything you need, fully managed" – Migration Feed + React Bits Magic Bento grid (hover animations, spotlight, emerald glow).
  */
 export default function BentoFeatures() {
   const [logIndex, setLogIndex] = useState(0);
@@ -38,6 +52,58 @@ export default function BentoFeatures() {
     }, 2000);
     return () => clearInterval(t);
   }, []);
+
+  const systemLogContent = (
+    <div className="relative h-full min-h-[200px] flex flex-col border-l-2 border-primary/40">
+      {/* Terminal-style title bar */}
+      <div className="flex items-center gap-2 border-b border-border/80 px-3 py-2 font-mono text-[10px] uppercase tracking-wider text-foreground-muted">
+        <span className="size-1.5 rounded-full bg-primary/60" aria-hidden />
+        [SYSTEM_LOG]
+      </div>
+      {/* Log body: preamble lines + 3 static + 1 active (green) */}
+      <div className="flex flex-1 flex-col justify-end gap-0.5 p-3 font-mono text-xs tabular-nums text-foreground-muted">
+        {LOG_PREAMBLE.map((line, i) => (
+          <div key={`pre-${i}`} className="flex items-center gap-2 py-0.5 pl-2 pr-1">
+            <span className="select-none text-foreground-muted/40">$</span>
+            <span className="min-w-0 truncate">{line}</span>
+          </div>
+        ))}
+        {MIGRATION_LOGS.slice(0, 4).map((line, i) => {
+          const isActive = i === 3;
+          return (
+            <div
+              key={`log-${i}`}
+              className={`flex items-center gap-2 py-0.5 pl-2 pr-1 ${
+                isActive ? "border-l-2 border-primary/50 bg-primary/5 text-primary" : ""
+              }`}
+            >
+              <span className="select-none text-foreground-muted/50">
+                {isActive ? ">" : "$"}
+              </span>
+              <span className="min-w-0 truncate">
+                {isActive ? MIGRATION_LOGS[logIndex] : line}
+              </span>
+              {isActive && (
+                <span
+                  className="ml-0.5 h-3.5 w-0.5 shrink-0 bg-primary animate-[terminal-blink_1.2s_ease-in-out_infinite]"
+                  aria-hidden
+                />
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  const bentoCards: MagicBentoCard[] = [
+    { color: GREEN_CARDS[0], title: "Website Management", description: "Maintenance, updates, and optimization.", label: "Performance", gridColumn: "1", gridRow: "1" },
+    { color: GREEN_CARDS[1], title: "Security & Monitoring", description: "Enterprise-grade protection and 24/7 monitoring.", label: "Security", gridColumn: "2", gridRow: "1" },
+    { color: GREEN_CARDS[2], title: "Performance Optimization", description: "CDN, caching, and speed tuning.", label: "CDN", gridColumn: "3", gridRow: "1" },
+    { color: LOG_CARD_BG, title: "", description: "", label: "", gridColumn: "1 / 3", gridRow: "2 / 4", customContent: systemLogContent },
+    { color: GREEN_CARDS[4], title: "Custom Development", description: "Features, integrations, and bespoke builds.", label: "Build", gridColumn: "3", gridRow: "2" },
+    { color: GREEN_CARDS[5], title: "Expert Support", description: "Dedicated engineers when you need them.", label: "Support", gridColumn: "3", gridRow: "3" },
+  ];
 
   return (
     <section id="services" className="relative bg-background py-24 lg:py-32">
@@ -57,107 +123,27 @@ export default function BentoFeatures() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5">
-          {/* Migration Feed card – full width on first row */}
-          <motion.div
-            className="md:col-span-2 lg:col-span-2"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <div
-              className="relative h-full min-h-[200px] overflow-hidden rounded-lg border border-[rgba(26,31,26,0.2)] bg-[#0C0F0C]/60 backdrop-blur-sm"
-              style={{ borderWidth: "0.5px" }}
-            >
-              <div className="absolute left-3 top-3 font-mono text-[10px] uppercase tracking-wider text-[#E2E8E2]/50">
-                [SYSTEM_LOG]
-              </div>
-              <div className="flex h-full flex-col justify-end p-6 pt-10">
-                <div className="font-mono text-xs text-[#E2E8E2]/90">
-                  {MIGRATION_LOGS.slice(0, 4).map((line, i) => (
-                    <div
-                      key={`log-${i}`}
-                      className={i === 3 ? "text-emerald" : "text-[#E2E8E2]/60"}
-                    >
-                      {i === 3 ? MIGRATION_LOGS[logIndex] : line}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Third card on first row */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            <BentoCard
-              tag="PERFORMANCE_METRIC"
-              title="Website Management"
-              description="Maintenance, updates, and optimization."
-              Icon={Globe}
-            />
-          </motion.div>
-
-          {/* Row 2 */}
-          {BENEFITS.slice(2, 6).map((item, index) => (
-            <motion.div
-              key={item.tag}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.05 * index }}
-            >
-              <BentoCard
-                tag={item.tag}
-                title={item.title}
-                description=""
-                Icon={item.icon}
-              />
-            </motion.div>
-          ))}
+        {/* Bento tray: System Log bottom-left (large slot), 5 benefit cards */}
+        <div
+          className="rounded-2xl p-4 md:p-5 lg:p-6"
+          style={{ backgroundColor: BENTO_TRAY_BG }}
+        >
+          <MagicBento
+            cards={bentoCards}
+            textAutoHide={true}
+            enableStars
+            enableSpotlight
+            enableBorderGlow={true}
+            enableTilt={false}
+            enableMagnetism
+            clickEffect
+            spotlightRadius={400}
+            particleCount={12}
+            glowColor="34, 197, 94"
+            disableAnimations={false}
+          />
         </div>
       </div>
     </section>
-  );
-}
-
-function BentoCard({
-  tag,
-  title,
-  description,
-  Icon,
-}: {
-  tag: string;
-  title: string;
-  description: string;
-  Icon: React.ComponentType<React.SVGProps<SVGSVGElement>> | null;
-}) {
-  return (
-    <div
-      className="group relative flex min-h-[160px] flex-col justify-between overflow-hidden rounded-lg border border-[rgba(26,31,26,0.2)] bg-[#0C0F0C]/60 p-5 backdrop-blur-sm transition-colors hover:border-emerald/20"
-      style={{ borderWidth: "0.5px" }}
-    >
-      <div className="font-mono text-[10px] uppercase tracking-wider text-[#E2E8E2]/50">
-        [{tag}]
-      </div>
-      <div>
-        {Icon && (
-          <Icon className="mb-2 h-5 w-5 text-emerald" strokeWidth={1.5} />
-        )}
-        <h3 className="font-heading text-lg font-semibold text-foreground">
-          {title}
-        </h3>
-        {description && (
-          <p className="mt-1 font-mono text-[10px] text-foreground-muted">
-            {description}
-          </p>
-        )}
-      </div>
-    </div>
   );
 }

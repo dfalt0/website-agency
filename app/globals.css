@@ -63,3 +63,8 @@
     stroke-dashoffset: -100;
   }
 }
+
+@keyframes terminal-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
