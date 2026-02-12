@@ -8,20 +8,20 @@ import { ScrambleHeading } from "@/components/ui/ScrambleHeading";
 const steps = [
   {
     number: "01",
-    title: "Tell us about your needs",
-    description: "Quick consultation to understand your website goals and requirements.",
+    title: "Share your website & services",
+    description: "Enter your website, domain, and service details into our system for AI-powered analysis. We get a clear picture of your stack and needs fast.",
     icon: Icons.MessageCircle,
   },
   {
     number: "02",
-    title: "We build or migrate",
-    description: "Our engineers create your site or seamlessly migrate from your current platform.",
+    title: "We bring it into our stack",
+    description: "We onboard your tech into our management platform and get to work—whether that means building new, migrating to better services, or rebuilding. Your setup, our bubble.",
     icon: Icons.Settings,
   },
   {
     number: "03",
     title: "Launch and grow",
-    description: "Your site goes live with ongoing optimization and support from our team.",
+    description: "We focus on managing and improving what you already have. Your site and services stay live with ongoing optimization and support—and we can build new when you need it.",
     icon: Icons.Rocket,
   },
 ];
@@ -60,14 +60,14 @@ export default function Process() {
               >
                 <CardHeader>
                   <div className="mb-4 flex items-center gap-4">
-                    <div className="font-heading flex h-12 w-12 items-center justify-center rounded-[var(--radius)] bg-primary text-xl font-semibold text-primary-foreground">
+                    <div className="font-heading flex h-12 w-12 items-center justify-center rounded-[var(--radius)] bg-primary text-xl font-semibold tracking-wide text-primary-foreground">
                       {step.number}
                     </div>
                     <div className="flex h-12 w-12 items-center justify-center rounded-[var(--radius)] bg-surface-muted text-foreground">
                       <Icon className="h-6 w-6" />
                     </div>
                   </div>
-                  <CardTitle className="text-xl">{step.title}</CardTitle>
+                  <CardTitle className="text-xl font-semibold tracking-wide">{step.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-base leading-relaxed">
