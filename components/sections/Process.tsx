@@ -53,10 +53,16 @@ export default function Process() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {steps.map((step, index) => {
             const Icon = step.icon;
+            const hoverPop =
+              index === 0
+                ? "hover:-translate-x-2 hover:-translate-y-3"
+                : index === 1
+                  ? "hover:-translate-y-3"
+                  : "hover:translate-x-2 hover:-translate-y-3";
             return (
               <Card
                 key={index}
-                className="transition-all duration-300 hover:shadow-card-hover"
+                className={`transition-all duration-300 hover:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.14),0_28px_64px_-12px_rgba(0,0,0,0.1)] ${hoverPop}`}
               >
                 <CardHeader>
                   <div className="mb-4 flex items-center gap-4">

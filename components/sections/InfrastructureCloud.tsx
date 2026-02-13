@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -18,6 +19,29 @@ const PLATFORMS = [
  * Your stack, connected: platform cards with pixel-card hover animation (green variant).
  */
 export default function InfrastructureCloud() {
+  const connectRef = useRef<HTMLAnchorElement>(null);
+  const [connectHovered, setConnectHovered] = useState(false);
+  const mousePosRef = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMove = (e: MouseEvent) => {
+      mousePosRef.current = { x: e.clientX, y: e.clientY };
+    };
+    window.addEventListener("mousemove", handleMove, { passive: true });
+    return () => window.removeEventListener("mousemove", handleMove);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!connectHovered || !connectRef.current) return;
+      const { x, y } = mousePosRef.current;
+      const el = document.elementFromPoint(x, y);
+      if (el && !connectRef.current.contains(el)) setConnectHovered(false);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [connectHovered]);
+
   return (
     <section className="bg-background py-24 lg:py-32">
       <div className="mx-auto max-w-[1200px] px-8 lg:px-16">
@@ -55,7 +79,7 @@ export default function InfrastructureCloud() {
                   variant="green"
                   className="group min-h-[140px] w-full bg-surface transition-colors duration-200 hover:bg-[#166534]"
                 >
-                  <div className="relative z-10 font-mono text-xl font-semibold text-foreground transition-colors duration-200 group-hover:text-white">
+                  <div className="relative z-10 font-mono text-2xl font-semibold text-foreground transition-colors duration-200 group-hover:text-white">
                     {platform.name}
                   </div>
                 </PixelCard>
@@ -71,30 +95,18 @@ export default function InfrastructureCloud() {
           viewport={{ once: true }}
         >
           <Link
+            ref={connectRef}
             href="/connect"
+            onMouseEnter={() => setConnectHovered(true)}
+            onMouseLeave={() => setConnectHovered(false)}
             className={cn(
-              "group relative inline-flex rounded-lg px-6 py-3 font-mono text-xs font-medium uppercase tracking-wider text-foreground transition-colors hover:text-emerald"
+              "relative inline-flex items-center justify-center rounded-lg border-2 border-primary px-8 py-4 font-mono text-sm font-medium uppercase tracking-wider transition-all duration-200",
+              connectHovered
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-primary text-foreground"
             )}
           >
             <span className="relative z-10">Connect your stack</span>
-            <span
-              className="absolute inset-0 rounded-lg border border-[#1A1F1A]"
-              style={{ borderWidth: "0.5px" }}
-              aria-hidden
-            />
-            <motion.span
-              className="absolute inset-[-1px] rounded-lg opacity-0 group-hover:opacity-100"
-              style={{
-                background: "linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.3), transparent, rgba(34, 197, 94, 0.3))",
-                backgroundSize: "200% 100%",
-                mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                maskComposite: "exclude",
-                padding: "0.5px",
-                WebkitMaskComposite: "xor",
-              }}
-              animate={{ backgroundPosition: ["0% 0%", "200% 0%"] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            />
           </Link>
         </motion.div>
       </div>
