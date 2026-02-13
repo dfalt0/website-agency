@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -62,7 +63,11 @@ const plans = [
   },
 ];
 
+const DEFAULT_HIGHLIGHTED_INDEX = 1; // Professional
+
 export default function Pricing() {
+  const [highlightedIndex, setHighlightedIndex] = useState(DEFAULT_HIGHLIGHTED_INDEX);
+
   return (
     <section id="pricing" className="bg-background py-24 lg:py-32">
       <div className="mx-auto max-w-[1200px] px-8 lg:px-16">
@@ -93,15 +98,26 @@ export default function Pricing() {
           {plans.map((plan, index) => (
             <Card
               key={index}
-              className={`relative flex flex-col h-full transition-all duration-300 hover:shadow-card-hover ${
-                plan.highlighted
-                  ? "border-2 border-primary shadow-card"
-                  : ""
+              role="button"
+              tabIndex={0}
+              onClick={() => setHighlightedIndex(index)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setHighlightedIndex(index);
+                }
+              }}
+              className={`relative flex cursor-pointer flex-col h-full border-2 transition-[border-color,box-shadow] duration-200 ease-out hover:shadow-card-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+                highlightedIndex === index
+                  ? "border-primary shadow-card"
+                  : "border-border-subtle/60"
               }`}
             >
-              {plan.badge && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <Badge variant="default">{plan.badge}</Badge>
+              {plan.badge && index === DEFAULT_HIGHLIGHTED_INDEX && highlightedIndex === 1 && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 flex items-center justify-center">
+                  <Badge variant="default" className="text-sm leading-none px-3.5 py-2">
+                    {plan.badge}
+                  </Badge>
                 </div>
               )}
               <CardHeader className="text-center">
@@ -124,9 +140,9 @@ export default function Pricing() {
                   ))}
                 </ul>
               </CardContent>
-              <CardFooter>
+              <CardFooter onClick={(e) => e.stopPropagation()}>
                 <Button
-                  variant={plan.cta.variant}
+                  variant={highlightedIndex === index ? "default" : "secondary"}
                   size="default"
                   className="w-full"
                   asChild

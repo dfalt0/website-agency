@@ -5,7 +5,6 @@ import { useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import RotatingText from "@/components/ui/RotatingText";
-import TransferDashboard from "@/components/sections/TransferDashboard";
 import HeroCommandLine from "@/components/sections/HeroCommandLine";
 
 /* Forest Mist – large blurred emerald radial gradient */
@@ -97,7 +96,7 @@ export default function Hero() {
       <GridPattern />
       <Spotlight x={spotlight.x} y={spotlight.y} />
 
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-8 pt-48 lg:pt-64">
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-8 pt-28 lg:pt-36">
         <div className="mx-auto max-w-[900px] text-center">
         <motion.h1
           className="font-heading mb-8 text-[clamp(3rem,10vw,6rem)] font-normal leading-[1.1] tracking-[-0.02em] text-[#E2E8E2]"
@@ -161,11 +160,9 @@ export default function Hero() {
         </motion.p>
         </div>
 
-        <div className="mt-12 w-full max-w-[900px] px-4">
-          <TransferDashboard />
+        <div className="mt-auto w-full pb-24 pt-16">
+          <HeroCommandLine />
         </div>
-
-        <HeroCommandLine />
       </div>
     </section>
   );
