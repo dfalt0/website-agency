@@ -144,7 +144,7 @@ export default function Hero() {
             variant="white-primary"
             size="lg"
             asChild
-            className="w-full max-w-[280px] shadow-emerald"
+            className="w-full max-w-[280px] border border-[#E2E8E2]/90 bg-transparent text-[#E2E8E2] shadow-emerald hover:bg-[#E2E8E2] hover:text-[#080A08]"
           >
             <Link href="/start">Get started</Link>
           </Button>

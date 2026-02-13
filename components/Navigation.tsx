@@ -12,10 +12,12 @@ export default function Navigation({ navVariant }: { navVariant?: NavVariant } =
   const [hasScrolledPastHero, setHasScrolledPastHero] = useState(false);
 
   // navVariant overrides: "dark" = dark background page (white nav text), "light" = light page (black nav text).
-  // Otherwise: home = white text until scroll past hero; other pages = black text from start.
-  const isLightPage = pathname !== "/";
+  // Otherwise: home = white text until scroll past hero; dark pages (/transfer, /scan) = always white text; other pages = black text.
+  const isDarkPage = pathname === "/transfer" || pathname === "/scan";
+  const isLightPage = pathname !== "/" && !isDarkPage;
   const scrolled =
-    navVariant === "dark" ? false : navVariant === "light" ? true : isLightPage || hasScrolledPastHero;
+    navVariant === "dark" ? false : navVariant === "light" ? true : isDarkPage ? false : isLightPage || hasScrolledPastHero;
+  const showGlass = hasScrolled || isDarkPage;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,7 +76,7 @@ export default function Navigation({ navVariant }: { navVariant?: NavVariant } =
     <CardNav
       items={items}
       scrolled={scrolled}
-      glass={hasScrolled}
+      glass={showGlass}
       theme="dark"
       buttonBgColor={scrolled ? "var(--primary)" : "#E2E8E2"}
       buttonTextColor={scrolled ? "var(--primary-foreground)" : "var(--dark)"}

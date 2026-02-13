@@ -78,7 +78,7 @@ export function CardNav({
         <div className="flex h-20 items-center justify-between">
           <Link
             href="/"
-            className="flex items-center gap-2 font-heading text-2xl font-semibold transition-colors"
+            className="flex items-center gap-2 font-heading text-3xl font-semibold transition-colors"
             style={{ color: textColor }}
           >
             {logo ?? "YourCompany"}
@@ -97,7 +97,7 @@ export function CardNav({
                         setOpenIndex(openIndex === index ? null : index);
                       }}
                       className={cn(
-                        "flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium transition-colors hover:opacity-90",
+                        "flex items-center gap-1 rounded-lg px-4 py-2 text-base font-medium transition-colors hover:opacity-90",
                         openIndex === index && "opacity-90"
                       )}
                       style={{ color: menuTextColor }}
@@ -135,7 +135,7 @@ export function CardNav({
                                 key={link.label}
                                 href={link.href ?? "#"}
                                 aria-label={link.ariaLabel ?? link.label}
-                                className="block px-5 py-2.5 text-sm font-medium transition-colors hover:opacity-80"
+                                className="block px-5 py-2.5 text-base font-medium transition-colors hover:opacity-80"
                                 onClick={() => setOpenIndex(null)}
                               >
                                 {link.label}
@@ -149,7 +149,7 @@ export function CardNav({
                 ) : (
                   <Link
                     href={item.href ?? "#"}
-                    className="rounded-lg px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
+                    className="rounded-lg px-4 py-2 text-base font-medium transition-colors hover:opacity-90"
                     style={{ color: menuTextColor }}
                   >
                     {item.label}
@@ -163,14 +163,14 @@ export function CardNav({
           <div className="hidden items-center gap-4 lg:flex">
             <Link
               href="/login"
-              className="text-sm font-medium transition-opacity hover:opacity-70"
+              className="text-base font-medium transition-opacity hover:opacity-70"
               style={{ color: menuTextColor }}
             >
               Log In
             </Link>
             <Link
               href="/start"
-              className="inline-flex h-10 items-center justify-center rounded-lg px-6 text-sm font-semibold transition-all hover:opacity-90"
+              className="inline-flex h-11 items-center justify-center rounded-lg px-6 text-base font-semibold transition-all hover:opacity-90"
               style={{
                 backgroundColor: buttonBgColor,
                 color: buttonTextColor,
@@ -214,7 +214,7 @@ export function CardNav({
             <div className="mx-auto max-w-[1200px] px-8 py-6">
               {items.map((item) => (
                 <div key={item.label} className="mb-4">
-                  <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  <p className="mb-2 text-sm font-medium uppercase tracking-wider text-muted-foreground">
                     {item.label}
                   </p>
                   <div className="space-y-1">
@@ -223,7 +223,7 @@ export function CardNav({
                         <Link
                           key={link.label}
                           href={link.href ?? "#"}
-                          className="block py-2 text-base font-medium text-foreground"
+                          className="block py-2.5 text-lg font-medium text-foreground"
                           onClick={() => setMobileOpen(false)}
                         >
                           {link.label}
@@ -232,7 +232,7 @@ export function CardNav({
                     ) : (
                       <Link
                         href={item.href ?? "#"}
-                        className="block py-2 text-base font-medium text-foreground"
+                        className="block py-2.5 text-lg font-medium text-foreground"
                         onClick={() => setMobileOpen(false)}
                       >
                         {item.label}
@@ -244,14 +244,14 @@ export function CardNav({
               <div className="mt-6 space-y-3 border-t border-border pt-6">
                 <Link
                   href="/login"
-                  className="block text-base font-medium text-foreground"
+                  className="block py-2.5 text-lg font-medium text-foreground"
                   onClick={() => setMobileOpen(false)}
                 >
                   Log In
                 </Link>
                 <Link
                   href="/start"
-                  className="block w-full rounded-lg py-3 text-center text-base font-semibold text-primary-foreground"
+                  className="block w-full rounded-lg py-3.5 text-center text-lg font-semibold text-primary-foreground"
                   style={{ backgroundColor: buttonBgColor }}
                   onClick={() => setMobileOpen(false)}
                 >

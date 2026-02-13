@@ -27,8 +27,8 @@ export default function Testimonials() {
     <section className="bg-surface-muted py-24 lg:py-32">
       <div className="mx-auto max-w-[1200px] px-8 lg:px-16">
         <div className="mb-16 text-center lg:mb-20">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-primary">
-            Testimonials
+          <p className="mb-4 font-mono text-sm font-semibold uppercase tracking-wider text-primary">
+            [TESTIMONIALS]
           </p>
           <h2 className="font-heading text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-[1.3] tracking-[-0.02em] text-foreground">
             Trusted by businesses like yours

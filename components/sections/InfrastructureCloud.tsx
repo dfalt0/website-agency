@@ -51,7 +51,7 @@ export default function InfrastructureCloud() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <p className="mb-4 font-mono text-[10px] font-medium uppercase tracking-wider text-primary">
+          <p className="mb-4 font-mono text-sm font-medium uppercase tracking-wider text-primary">
             [INTEGRATIONS]
           </p>
           <h2 className="font-heading mb-6 text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-[1.3] tracking-[-0.02em] text-foreground">

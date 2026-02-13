@@ -72,8 +72,8 @@ export default function Pricing() {
     <section id="pricing" className="bg-background py-24 lg:py-32">
       <div className="mx-auto max-w-[1200px] px-8 lg:px-16">
         <div className="mb-16 text-center lg:mb-20">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-primary">
-            Pricing
+          <p className="mb-4 font-mono text-sm font-semibold uppercase tracking-wider text-primary">
+            [PRICING]
           </p>
           <div className="mb-6 flex justify-center">
             <TrueFocus

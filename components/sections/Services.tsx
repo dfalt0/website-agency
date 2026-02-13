@@ -55,7 +55,7 @@ export default function Services() {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5 }}
         >
-          <p className="mb-4 font-mono text-xs font-medium uppercase tracking-wider text-primary">
+          <p className="mb-4 font-mono text-sm font-medium uppercase tracking-wider text-primary">
             What we do
           </p>
           <h2 className="font-heading mb-6 text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-[1.3] tracking-[-0.02em] text-foreground">

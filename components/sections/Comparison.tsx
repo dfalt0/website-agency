@@ -24,7 +24,7 @@ export default function Comparison() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <p className="mb-4 font-mono text-[10px] font-medium uppercase tracking-wider text-primary">
+          <p className="mb-4 font-mono text-sm font-medium uppercase tracking-wider text-primary">
             [COMPARISON]
           </p>
           <ScrambleHeading

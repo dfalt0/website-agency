@@ -2,7 +2,7 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/sections/Hero";
 import ConnectionBeam from "@/components/sections/ConnectionBeam";
 import StatsBar from "@/components/sections/StatsBar";
-import BentoFeatures from "@/components/sections/BentoFeatures";
+import Features from "@/components/sections/Features";
 import InfrastructureCloud from "@/components/sections/InfrastructureCloud";
 import Comparison from "@/components/sections/Comparison";
 import Process from "@/components/sections/Process";
@@ -19,7 +19,7 @@ export default function Home() {
         <Navigation />
         <Hero />
         <StatsBar />
-        <BentoFeatures />
+        <Features />
         <InfrastructureCloud />
         <Comparison />
         <Process />

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { Inter, Instrument_Serif, JetBrains_Mono } from "next/font/google";
+import { Inter, Instrument_Serif, JetBrains_Mono, Caveat } from "next/font/google";
 import "./globals.css";
+import ClickSparkWrapper from "@/components/ClickSparkWrapper";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -23,6 +24,13 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-handwriting",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Managed Web Services - Your Website, Fully Managed",
   description: "Professional engineers managing your website and cloud infrastructure—affordable, competitive, and worry-free.",
@@ -35,8 +43,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}>
-      <body className="antialiased">{children}</body>
+    <html lang="en" className={`${inter.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} ${caveat.variable}`}>
+      <body className="antialiased">
+        <ClickSparkWrapper>{children}</ClickSparkWrapper>
+      </body>
     </html>
   );
 }
