@@ -123,11 +123,36 @@ export default function BentoFeatures() {
           </p>
         </div>
 
-        {/* Bento tray: System Log bottom-left (large slot), 5 benefit cards */}
+        {/* Bento tray: macOS-style window with traffic lights, then cards */}
         <div
-          className="rounded-2xl p-4 md:p-5 lg:p-6"
+          className="rounded-2xl overflow-hidden"
           style={{ backgroundColor: BENTO_TRAY_BG }}
         >
+          {/* macOS-style title bar with close / minimize / maximize */}
+          <div
+            className="flex items-center gap-2 px-4 pt-3 pb-1.5 md:px-5 md:pt-4"
+            style={{ minHeight: "40px" }}
+          >
+            <button
+              type="button"
+              aria-label="Close"
+              className="h-3 w-3 rounded-full border-0 transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f5528]"
+              style={{ backgroundColor: "#ff5f57" }}
+            />
+            <button
+              type="button"
+              aria-label="Minimize"
+              className="h-3 w-3 rounded-full border-0 transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f5528]"
+              style={{ backgroundColor: "#febc2e" }}
+            />
+            <button
+              type="button"
+              aria-label="Maximize"
+              className="h-3 w-3 rounded-full border-0 transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f5528]"
+              style={{ backgroundColor: "#28c840" }}
+            />
+          </div>
+          <div className="p-4 pt-2 md:p-5 md:pt-2 lg:p-6 lg:pt-3">
           <MagicBento
             cards={bentoCards}
             textAutoHide={true}
@@ -142,6 +167,7 @@ export default function BentoFeatures() {
             glowColor="34, 197, 94"
             disableAnimations={false}
           />
+          </div>
         </div>
       </div>
     </section>

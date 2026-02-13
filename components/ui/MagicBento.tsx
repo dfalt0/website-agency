@@ -30,11 +30,11 @@ const createParticleElement = (
   el.className = "particle";
   el.style.cssText = `
     position: absolute;
-    width: 4px;
-    height: 4px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: rgba(${color}, 1);
-    box-shadow: 0 0 6px rgba(${color}, 0.6);
+    box-shadow: 0 0 16px rgba(${color}, 0.95), 0 0 6px rgba(${color}, 0.8);
     pointer-events: none;
     z-index: 100;
     left: ${x}px;
@@ -155,7 +155,7 @@ const ParticleCard = ({
         });
 
         gsap.to(clone, {
-          opacity: 0.3,
+          opacity: 0.75,
           duration: 1.5,
           ease: "power2.inOut",
           repeat: -1,
