@@ -306,8 +306,8 @@ export default function Features() {
           <>
               {/* macOS-style title bar – always visible when window is shown */}
               <div
-                className="flex items-center gap-2 px-4 pt-2 pb-1.5 md:px-5 md:pt-2.5"
-                style={{ minHeight: "36px" }}
+                className="flex items-center gap-2 px-4 pt-3 pb-1.5 md:px-5 md:pt-4"
+                style={{ minHeight: "40px" }}
               >
                 <button
                   type="button"
