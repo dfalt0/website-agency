@@ -6,44 +6,10 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import RotatingText from "@/components/ui/RotatingText";
 import HeroCommandLine from "@/components/sections/HeroCommandLine";
+import Squares from "@/components/ui/Squares";
 
 /* Forest Mist – large blurred emerald radial gradient */
 const FOREST_MIST = "rgba(34, 197, 94, 0.08)";
-
-/* SVG grid pattern – mask fades toward the bottom (Linear depth) */
-function GridPattern() {
-  const size = 48;
-  return (
-    <div
-      className="absolute inset-0 opacity-[0.22]"
-      style={{
-        maskImage: "linear-gradient(to bottom, black 0%, black 40%, transparent 85%)",
-        WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 40%, transparent 85%)",
-      }}
-      aria-hidden
-    >
-      <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern
-            id="hero-grid"
-            width={size}
-            height={size}
-            patternUnits="userSpaceOnUse"
-          >
-            <path
-              d={`M ${size} 0 L 0 0 0 ${size}`}
-              fill="none"
-              stroke="var(--dark-foreground)"
-              strokeWidth="0.5"
-              strokeOpacity="0.55"
-            />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#hero-grid)" />
-      </svg>
-    </div>
-  );
-}
 
 /* Mouse-follow radial glow – emerald tint (Forest Mist) */
 function Spotlight({ x, y }: { x: number; y: number }) {
@@ -65,6 +31,7 @@ function Spotlight({ x, y }: { x: number; y: number }) {
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const [spotlight, setSpotlight] = useState({ x: 0, y: 0 });
+  const squaresMouseRef = useRef<{ clientX: number; clientY: number } | null>(null);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLElement>) => {
@@ -74,15 +41,21 @@ export default function Hero() {
         x: e.clientX - rect.left,
         y: e.clientY - rect.top,
       });
+      squaresMouseRef.current = { clientX: e.clientX, clientY: e.clientY };
     },
     []
   );
+
+  const handleMouseLeave = useCallback(() => {
+    squaresMouseRef.current = null;
+  }, []);
 
   return (
     <section
       ref={sectionRef}
       className="relative flex min-h-screen flex-col overflow-hidden bg-dark"
       onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
       {/* Base: deep forest black + Forest Mist glow (emerald radial) */}
       <div className="absolute inset-0 bg-dark" />
@@ -93,7 +66,24 @@ export default function Hero() {
         }}
       />
 
-      <GridPattern />
+      {/* Animated grid – theme: dark-foreground lines, emerald hover (React Bits Squares) */}
+      <div
+        className="absolute inset-0 opacity-90"
+        style={{
+          maskImage: "linear-gradient(to bottom, black 0%, black 35%, transparent 82%)",
+          WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 35%, transparent 82%)",
+        }}
+      >
+        <Squares
+          direction="diagonal"
+          speed={0.5}
+          squareSize={24}
+          borderColor="rgba(226, 232, 226, 0.06)"
+          borderWidth={0.5}
+          hoverFillColor="rgba(34, 197, 94, 0.18)"
+          mouseClientRef={squaresMouseRef}
+        />
+      </div>
       <Spotlight x={spotlight.x} y={spotlight.y} />
 
       <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-8 pt-28 lg:pt-36">
@@ -107,7 +97,7 @@ export default function Hero() {
           Your{" "}
           <span className="font-heading inline-flex items-baseline align-baseline px-2 py-0.5 sm:px-3 sm:py-1 md:px-4 md:py-1.5 bg-[#E2E8E2] text-[#080A08] rounded-lg">
             <RotatingText
-              texts={["website", "shopify", "wordpress", "wix", "squarespace", "aws", "vercel"]}
+              texts={["website", "online store", "blog", "site builder", "ecommerce", "cloud", "hosting"]}
               mainClassName="overflow-hidden justify-center inline-flex"
               staggerFrom="last"
               initial={{ y: "100%" }}

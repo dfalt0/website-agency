@@ -15,7 +15,7 @@ const testimonials = [
     avatar: "/images/testimonials/michael.jpg",
   },
   {
-    quote: "We migrated from Squarespace and couldn't be happier. Same ease of use, but with unlimited customization and expert support.",
+    quote: "We migrated from our previous site builder and couldn't be happier. Same ease of use, but with unlimited customization and expert support.",
     author: "Emily Thompson",
     role: "Marketing Director, Bloom & Co",
     avatar: "/images/testimonials/emily.jpg",

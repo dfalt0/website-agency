@@ -34,7 +34,7 @@ export default function Comparison() {
             Why choose managed over DIY?
           </ScrambleHeading>
           <p className="mx-auto max-w-[700px] text-lg leading-[1.8] text-foreground-muted">
-            Get the benefits of platforms like Squarespace, Wix, and GoDaddy—with expert engineers doing all the work.
+            Get the benefits of popular DIY website builders and all-in-one site platforms—with expert engineers doing all the work.
           </p>
         </motion.div>
 
