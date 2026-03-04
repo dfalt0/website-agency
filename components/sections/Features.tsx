@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { ExternalLink, Globe, Cloud, Zap, History, MessageSquare, Activity, GitCommit, Shield, Wrench, Sparkles, User } from "lucide-react";
 import { ScrambleHeading } from "@/components/ui/ScrambleHeading";
 import MagicBento, { type MagicBentoCard } from "@/components/ui/MagicBento";

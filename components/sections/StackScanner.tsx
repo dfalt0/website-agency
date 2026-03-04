@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { Copy, Download, Check, FileDown } from "lucide-react";
 import { downloadBlueprint } from "../../lib/generatePdf";
 

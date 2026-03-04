@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "motion/react";
 
 /**
  * Connection Beam – faint glowing emerald line that pulses downward as the user scrolls.

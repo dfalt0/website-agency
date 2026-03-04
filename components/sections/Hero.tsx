@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRef, useState, useCallback, useEffect } from "react";
-import { motion, useMotionValue, animate } from "framer-motion";
+import { motion, useMotionValue, animate } from "motion/react";
 import { Button } from "@/components/ui/button";
 import RotatingText from "@/components/ui/RotatingText";
 import HeroCommandLine from "@/components/sections/HeroCommandLine";

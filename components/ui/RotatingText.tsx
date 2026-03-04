@@ -1,8 +1,8 @@
 "use client";
 
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import type { Transition, VariantLabels, Target, TargetAndTransition } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
+import type { Transition, VariantLabels, Target, TargetAndTransition } from "motion/react";
 import { cn } from "@/lib/utils";
 
 export interface RotatingTextRef {
