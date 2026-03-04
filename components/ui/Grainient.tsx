@@ -124,6 +124,9 @@ export interface GrainientProps {
   saturation?: number;
   centerX?: number;
   centerY?: number;
+  centerDriftX?: number;
+  centerDriftY?: number;
+  centerDriftSpeed?: number;
   zoom?: number;
   color1?: string;
   color2?: string;
@@ -150,6 +153,9 @@ export default function Grainient({
   saturation = 1.0,
   centerX = 0.0,
   centerY = 0.0,
+  centerDriftX = 0.0,
+  centerDriftY = 0.0,
+  centerDriftSpeed = 0.0,
   zoom = 0.9,
   color1 = "#052E16",
   color2 = "#15803D",
@@ -228,7 +234,12 @@ export default function Grainient({
     const t0 = performance.now();
     const loop = (t: number) => {
       if (unmounted) return;
-      (program.uniforms.iTime as { value: number }).value = (t - t0) * 0.001;
+      const elapsed = (t - t0) * 0.001;
+      (program.uniforms.iTime as { value: number }).value = elapsed;
+      const center = program.uniforms.uCenterOffset.value as Float32Array;
+      const phase = elapsed * centerDriftSpeed;
+      center[0] = centerX + Math.sin(phase) * centerDriftX;
+      center[1] = centerY + Math.cos(phase * 0.8) * centerDriftY;
       renderer.render({ scene: mesh });
       raf = requestAnimationFrame(loop);
     };
@@ -263,6 +274,9 @@ export default function Grainient({
     saturation,
     centerX,
     centerY,
+    centerDriftX,
+    centerDriftY,
+    centerDriftSpeed,
     zoom,
     color1,
     color2,

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Instrument_Serif, JetBrains_Mono, Caveat } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
 import ClickSparkWrapper from "@/components/ClickSparkWrapper";
 
 const inter = Inter({
@@ -43,9 +44,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} ${caveat.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} ${caveat.variable}`}>
       <body className="antialiased">
-        <ClickSparkWrapper>{children}</ClickSparkWrapper>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <ClickSparkWrapper>{children}</ClickSparkWrapper>
+        </ThemeProvider>
       </body>
     </html>
   );

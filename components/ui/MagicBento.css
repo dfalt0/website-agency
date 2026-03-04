@@ -104,6 +104,12 @@
   text-transform: uppercase;
   color: var(--foreground-muted, rgba(0, 0, 0, 0.5));
 }
+.magic-bento-card__label::before {
+  content: "[";
+}
+.magic-bento-card__label::after {
+  content: "]";
+}
 
 .magic-bento-card__content {
   margin-top: 0.5rem;

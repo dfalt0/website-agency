@@ -28,6 +28,9 @@ export default function CTA() {
           saturation={1}
           centerX={0}
           centerY={0}
+          centerDriftX={0.22}
+          centerDriftY={0.05}
+          centerDriftSpeed={0.35}
           zoom={0.9}
         />
       </div>

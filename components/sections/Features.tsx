@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, Globe, Cloud, Zap, History, MessageSquare, Activity, GitCommit, Shield, Wrench, Sparkles, User } from "lucide-react";
 import { ScrambleHeading } from "@/components/ui/ScrambleHeading";
 import MagicBento, { type MagicBentoCard } from "@/components/ui/MagicBento";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 
 /** Static lines shown above the active (rotating) line – fills the log pane */
 const LOG_PREAMBLE = [
@@ -345,7 +346,7 @@ export default function Features() {
                       <MagicBento
                         cards={bentoCards}
                         textAutoHide={true}
-                        enableStars
+                        enableStars={false}
                         enableSpotlight
                         enableBorderGlow={true}
                         enableTilt={false}
@@ -372,43 +373,43 @@ export default function Features() {
                         <div className="space-y-6 p-4 pb-6 md:p-6 lg:p-8">
                           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                             <div className="space-y-2">
-                              <div className="h-8 w-48 rounded bg-white/10" />
-                              <div className="h-4 w-72 rounded bg-white/5" />
+                              <div className="h-8 w-48 rounded bg-black/10 dark:bg-white/10" />
+                              <div className="h-4 w-72 rounded bg-black/5 dark:bg-white/5" />
                             </div>
-                            <div className="h-10 w-32 rounded-lg bg-white/10" />
+                            <div className="h-10 w-32 rounded-lg bg-black/10 dark:bg-white/10" />
                           </div>
                           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                             {[1, 2, 3, 4].map((i) => (
-                              <div key={i} className="rounded-xl border border-white/10 bg-[#0a2d14] p-4">
+                              <div key={i} className="rounded-xl border border-border bg-[#f8f6f1] p-4 dark:border-white/10 dark:bg-[#0a2d14]">
                                 <div className="flex justify-between">
-                                  <div className="h-8 w-16 rounded bg-white/10" />
-                                  <div className="h-8 w-8 rounded-lg bg-white/10" />
+                                  <div className="h-8 w-16 rounded bg-black/10 dark:bg-white/10" />
+                                  <div className="h-8 w-8 rounded-lg bg-black/10 dark:bg-white/10" />
                                 </div>
-                                <div className="mt-3 h-3 w-24 rounded bg-white/5" />
+                                <div className="mt-3 h-3 w-24 rounded bg-black/5 dark:bg-white/5" />
                               </div>
                             ))}
                           </div>
                           <div className="space-y-3">
-                            <div className="h-5 w-28 rounded bg-white/10" />
+                            <div className="h-5 w-28 rounded bg-black/10 dark:bg-white/10" />
                             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
                               {[1, 2, 3, 4].map((i) => (
-                                <div key={i} className="h-32 rounded-xl border border-white/10 bg-[#0a2d14]" />
+                                <div key={i} className="h-32 rounded-xl border border-border bg-[#f8f6f1] dark:border-white/10 dark:bg-[#0a2d14]" />
                               ))}
                             </div>
                           </div>
                           <div className="space-y-3">
-                            <div className="h-5 w-32 rounded bg-white/10" />
+                            <div className="h-5 w-32 rounded bg-black/10 dark:bg-white/10" />
                             <div className="space-y-2">
                               {[1, 2, 3, 4].map((i) => (
                                 <div key={i} className="flex gap-3">
-                                  <div className="h-10 w-10 shrink-0 rounded-lg bg-white/10" />
-                                  <div className="flex-1 rounded-xl border border-white/10 bg-[#0a2d14] p-3">
+                                  <div className="h-10 w-10 shrink-0 rounded-lg bg-black/10 dark:bg-white/10" />
+                                  <div className="flex-1 rounded-xl border border-border bg-[#f8f6f1] p-3 dark:border-white/10 dark:bg-[#0a2d14]">
                                     <div className="mb-2 flex gap-2">
-                                      <div className="h-4 w-16 rounded bg-white/10" />
-                                      <div className="h-4 w-14 rounded bg-white/5" />
+                                      <div className="h-4 w-16 rounded bg-black/10 dark:bg-white/10" />
+                                      <div className="h-4 w-14 rounded bg-black/5 dark:bg-white/5" />
                                     </div>
-                                    <div className="h-4 w-full rounded bg-white/5" />
-                                    <div className="mt-2 h-3 w-3/4 rounded bg-white/5" />
+                                    <div className="h-4 w-full rounded bg-black/5 dark:bg-white/5" />
+                                    <div className="mt-2 h-3 w-3/4 rounded bg-black/5 dark:bg-white/5" />
                                   </div>
                                 </div>
                               ))}
@@ -425,20 +426,23 @@ export default function Features() {
                           >
                             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                               <div>
-                                <h3 className="text-2xl font-semibold tracking-tight text-white">
+                                <h3 className="text-2xl font-semibold tracking-tight text-white dark:text-white">
                                   Welcome back!
                                 </h3>
-                                <p className="mt-1 text-sm text-white/70">
+                                <p className="mt-1 text-sm text-white/70 dark:text-white/70">
                                   Here&apos;s what&apos;s happening with your services today.
                                 </p>
                               </div>
-                              <button
-                                type="button"
-                                className="inline-flex items-center justify-center gap-2 rounded-lg bg-white/15 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/25"
-                              >
-                                <MessageSquare className="h-4 w-4" />
-                                New Request
-                              </button>
+                              <div className="flex items-center gap-3">
+                                <ModeToggle />
+                                <button
+                                  type="button"
+                                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-white/15 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/25"
+                                >
+                                  <MessageSquare className="h-4 w-4" />
+                                  New Request
+                                </button>
+                              </div>
                             </div>
 
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -450,18 +454,18 @@ export default function Features() {
                               ].map(({ title, value, sub, Icon }) => (
                                 <div
                                   key={title}
-                                  className="rounded-xl border border-white/10 bg-[#0a2d14] p-4"
+                                  className="rounded-xl border border-border bg-[#f8f6f1] p-4 dark:border-white/10 dark:bg-[#0a2d14]"
                                 >
                                   <div className="flex items-start justify-between">
                                     <div>
-                                      <p className="text-2xl font-semibold text-white">{value}</p>
-                                      <p className="text-xs text-white/60">{sub}</p>
+                                      <p className="text-2xl font-semibold text-foreground dark:text-white">{value}</p>
+                                      <p className="text-xs text-foreground/60 dark:text-white/60">{sub}</p>
                                     </div>
-                                    <div className="rounded-lg bg-white/10 p-2">
+                                    <div className="rounded-lg bg-black/5 p-2 dark:bg-white/10">
                                       <Icon className="h-5 w-5 text-primary" strokeWidth={1.5} />
                                     </div>
                                   </div>
-                                  <p className="mt-2 font-mono text-[10px] uppercase tracking-wider text-white/50">
+                                  <p className="mt-2 font-mono text-[10px] uppercase tracking-wider text-foreground/50 dark:text-white/50">
                                     {title}
                                   </p>
                                 </div>
@@ -470,8 +474,8 @@ export default function Features() {
 
                             <div className="space-y-4">
                               <div className="flex items-center justify-between">
-                                <h4 className="text-xl font-semibold text-white">Your Services</h4>
-                                <span className="text-sm text-white/70">View all →</span>
+                                <h4 className="text-xl font-semibold text-white dark:text-white">Your Services</h4>
+                                <span className="text-sm text-white/70 dark:text-white/70">View all →</span>
                               </div>
                               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                                 {MOCK_SERVICES.map((service, index) => {
@@ -483,16 +487,16 @@ export default function Features() {
                                       initial={{ opacity: 0, y: 8 }}
                                       animate={{ opacity: 1, y: 0 }}
                                       transition={{ delay: index * 0.04 }}
-                                      className="rounded-xl border border-white/10 bg-[#0a2d14] p-4 transition-colors hover:border-primary/40"
+                                      className="rounded-xl border border-border bg-[#f8f6f1] p-4 transition-colors hover:border-primary/40 dark:border-white/10 dark:bg-[#0a2d14]"
                                     >
                                       <div className="mb-3 flex items-start justify-between">
-                                        <span className="font-mono text-[10px] uppercase tracking-wider text-white/60">
+                                        <span className="font-mono text-[10px] uppercase tracking-wider text-foreground/60 dark:text-white/60">
                                           {service.id}
                                         </span>
                                         <span
                                           className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${
                                             isMaintenance
-                                              ? "border-amber-500/30 bg-amber-500/20 text-amber-200"
+                                              ? "border-amber-500/30 bg-amber-500/20 text-amber-700 dark:bg-amber-500/20 dark:text-amber-200"
                                               : "border-primary/30 bg-primary/20 text-primary-foreground"
                                           }`}
                                         >
@@ -500,26 +504,26 @@ export default function Features() {
                                         </span>
                                       </div>
                                       <div className="mb-3 flex items-center gap-3">
-                                        <div className="rounded-lg bg-white/10 p-2">
+                                        <div className="rounded-lg bg-black/5 p-2 dark:bg-white/10">
                                           <Icon className="h-5 w-5 text-primary" strokeWidth={1.5} />
                                         </div>
                                         <div className="min-w-0 flex-1">
-                                          <h5 className="truncate font-medium text-white">{service.name}</h5>
-                                          <p className="text-xs text-white/70">{service.provider}</p>
+                                          <h5 className="truncate font-medium text-foreground dark:text-white">{service.name}</h5>
+                                          <p className="text-xs text-foreground/70 dark:text-white/70">{service.provider}</p>
                                         </div>
                                       </div>
                                       <div className="mb-3 grid grid-cols-2 gap-2">
-                                        <div className="rounded-lg bg-white/5 py-2 text-center">
+                                        <div className="rounded-lg bg-black/5 py-2 text-center dark:bg-white/5">
                                           <p className="text-lg font-semibold text-primary">{service.uptime}%</p>
-                                          <p className="font-mono text-[10px] text-white/60">UPTIME</p>
+                                          <p className="font-mono text-[10px] text-foreground/60 dark:text-white/60">UPTIME</p>
                                         </div>
-                                        <div className="rounded-lg bg-white/5 py-2 text-center">
-                                          <p className="text-lg font-semibold text-white">{(service.visitors / 1000).toFixed(1)}k</p>
-                                          <p className="font-mono text-[10px] text-white/60">VISITORS</p>
+                                        <div className="rounded-lg bg-black/5 py-2 text-center dark:bg-white/5">
+                                          <p className="text-lg font-semibold text-foreground dark:text-white">{(service.visitors / 1000).toFixed(1)}k</p>
+                                          <p className="font-mono text-[10px] text-foreground/60 dark:text-white/60">VISITORS</p>
                                         </div>
                                       </div>
-                                      <div className="flex items-center justify-between border-t border-white/10 pt-2">
-                                        <span className="text-xs capitalize text-white/60">{service.type}</span>
+                                      <div className="flex items-center justify-between border-t border-border pt-2 dark:border-white/10">
+                                        <span className="text-xs capitalize text-foreground/60 dark:text-white/60">{service.type}</span>
                                         <a href={`https://${service.url}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 truncate text-xs text-primary hover:underline">
                                           <span className="max-w-[100px] truncate">{service.url}</span>
                                           <ExternalLink className="h-3 w-3 shrink-0" />
@@ -534,8 +538,8 @@ export default function Features() {
                             {/* Recent Changes – cloud-scale-guard ChangeLog style */}
                             <div className="space-y-4">
                               <div className="flex items-center justify-between">
-                                <h4 className="text-xl font-semibold text-white">Recent Changes</h4>
-                                <span className="text-sm text-white/70">View all →</span>
+                                <h4 className="text-xl font-semibold text-white dark:text-white">Recent Changes</h4>
+                                <span className="text-sm text-white/70 dark:text-white/70">View all →</span>
                               </div>
                               <div className="space-y-2">
                                 {MOCK_CHANGE_LOGS.map((log, index) => {
@@ -553,29 +557,29 @@ export default function Features() {
                                         <div className={`rounded-lg border p-2 ${config.class}`}>
                                           <Icon className="h-4 w-4" strokeWidth={1.5} />
                                         </div>
-                                        <div className="my-2 w-px flex-1 bg-white/20" />
+                                        <div className="my-2 w-px flex-1 bg-white/20 dark:bg-white/20" />
                                       </div>
                                       <div className="flex-1 pb-4">
-                                        <div className="rounded-xl border border-white/10 bg-[#0a2d14] p-4 transition-colors hover:border-primary/30">
+                                        <div className="rounded-xl border border-border bg-[#f8f6f1] p-4 transition-colors hover:border-primary/30 dark:border-white/10 dark:bg-[#0a2d14]">
                                           <div className="mb-2 flex flex-wrap items-start justify-between gap-2">
                                             <div className="flex items-center gap-2">
                                               <span className={`rounded border px-2 py-0.5 text-[10px] font-medium ${config.class}`}>
                                                 {config.label}
                                               </span>
-                                              <span className="font-mono text-[10px] uppercase tracking-wider text-white/50">
+                                              <span className="font-mono text-[10px] uppercase tracking-wider text-foreground/50 dark:text-white/50">
                                                 {sourceLabels[log.source] ?? log.source}
                                               </span>
                                             </div>
-                                            <span className="text-xs text-white/50">{log.created_date}</span>
+                                            <span className="text-xs text-foreground/50 dark:text-white/50">{log.created_date}</span>
                                           </div>
-                                          <h5 className="font-medium text-white">{log.title}</h5>
+                                          <h5 className="font-medium text-foreground dark:text-white">{log.title}</h5>
                                           {log.description && (
-                                            <p className="mt-1 line-clamp-2 text-sm text-white/60">{log.description}</p>
+                                            <p className="mt-1 line-clamp-2 text-sm text-foreground/60 dark:text-white/60">{log.description}</p>
                                           )}
-                                          <div className="mt-3 flex items-center gap-3 text-xs text-white/50">
+                                          <div className="mt-3 flex items-center gap-3 text-xs text-foreground/50 dark:text-white/50">
                                             {log.engineer_name ? (
                                               <div className="flex items-center gap-1.5">
-                                                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white/10">
+                                                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black/10 dark:bg-white/10">
                                                   <User className="h-3 w-3" />
                                                 </div>
                                                 <span>{log.engineer_name}</span>

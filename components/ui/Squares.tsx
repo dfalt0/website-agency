@@ -35,7 +35,7 @@ export default function Squares({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
     const resizeCanvas = () => {
@@ -70,11 +70,16 @@ export default function Squares({
 
       const startX = Math.floor(gridOffset.current.x / squareSize) * squareSize;
       const startY = Math.floor(gridOffset.current.y / squareSize) * squareSize;
+      const offsetX = gridOffset.current.x % squareSize;
+      const offsetY = gridOffset.current.y % squareSize;
+
+      ctx.strokeStyle = borderColor;
+      ctx.lineWidth = borderWidth;
 
       for (let x = startX; x < canvas.width + squareSize; x += squareSize) {
         for (let y = startY; y < canvas.height + squareSize; y += squareSize) {
-          const squareX = x - (gridOffset.current.x % squareSize);
-          const squareY = y - (gridOffset.current.y % squareSize);
+          const squareX = x - offsetX;
+          const squareY = y - offsetY;
 
           const gridX = Math.floor((x - startX) / squareSize);
           const gridY = Math.floor((y - startY) / squareSize);
@@ -86,8 +91,6 @@ export default function Squares({
             ctx.fillStyle = hoverFillColor;
             ctx.fillRect(squareX, squareY, squareSize, squareSize);
           }
-
-          ctx.strokeStyle = borderColor;
           ctx.strokeRect(squareX, squareY, squareSize, squareSize);
         }
       }
