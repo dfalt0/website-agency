@@ -1,8 +1,13 @@
 "use client";
 
 import Link from "next/link";
+<<<<<<< Updated upstream
 import { useRef, useState, useCallback, useEffect } from "react";
 import { motion, useMotionValue, animate } from "motion/react";
+=======
+import { useRef, useState, useCallback } from "react";
+import { motion } from "motion/react";
+>>>>>>> Stashed changes
 import { Button } from "@/components/ui/button";
 import RotatingText from "@/components/ui/RotatingText";
 import HeroCommandLine from "@/components/sections/HeroCommandLine";
