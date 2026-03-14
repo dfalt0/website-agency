@@ -10,7 +10,7 @@ const InfrastructureCloud = dynamic(() => import("@/components/sections/Infrastr
 const Comparison = dynamic(() => import("@/components/sections/Comparison"), { ssr: true });
 const Process = dynamic(() => import("@/components/sections/Process"), { ssr: true });
 const Pricing = dynamic(() => import("@/components/sections/Pricing"), { ssr: true });
-const Testimonials = dynamic(() => import("@/components/sections/Testimonials"), { ssr: true });
+// const Testimonials = dynamic(() => import("@/components/sections/Testimonials"), { ssr: true });
 const CTA = dynamic(() => import("@/components/sections/CTA"), { ssr: true });
 const Footer = dynamic(() => import("@/components/sections/Footer"), { ssr: true });
 
@@ -27,7 +27,7 @@ export default function Home() {
         <Comparison />
         <Process />
         <Pricing />
-        <Testimonials />
+        {/* <Testimonials /> */}
         <CTA />
         <Footer />
       </div>

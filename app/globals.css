@@ -19,6 +19,7 @@
   --color-card-obsidian: var(--card-obsidian);
   --color-border: var(--border);
   --color-border-subtle: var(--border-subtle);
+  --color-nav-bar: var(--nav-bar-bg);
   --color-input: var(--input);
   --color-ring: var(--ring);
   /* Font stacks (--font-heading-stack etc. defined in :root below) */
@@ -51,6 +52,8 @@
     --primary-hover: #052E16;
     --border: #E2E8E2;
     --border-subtle: #E2E8E2;
+    /* Nav bar: slightly darker than page in light mode */
+    --nav-bar-bg: #E6EAE6;
     --input: #E2E8E2;
     --ring: #22C55E;
     --muted: #1A1F1A;

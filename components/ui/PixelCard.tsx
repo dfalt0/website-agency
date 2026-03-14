@@ -23,6 +23,8 @@ class Pixel {
   isIdle: boolean;
   isReverse: boolean;
   isShimmer: boolean;
+  /** 0–1: scales maxSize and draw opacity for soft center fade */
+  fadeWeight: number;
 
   constructor(
     canvas: HTMLCanvasElement,
@@ -31,7 +33,8 @@ class Pixel {
     y: number,
     color: string,
     speed: number,
-    delay: number
+    delay: number,
+    maxSizeMultiplier: number = 1
   ) {
     this.width = canvas.width;
     this.height = canvas.height;
@@ -44,7 +47,8 @@ class Pixel {
     this.sizeStep = Math.random() * 0.4;
     this.minSize = 0.5;
     this.maxSizeInteger = 2;
-    this.maxSize = this.getRandomValue(this.minSize, this.maxSizeInteger);
+    this.fadeWeight = Math.max(0, Math.min(1, maxSizeMultiplier));
+    this.maxSize = this.getRandomValue(this.minSize, this.maxSizeInteger) * this.fadeWeight;
     this.delay = delay;
     this.counter = 0;
     this.counterStep = Math.random() * 4 + (this.width + this.height) * 0.01;
@@ -58,9 +62,13 @@ class Pixel {
   }
 
   draw() {
+    if (this.size <= 0 || this.fadeWeight <= 0) return;
     const centerOffset = this.maxSizeInteger * 0.5 - this.size * 0.5;
+    this.ctx.save();
+    this.ctx.globalAlpha = this.fadeWeight;
     this.ctx.fillStyle = this.color;
     this.ctx.fillRect(this.x + centerOffset, this.y + centerOffset, this.size, this.size);
+    this.ctx.restore();
   }
 
   appear() {
@@ -164,6 +172,12 @@ interface PixelCardProps {
   speed?: number;
   colors?: string;
   noFocus?: boolean;
+  /** Exclude center from pixel animation. Number/string = square; object = rectangle. y can be { top, bottom } for asymmetric (e.g. less clear below text). Add feather for soft fade. */
+  excludeCenter?: number | string | {
+    x?: number | string;
+    y?: number | string | { top?: number | string; bottom?: number | string };
+    feather?: number | string;
+  };
   className?: string;
   children: React.ReactNode;
 }
@@ -182,6 +196,7 @@ export default function PixelCard({
   speed,
   colors,
   noFocus,
+  excludeCenter,
   className = "",
   children,
 }: PixelCardProps): JSX.Element {
@@ -213,10 +228,81 @@ export default function PixelCard({
     canvasRef.current.style.width = `${width}px`;
     canvasRef.current.style.height = `${height}px`;
 
+    const cx = width / 2;
+    const cy = height / 2;
+    let excludeHalfX = 0;
+    let excludeHalfYTop = 0;
+    let excludeHalfYBottom = 0;
+    let featherPx = 0;
+    const parseHalf = (v: number | string, size: number): number => {
+      if (typeof v === "string") {
+        const pct = parseFloat(v.replace("%", ""));
+        return Number.isNaN(pct) ? 0 : (size * pct) / 100;
+      }
+      return Number(v) ?? 0;
+    };
+    if (excludeCenter !== undefined && excludeCenter !== 0) {
+      if (typeof excludeCenter === "object" && excludeCenter !== null && ("x" in excludeCenter || "y" in excludeCenter)) {
+        const ox = excludeCenter.x ?? (typeof excludeCenter.y === "object" ? undefined : excludeCenter.y);
+        if (ox !== undefined) excludeHalfX = typeof ox === "string" ? parseHalf(ox, width) : ox;
+        const oy = excludeCenter.y;
+        if (oy !== undefined) {
+          if (typeof oy === "object" && oy !== null && ("top" in oy || "bottom" in oy)) {
+            if (oy.top !== undefined) excludeHalfYTop = typeof oy.top === "string" ? parseHalf(oy.top, height) : oy.top;
+            if (oy.bottom !== undefined) excludeHalfYBottom = typeof oy.bottom === "string" ? parseHalf(oy.bottom, height) : oy.bottom;
+            if (excludeHalfYTop === 0 && excludeHalfYBottom === 0) {
+              excludeHalfYTop = excludeHalfYBottom = parseHalf(typeof oy.top !== "undefined" ? oy.top : oy.bottom ?? 0, height);
+            }
+          } else {
+            const half =
+              typeof oy === "string" ? parseHalf(oy, height) : typeof oy === "number" ? oy : 0;
+            excludeHalfYTop = half;
+            excludeHalfYBottom = half;
+          }
+        }
+        const f = excludeCenter.feather;
+        if (f !== undefined) {
+          featherPx = typeof f === "string" ? (Math.min(width, height) * parseFloat(f.replace("%", ""))) / 100 : Number(f);
+        }
+      } else {
+        const single = typeof excludeCenter === "string"
+          ? (Math.min(width, height) * parseFloat(excludeCenter.replace("%", ""))) / 100 / 2
+          : Number(excludeCenter) ?? 0;
+        excludeHalfX = single;
+        excludeHalfYTop = single;
+        excludeHalfYBottom = single;
+      }
+    }
+
+    const useFeather = featherPx > 0;
     const colorsArray = finalColors.split(",");
     const pxs: Pixel[] = [];
     for (let x = 0; x < width; x += Number(finalGap)) {
       for (let y = 0; y < height; y += Number(finalGap)) {
+        let weight = 1;
+        if (excludeHalfX > 0 || excludeHalfYTop > 0 || excludeHalfYBottom > 0) {
+          if (useFeather) {
+            const outX = Math.max(0, Math.abs(x - cx) - excludeHalfX);
+            const outY =
+              y < cy - excludeHalfYTop
+                ? (cy - excludeHalfYTop) - y
+                : y > cy + excludeHalfYBottom
+                  ? y - (cy + excludeHalfYBottom)
+                  : 0;
+            const outsideDist = Math.sqrt(outX * outX + outY * outY);
+            const t = Math.min(1, outsideDist / featherPx);
+            // Smoother falloff: power curve stretches the fade for a softer, more feathered look
+            const curve = t * t * (3 - 2 * t);
+            // Let a little pixel bleed through in the center (feathered opacity) instead of hard clear
+            const centerBleed = 0.07;
+            weight = centerBleed + (1 - centerBleed) * curve;
+          } else {
+            const inCenterX = excludeHalfX > 0 && Math.abs(x - cx) <= excludeHalfX;
+            const hasYExclude = excludeHalfYTop > 0 || excludeHalfYBottom > 0;
+            const inY = hasYExclude && y >= cy - excludeHalfYTop && y <= cy + excludeHalfYBottom;
+            if (inCenterX && (!hasYExclude || inY)) continue;
+          }
+        }
         const color = colorsArray[Math.floor(Math.random() * colorsArray.length)];
         const dx = x - width / 2;
         const dy = y - height / 2;
@@ -231,7 +317,8 @@ export default function PixelCard({
             y,
             color.trim(),
             getEffectiveSpeed(finalSpeed, reducedMotion),
-            delay
+            delay,
+            weight
           )
         );
       }
@@ -302,13 +389,13 @@ export default function PixelCard({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [finalGap, finalSpeed, finalColors, finalNoFocus]);
+  }, [finalGap, finalSpeed, finalColors, finalNoFocus, excludeCenter]);
 
   return (
     <div
       ref={containerRef}
       className={cn(
-        "relative overflow-hidden grid place-items-center border border-border rounded-[var(--radius)] isolate transition-colors duration-200 ease-[cubic-bezier(0.5,1,0.89,1)] select-none",
+        "relative overflow-hidden grid place-items-center border border-border rounded-(--radius) isolate transition-colors duration-200 ease-[cubic-bezier(0.5,1,0.89,1)] select-none",
         className
       )}
       onMouseEnter={onMouseEnter}

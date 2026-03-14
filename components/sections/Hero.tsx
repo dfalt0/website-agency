@@ -1,13 +1,8 @@
 "use client";
 
 import Link from "next/link";
-<<<<<<< Updated upstream
 import { useRef, useState, useCallback, useEffect } from "react";
 import { motion, useMotionValue, animate } from "motion/react";
-=======
-import { useRef, useState, useCallback } from "react";
-import { motion } from "motion/react";
->>>>>>> Stashed changes
 import { Button } from "@/components/ui/button";
 import RotatingText from "@/components/ui/RotatingText";
 import HeroCommandLine from "@/components/sections/HeroCommandLine";
@@ -106,7 +101,7 @@ export default function Hero() {
       >
         <Squares
           direction="diagonal"
-          speed={0.5}
+          speed={0.2}
           squareSize={36}
           borderColor="rgba(226, 232, 226, 0.06)"
           borderWidth={0.5}
@@ -174,6 +169,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.14, ease: [0.22, 1, 0.36, 1] }}
+          onMouseEnter={() => { squaresMouseRef.current = null; }}
         >
           <Button
             variant="white-primary"
@@ -195,7 +191,10 @@ export default function Hero() {
         </motion.p>
         </div>
 
-        <div className="mt-auto w-full pb-24 pt-16">
+        <div
+          className="mt-auto w-full pb-24 pt-16"
+          onMouseEnter={() => { squaresMouseRef.current = null; }}
+        >
           <HeroCommandLine />
         </div>
       </div>

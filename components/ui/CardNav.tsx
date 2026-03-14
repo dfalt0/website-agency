@@ -70,7 +70,7 @@ export function CardNav({
       ref={navRef}
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        showGlass && "bg-background/80 shadow-soft backdrop-blur-xl",
+        showGlass && "bg-nav-bar shadow-soft backdrop-blur-xl",
         className
       )}
     >

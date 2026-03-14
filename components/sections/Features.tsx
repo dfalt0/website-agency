@@ -2,10 +2,9 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ExternalLink, Globe, Cloud, Zap, History, MessageSquare, Activity, GitCommit, Shield, Wrench, Sparkles, User } from "lucide-react";
+import { ExternalLink, Globe, Cloud, Zap, History, MessageSquare, Activity, GitCommit, Shield, Wrench, Sparkles, User, Sun, Moon } from "lucide-react";
 import { ScrambleHeading } from "@/components/ui/ScrambleHeading";
 import MagicBento, { type MagicBentoCard } from "@/components/ui/MagicBento";
-import { ModeToggle } from "@/components/ui/mode-toggle";
 
 /** Static lines shown above the active (rotating) line – fills the log pane */
 const LOG_PREAMBLE = [
@@ -27,10 +26,13 @@ const MIGRATION_LOGS = [
   "Enabling WAF rules...",
 ];
 
-/** Bento tray – between primary and primary-hover, slightly darker */
+/** Bento tray – dark green in dark mode */
 const BENTO_TRAY_BG = "#0f5528";
 
-/** Bento card shades of green matching the site – Obsidian Forest greens */
+/** Bento tray – warm cream in light mode; distinct from page bg, not dull */
+const BENTO_TRAY_LIGHT = "#e4dcc8";
+
+/** Bento card shades of green matching the site – Obsidian Forest greens (dark mode) */
 const GREEN_CARDS = [
   "#e8f5ec",
   "#d4edda",
@@ -38,6 +40,16 @@ const GREEN_CARDS = [
   "#b8dfc4",
   "#a7d9b8",
   "#d0e9d6",
+] as const;
+
+/** Bento card shades – warm ivory/cream in light mode; subtle depth, not dull */
+const LIGHT_CARDS = [
+  "#f7f2ea",
+  "#f4efe4",
+  "#f2ecdf",
+  "#f0e9dc",
+  "#ede6d8",
+  "#f5f0e6",
 ] as const;
 
 const LOG_CARD_BG = "var(--surface)";
@@ -62,13 +74,44 @@ const MOCK_CHANGE_LOGS = [
   { type: "maintenance" as const, source: "automated" as const, title: "Database backup completed", description: "Automated weekly backup completed successfully. All data verified.", engineer_name: null, commit_hash: null, created_date: "Feb 4, 8:00 AM" },
 ];
 
+/** Change type badge/icon styles – separate for light and dark bento so colors read well in both */
 const changeTypeConfig = {
-  deployment: { icon: History, label: "Deploy", class: "bg-primary/20 text-primary border-primary/30" },
-  update: { icon: Sparkles, label: "Update", class: "bg-blue-500/20 text-blue-200 border-blue-500/30" },
-  fix: { icon: Zap, label: "Fix", class: "bg-amber-500/20 text-amber-200 border-amber-500/30" },
-  security: { icon: Shield, label: "Security", class: "bg-rose-500/20 text-rose-200 border-rose-500/30" },
-  maintenance: { icon: Wrench, label: "Maintenance", class: "bg-white/10 text-white/80 border-white/20" },
-  feature: { icon: Sparkles, label: "Feature", class: "bg-purple-500/20 text-purple-200 border-purple-500/30" },
+  deployment: {
+    icon: History,
+    label: "Deploy",
+    classLight: "bg-primary/15 text-primary border-primary/25",
+    classDark: "bg-primary/20 text-primary-foreground border-primary/30",
+  },
+  update: {
+    icon: Sparkles,
+    label: "Update",
+    classLight: "bg-blue-100 text-blue-800 border-blue-200",
+    classDark: "bg-blue-500/20 text-blue-200 border-blue-500/30",
+  },
+  fix: {
+    icon: Zap,
+    label: "Fix",
+    classLight: "bg-amber-100 text-amber-800 border-amber-200",
+    classDark: "bg-amber-500/20 text-amber-200 border-amber-500/30",
+  },
+  security: {
+    icon: Shield,
+    label: "Security",
+    classLight: "bg-rose-100 text-rose-800 border-rose-200",
+    classDark: "bg-rose-500/20 text-rose-200 border-rose-500/30",
+  },
+  maintenance: {
+    icon: Wrench,
+    label: "Maintenance",
+    classLight: "bg-neutral-200/80 text-neutral-700 border-neutral-300",
+    classDark: "bg-white/10 text-white/80 border-white/20",
+  },
+  feature: {
+    icon: Sparkles,
+    label: "Feature",
+    classLight: "bg-violet-100 text-violet-800 border-violet-200",
+    classDark: "bg-purple-500/20 text-purple-200 border-purple-500/30",
+  },
 };
 
 const sourceLabels: Record<string, string> = {
@@ -91,7 +134,21 @@ const CLOSED_MESSAGES = [
  * Features section: "Everything you need, fully managed" – Migration Feed + Magic Bento grid.
  * Traffic lights: Red = poof & reload, Yellow = minimize, Green = expand to full dashboard.
  */
+/** Card surface in light mode – warm ivory, reads clearly and feels fresh */
+const BENTO_CARD_LIGHT = "#f5f0e7";
+const BENTO_CARD_DARK = "#0a2d14";
+
+/** Smooth theme switch in bento */
+const BENTO_THEME_TRANSITION = "background-color 0.42s ease-out, border-color 0.42s ease-out, color 0.35s ease-out";
+/** Theme + hover pop for cards (slower, subtle scale) */
+const BENTO_CARD_TRANSITION = "background-color 0.42s ease-out, border-color 0.42s ease-out, color 0.35s ease-out, transform 0.35s ease-out";
+const BENTO_THEME_TRANSITION_CLASS = "transition-colors duration-[420ms] ease-out";
+
 export default function Features() {
+  // Bento-only theme: sun/moon toggle only affects the bento window, not the rest of the site.
+  const [bentoTheme, setBentoTheme] = useState<"light" | "dark">("light");
+  const isLight = bentoTheme === "light";
+
   const [logIndex, setLogIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [minimized, setMinimized] = useState(false);
@@ -198,13 +255,14 @@ export default function Features() {
     </div>
   );
 
+  const cardColors = isLight ? LIGHT_CARDS : GREEN_CARDS;
   const bentoCards: MagicBentoCard[] = [
-    { color: GREEN_CARDS[0], title: "Website Management", description: "Maintenance, updates, and optimization.", label: "Performance", gridColumn: "1", gridRow: "1" },
-    { color: GREEN_CARDS[1], title: "Security & Monitoring", description: "Enterprise-grade protection and 24/7 monitoring.", label: "Security", gridColumn: "2", gridRow: "1" },
-    { color: GREEN_CARDS[2], title: "Performance Optimization", description: "CDN, caching, and speed tuning.", label: "CDN", gridColumn: "3", gridRow: "1" },
+    { color: cardColors[0], title: "Website Management", description: "Maintenance, updates, and optimization.", label: "Performance", gridColumn: "1", gridRow: "1" },
+    { color: cardColors[1], title: "Security & Monitoring", description: "Enterprise-grade protection and 24/7 monitoring.", label: "Security", gridColumn: "2", gridRow: "1" },
+    { color: cardColors[2], title: "Performance Optimization", description: "CDN, caching, and speed tuning.", label: "CDN", gridColumn: "3", gridRow: "1" },
     { color: LOG_CARD_BG, title: "", description: "", label: "", gridColumn: "1 / 3", gridRow: "2 / 4", customContent: systemLogContent },
-    { color: GREEN_CARDS[4], title: "Custom Development", description: "Features, integrations, and bespoke builds.", label: "Build", gridColumn: "3", gridRow: "2" },
-    { color: GREEN_CARDS[5], title: "Expert Support", description: "Dedicated engineers when you need them.", label: "Support", gridColumn: "3", gridRow: "3" },
+    { color: cardColors[4], title: "Custom Development", description: "Features, integrations, and bespoke builds.", label: "Build", gridColumn: "3", gridRow: "2" },
+    { color: cardColors[5], title: "Expert Support", description: "Dedicated engineers when you need them.", label: "Support", gridColumn: "3", gridRow: "3" },
   ];
 
   const isPoofing = closePhase === "poofing";
@@ -238,7 +296,7 @@ export default function Features() {
           {/* "try me!" + curved arrow – disappears after first click on any traffic light button */}
           {!calloutDismissed && (
           <svg
-            className="absolute -left-8 -top-[5.5rem] z-20 h-[100px] w-[160px] md:-left-10 md:-top-[6.5rem] md:h-[105px] md:w-[170px]"
+            className="absolute -left-8 -top-22 z-20 h-[100px] w-[160px] md:-left-10 md:-top-26 md:h-[105px] md:w-[170px]"
             viewBox="0 0 170 105"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -283,8 +341,9 @@ export default function Features() {
         <motion.div
           className="overflow-hidden rounded-2xl transition-[max-width] duration-500 ease-out"
           style={{
-            backgroundColor: BENTO_TRAY_BG,
+            backgroundColor: isLight ? BENTO_TRAY_LIGHT : BENTO_TRAY_BG,
             width: "100%",
+            transition: BENTO_THEME_TRANSITION,
           }}
           initial={
             closePhase === "returning"
@@ -305,32 +364,78 @@ export default function Features() {
           }}
         >
           <>
-              {/* macOS-style title bar – always visible when window is shown */}
+              {/* macOS-style title bar – traffic lights left, title center, theme right */}
               <div
-                className="flex items-center gap-2 px-4 pt-3 pb-1.5 md:px-5 md:pt-4"
+                className="relative flex items-center justify-between gap-2 px-4 pt-3 pb-1.5 md:px-5 md:pt-4"
                 style={{ minHeight: "40px" }}
               >
-                <button
-                  type="button"
-                  aria-label="Close"
-                  onClick={handleClose}
-                  className="h-3 w-3 rounded-full border-0 transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f5528]"
-                  style={{ backgroundColor: "#ff5f57" }}
-                />
-                <button
-                  type="button"
-                  aria-label="Minimize"
-                  onClick={handleMinimize}
-                  className="h-3 w-3 rounded-full border-0 transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f5528]"
-                  style={{ backgroundColor: "#febc2e" }}
-                />
-                <button
-                  type="button"
-                  aria-label="Expand"
-                  onClick={handleExpand}
-                  className="h-3 w-3 rounded-full border-0 transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f5528]"
-                  style={{ backgroundColor: "#28c840" }}
-                />
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    aria-label="Close"
+                    onClick={handleClose}
+                    className="h-3 w-3 rounded-full border-0 transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f5528]"
+                    style={{ backgroundColor: "#ff5f57" }}
+                  />
+                  <button
+                    type="button"
+                    aria-label="Minimize"
+                    onClick={handleMinimize}
+                    className="h-3 w-3 rounded-full border-0 transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f5528]"
+                    style={{ backgroundColor: "#febc2e" }}
+                  />
+                  <button
+                    type="button"
+                    aria-label="Expand"
+                    onClick={handleExpand}
+                    className="h-3 w-3 rounded-full border-0 transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f5528]"
+                    style={{ backgroundColor: "#28c840" }}
+                  />
+                </div>
+                {/* Centered window title (macOS style) */}
+                <div
+                  className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none text-sm font-medium ${BENTO_THEME_TRANSITION_CLASS} ${isLight ? "text-foreground/90" : "text-white/90"}`}
+                >
+                  My Stuff
+                </div>
+                {/* Simple light/dark toggle – only affects bento window, not the rest of the site */}
+                <div
+                    className="flex items-center rounded-md border p-0.5"
+                    style={{
+                      borderColor: isLight ? "rgba(0,0,0,0.12)" : "rgba(255,255,255,0.2)",
+                      backgroundColor: isLight ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.06)",
+                      transition: BENTO_THEME_TRANSITION,
+                    }}
+                    role="group"
+                    aria-label="Theme"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setBentoTheme("light")}
+                      aria-label="Light mode"
+                      className="rounded p-1.5 hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-1 focus-visible:ring-offset-transparent"
+                      style={{
+                        color: isLight ? "var(--foreground)" : "rgba(255,255,255,0.7)",
+                        backgroundColor: bentoTheme === "light" ? (isLight ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.15)") : "transparent",
+                        transition: BENTO_THEME_TRANSITION,
+                      }}
+                    >
+                      <Sun className="h-3.5 w-3.5" strokeWidth={1.8} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setBentoTheme("dark")}
+                      aria-label="Dark mode"
+                      className="rounded p-1.5 hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-1 focus-visible:ring-offset-transparent"
+                      style={{
+                        color: isLight ? "var(--foreground)" : "rgba(255,255,255,0.7)",
+                        backgroundColor: bentoTheme === "dark" ? (isLight ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.15)") : "transparent",
+                        transition: BENTO_THEME_TRANSITION,
+                      }}
+                    >
+                      <Moon className="h-3.5 w-3.5" strokeWidth={1.8} />
+                    </button>
+                  </div>
               </div>
 
               {/* Content area: bento fades out when expanding; expanded shows skeleton then content. No height collapse. */}
@@ -373,43 +478,43 @@ export default function Features() {
                         <div className="space-y-6 p-4 pb-6 md:p-6 lg:p-8">
                           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                             <div className="space-y-2">
-                              <div className="h-8 w-48 rounded bg-black/10 dark:bg-white/10" />
-                              <div className="h-4 w-72 rounded bg-black/5 dark:bg-white/5" />
+                              <div className={`h-8 w-48 rounded ${isLight ? "bg-black/10" : "bg-white/10"}`} />
+                              <div className={`h-4 w-72 rounded ${isLight ? "bg-black/5" : "bg-white/5"}`} />
                             </div>
-                            <div className="h-10 w-32 rounded-lg bg-black/10 dark:bg-white/10" />
+                            <div className={`h-10 w-32 rounded-lg ${isLight ? "bg-black/10" : "bg-white/10"}`} />
                           </div>
                           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                             {[1, 2, 3, 4].map((i) => (
-                              <div key={i} className="rounded-xl border border-border bg-[#f8f6f1] p-4 dark:border-white/10 dark:bg-[#0a2d14]">
+                              <div key={i} className="rounded-xl border p-4" style={{ borderColor: isLight ? "var(--border)" : "rgba(255,255,255,0.1)", backgroundColor: isLight ? BENTO_CARD_LIGHT : BENTO_CARD_DARK, transition: BENTO_THEME_TRANSITION }}>
                                 <div className="flex justify-between">
-                                  <div className="h-8 w-16 rounded bg-black/10 dark:bg-white/10" />
-                                  <div className="h-8 w-8 rounded-lg bg-black/10 dark:bg-white/10" />
+                                  <div className={`h-8 w-16 rounded ${isLight ? "bg-black/10" : "bg-white/10"}`} />
+                                  <div className={`h-8 w-8 rounded-lg ${isLight ? "bg-black/10" : "bg-white/10"}`} />
                                 </div>
-                                <div className="mt-3 h-3 w-24 rounded bg-black/5 dark:bg-white/5" />
+                                <div className={`mt-3 h-3 w-24 rounded ${isLight ? "bg-black/5" : "bg-white/5"}`} />
                               </div>
                             ))}
                           </div>
                           <div className="space-y-3">
-                            <div className="h-5 w-28 rounded bg-black/10 dark:bg-white/10" />
+                            <div className={`h-5 w-28 rounded ${isLight ? "bg-black/10" : "bg-white/10"}`} />
                             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
                               {[1, 2, 3, 4].map((i) => (
-                                <div key={i} className="h-32 rounded-xl border border-border bg-[#f8f6f1] dark:border-white/10 dark:bg-[#0a2d14]" />
+                                <div key={i} className="h-32 rounded-xl border" style={{ borderColor: isLight ? "var(--border)" : "rgba(255,255,255,0.1)", backgroundColor: isLight ? BENTO_CARD_LIGHT : BENTO_CARD_DARK, transition: BENTO_THEME_TRANSITION }} />
                               ))}
                             </div>
                           </div>
                           <div className="space-y-3">
-                            <div className="h-5 w-32 rounded bg-black/10 dark:bg-white/10" />
+                            <div className={`h-5 w-32 rounded ${isLight ? "bg-black/10" : "bg-white/10"}`} />
                             <div className="space-y-2">
                               {[1, 2, 3, 4].map((i) => (
                                 <div key={i} className="flex gap-3">
-                                  <div className="h-10 w-10 shrink-0 rounded-lg bg-black/10 dark:bg-white/10" />
-                                  <div className="flex-1 rounded-xl border border-border bg-[#f8f6f1] p-3 dark:border-white/10 dark:bg-[#0a2d14]">
+                                  <div className={`h-10 w-10 shrink-0 rounded-lg ${isLight ? "bg-black/10" : "bg-white/10"}`} />
+                                  <div className="flex-1 rounded-xl border p-3" style={{ borderColor: isLight ? "var(--border)" : "rgba(255,255,255,0.1)", backgroundColor: isLight ? BENTO_CARD_LIGHT : BENTO_CARD_DARK, transition: BENTO_THEME_TRANSITION }}>
                                     <div className="mb-2 flex gap-2">
-                                      <div className="h-4 w-16 rounded bg-black/10 dark:bg-white/10" />
-                                      <div className="h-4 w-14 rounded bg-black/5 dark:bg-white/5" />
+                                      <div className={`h-4 w-16 rounded ${isLight ? "bg-black/10" : "bg-white/10"}`} />
+                                      <div className={`h-4 w-14 rounded ${isLight ? "bg-black/5" : "bg-white/5"}`} />
                                     </div>
-                                    <div className="h-4 w-full rounded bg-black/5 dark:bg-white/5" />
-                                    <div className="mt-2 h-3 w-3/4 rounded bg-black/5 dark:bg-white/5" />
+                                    <div className={`h-4 w-full rounded ${isLight ? "bg-black/5" : "bg-white/5"}`} />
+                                    <div className={`mt-2 h-3 w-3/4 rounded ${isLight ? "bg-black/5" : "bg-white/5"}`} />
                                   </div>
                                 </div>
                               ))}
@@ -426,18 +531,17 @@ export default function Features() {
                           >
                             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                               <div>
-                                <h3 className="text-2xl font-semibold tracking-tight text-white dark:text-white">
+                                <h3 className={`${BENTO_THEME_TRANSITION_CLASS} ${isLight ? "text-2xl font-semibold tracking-tight text-foreground" : "text-2xl font-semibold tracking-tight text-white"}`}>
                                   Welcome back!
                                 </h3>
-                                <p className="mt-1 text-sm text-white/70 dark:text-white/70">
+                                <p className={`${BENTO_THEME_TRANSITION_CLASS} ${isLight ? "mt-1 text-sm text-foreground/70" : "mt-1 text-sm text-white/70"}`}>
                                   Here&apos;s what&apos;s happening with your services today.
                                 </p>
                               </div>
                               <div className="flex items-center gap-3">
-                                <ModeToggle />
                                 <button
                                   type="button"
-                                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-white/15 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/25"
+                                  className={`${BENTO_THEME_TRANSITION_CLASS} ${isLight ? "inline-flex items-center justify-center gap-2 rounded-lg bg-black/10 px-4 py-2.5 text-sm font-medium text-foreground hover:bg-black/15" : "inline-flex items-center justify-center gap-2 rounded-lg bg-white/15 px-4 py-2.5 text-sm font-medium text-white hover:bg-white/25"}`}
                                 >
                                   <MessageSquare className="h-4 w-4" />
                                   New Request
@@ -454,18 +558,19 @@ export default function Features() {
                               ].map(({ title, value, sub, Icon }) => (
                                 <div
                                   key={title}
-                                  className="rounded-xl border border-border bg-[#f8f6f1] p-4 dark:border-white/10 dark:bg-[#0a2d14]"
+                                  className="rounded-xl border p-4 hover:scale-[1.01]"
+                                  style={{ borderColor: isLight ? "var(--border)" : "rgba(255,255,255,0.1)", backgroundColor: isLight ? BENTO_CARD_LIGHT : BENTO_CARD_DARK, transition: BENTO_CARD_TRANSITION }}
                                 >
                                   <div className="flex items-start justify-between">
                                     <div>
-                                      <p className="text-2xl font-semibold text-foreground dark:text-white">{value}</p>
-                                      <p className="text-xs text-foreground/60 dark:text-white/60">{sub}</p>
+                                      <p className={`font-body ${BENTO_THEME_TRANSITION_CLASS} ${isLight ? "text-2xl font-semibold tabular-nums text-foreground" : "text-2xl font-semibold tabular-nums text-white"}`}>{value}</p>
+                                      <p className={`font-body ${BENTO_THEME_TRANSITION_CLASS} ${isLight ? "text-xs text-foreground/60" : "text-xs text-white/60"}`}>{sub}</p>
                                     </div>
-                                    <div className="rounded-lg bg-black/5 p-2 dark:bg-white/10">
+                                    <div className={`rounded-lg p-2 ${BENTO_THEME_TRANSITION_CLASS} ${isLight ? "bg-black/5" : "bg-white/10"}`}>
                                       <Icon className="h-5 w-5 text-primary" strokeWidth={1.5} />
                                     </div>
                                   </div>
-                                  <p className="mt-2 font-mono text-[10px] uppercase tracking-wider text-foreground/50 dark:text-white/50">
+                                  <p className={`font-mono ${BENTO_THEME_TRANSITION_CLASS} ${isLight ? "mt-2 text-[10px] uppercase tracking-wider text-foreground/50" : "mt-2 text-[10px] uppercase tracking-wider text-white/50"}`}>
                                     {title}
                                   </p>
                                 </div>
@@ -474,8 +579,8 @@ export default function Features() {
 
                             <div className="space-y-4">
                               <div className="flex items-center justify-between">
-                                <h4 className="text-xl font-semibold text-white dark:text-white">Your Services</h4>
-                                <span className="text-sm text-white/70 dark:text-white/70">View all →</span>
+                                <h4 className={`${BENTO_THEME_TRANSITION_CLASS} ${isLight ? "text-xl font-semibold text-foreground" : "text-xl font-semibold text-white"}`}>Your Services</h4>
+                                <span className={`${BENTO_THEME_TRANSITION_CLASS} ${isLight ? "text-sm text-foreground/70" : "text-sm text-white/70"}`}>View all →</span>
                               </div>
                               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                                 {MOCK_SERVICES.map((service, index) => {
@@ -487,43 +592,48 @@ export default function Features() {
                                       initial={{ opacity: 0, y: 8 }}
                                       animate={{ opacity: 1, y: 0 }}
                                       transition={{ delay: index * 0.04 }}
-                                      className="rounded-xl border border-border bg-[#f8f6f1] p-4 transition-colors hover:border-primary/40 dark:border-white/10 dark:bg-[#0a2d14]"
+                                      className="rounded-xl border p-4 transition-colors hover:scale-[1.01] hover:border-primary/40"
+                                      style={{ borderColor: isLight ? "var(--border)" : "rgba(255,255,255,0.1)", backgroundColor: isLight ? BENTO_CARD_LIGHT : BENTO_CARD_DARK, transition: BENTO_CARD_TRANSITION }}
                                     >
                                       <div className="mb-3 flex items-start justify-between">
-                                        <span className="font-mono text-[10px] uppercase tracking-wider text-foreground/60 dark:text-white/60">
+                                        <span className={isLight ? "font-mono text-[10px] uppercase tracking-wider text-foreground/60" : "font-mono text-[10px] uppercase tracking-wider text-white/60"}>
                                           {service.id}
                                         </span>
                                         <span
-                                          className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${
+                                          className={`rounded-full border px-2 py-0.5 font-body text-[10px] font-medium ${
                                             isMaintenance
-                                              ? "border-amber-500/30 bg-amber-500/20 text-amber-700 dark:bg-amber-500/20 dark:text-amber-200"
-                                              : "border-primary/30 bg-primary/20 text-primary-foreground"
+                                              ? isLight
+                                                ? "border-amber-300 bg-amber-100 text-amber-800"
+                                                : "border-amber-500/30 bg-amber-500/20 text-amber-200"
+                                              : isLight
+                                                ? "border-primary/40 bg-primary/15 text-primary"
+                                                : "border-primary/30 bg-primary/20 text-primary-foreground"
                                           }`}
                                         >
                                           {isMaintenance ? "Maintenance" : (<><span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-primary" />Operational</>)}
                                         </span>
                                       </div>
                                       <div className="mb-3 flex items-center gap-3">
-                                        <div className="rounded-lg bg-black/5 p-2 dark:bg-white/10">
+                                        <div className={`rounded-lg p-2 ${isLight ? "bg-black/5" : "bg-white/10"}`}>
                                           <Icon className="h-5 w-5 text-primary" strokeWidth={1.5} />
                                         </div>
                                         <div className="min-w-0 flex-1">
-                                          <h5 className="truncate font-medium text-foreground dark:text-white">{service.name}</h5>
-                                          <p className="text-xs text-foreground/70 dark:text-white/70">{service.provider}</p>
+                                          <h5 className={`font-body text-base font-semibold tracking-tight ${isLight ? "truncate text-foreground" : "truncate text-white"}`}>{service.name}</h5>
+                                          <p className={`font-body text-xs ${isLight ? "text-foreground/70" : "text-white/70"}`}>{service.provider}</p>
                                         </div>
                                       </div>
                                       <div className="mb-3 grid grid-cols-2 gap-2">
-                                        <div className="rounded-lg bg-black/5 py-2 text-center dark:bg-white/5">
-                                          <p className="text-lg font-semibold text-primary">{service.uptime}%</p>
-                                          <p className="font-mono text-[10px] text-foreground/60 dark:text-white/60">UPTIME</p>
+                                        <div className={`rounded-lg py-2 text-center ${isLight ? "bg-black/5" : "bg-white/5"}`}>
+                                          <p className="font-body text-lg font-semibold tabular-nums text-primary">{service.uptime}%</p>
+                                          <p className={isLight ? "font-mono text-[10px] text-foreground/60" : "font-mono text-[10px] text-white/60"}>UPTIME</p>
                                         </div>
-                                        <div className="rounded-lg bg-black/5 py-2 text-center dark:bg-white/5">
-                                          <p className="text-lg font-semibold text-foreground dark:text-white">{(service.visitors / 1000).toFixed(1)}k</p>
-                                          <p className="font-mono text-[10px] text-foreground/60 dark:text-white/60">VISITORS</p>
+                                        <div className={`rounded-lg py-2 text-center ${isLight ? "bg-black/5" : "bg-white/5"}`}>
+                                          <p className={`font-body text-lg font-semibold tabular-nums ${isLight ? "text-foreground" : "text-white"}`}>{`${(service.visitors / 1000).toFixed(1)}k`}</p>
+                                          <p className={isLight ? "font-mono text-[10px] text-foreground/60" : "font-mono text-[10px] text-white/60"}>VISITORS</p>
                                         </div>
                                       </div>
-                                      <div className="flex items-center justify-between border-t border-border pt-2 dark:border-white/10">
-                                        <span className="text-xs capitalize text-foreground/60 dark:text-white/60">{service.type}</span>
+                                      <div className={`flex items-center justify-between border-t pt-2 ${isLight ? "border-border" : "border-white/10"}`}>
+                                        <span className={isLight ? "text-xs capitalize text-foreground/60" : "text-xs capitalize text-white/60"}>{service.type}</span>
                                         <a href={`https://${service.url}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 truncate text-xs text-primary hover:underline">
                                           <span className="max-w-[100px] truncate">{service.url}</span>
                                           <ExternalLink className="h-3 w-3 shrink-0" />
@@ -538,8 +648,8 @@ export default function Features() {
                             {/* Recent Changes – cloud-scale-guard ChangeLog style */}
                             <div className="space-y-4">
                               <div className="flex items-center justify-between">
-                                <h4 className="text-xl font-semibold text-white dark:text-white">Recent Changes</h4>
-                                <span className="text-sm text-white/70 dark:text-white/70">View all →</span>
+                                <h4 className={`${BENTO_THEME_TRANSITION_CLASS} ${isLight ? "text-xl font-semibold text-foreground" : "text-xl font-semibold text-white"}`}>Recent Changes</h4>
+                                <span className={`${BENTO_THEME_TRANSITION_CLASS} ${isLight ? "text-sm text-foreground/70" : "text-sm text-white/70"}`}>View all →</span>
                               </div>
                               <div className="space-y-2">
                                 {MOCK_CHANGE_LOGS.map((log, index) => {
@@ -554,32 +664,32 @@ export default function Features() {
                                       className="flex gap-4"
                                     >
                                       <div className="flex flex-col items-center">
-                                        <div className={`rounded-lg border p-2 ${config.class}`}>
+                                        <div className={`rounded-lg border p-2 ${isLight ? config.classLight : config.classDark}`}>
                                           <Icon className="h-4 w-4" strokeWidth={1.5} />
                                         </div>
-                                        <div className="my-2 w-px flex-1 bg-white/20 dark:bg-white/20" />
+                                        <div className={isLight ? "my-2 w-px flex-1 bg-black/15" : "my-2 w-px flex-1 bg-white/20"} />
                                       </div>
                                       <div className="flex-1 pb-4">
-                                        <div className="rounded-xl border border-border bg-[#f8f6f1] p-4 transition-colors hover:border-primary/30 dark:border-white/10 dark:bg-[#0a2d14]">
+                                        <div className="rounded-xl border p-4 transition-colors hover:scale-[1.01] hover:border-primary/30" style={{ borderColor: isLight ? "var(--border)" : "rgba(255,255,255,0.1)", backgroundColor: isLight ? BENTO_CARD_LIGHT : BENTO_CARD_DARK, transition: BENTO_CARD_TRANSITION }}>
                                           <div className="mb-2 flex flex-wrap items-start justify-between gap-2">
                                             <div className="flex items-center gap-2">
-                                              <span className={`rounded border px-2 py-0.5 text-[10px] font-medium ${config.class}`}>
+                                              <span className={`rounded border px-2 py-0.5 text-[10px] font-medium ${isLight ? config.classLight : config.classDark}`}>
                                                 {config.label}
                                               </span>
-                                              <span className="font-mono text-[10px] uppercase tracking-wider text-foreground/50 dark:text-white/50">
+                                              <span className={isLight ? "font-mono text-[10px] uppercase tracking-wider text-foreground/50" : "font-mono text-[10px] uppercase tracking-wider text-white/50"}>
                                                 {sourceLabels[log.source] ?? log.source}
                                               </span>
                                             </div>
-                                            <span className="text-xs text-foreground/50 dark:text-white/50">{log.created_date}</span>
+                                            <span className={isLight ? "text-xs text-foreground/50" : "text-xs text-white/50"}>{log.created_date}</span>
                                           </div>
-                                          <h5 className="font-medium text-foreground dark:text-white">{log.title}</h5>
+                                          <h5 className={`font-body text-[15px] font-semibold leading-snug ${isLight ? "text-foreground" : "text-white"}`}>{log.title}</h5>
                                           {log.description && (
-                                            <p className="mt-1 line-clamp-2 text-sm text-foreground/60 dark:text-white/60">{log.description}</p>
+                                            <p className={`font-body mt-1 line-clamp-2 text-sm leading-relaxed ${isLight ? "text-foreground/65" : "text-white/65"}`}>{log.description}</p>
                                           )}
-                                          <div className="mt-3 flex items-center gap-3 text-xs text-foreground/50 dark:text-white/50">
+                                          <div className={`font-body ${isLight ? "mt-3 flex items-center gap-3 text-xs text-foreground/50" : "mt-3 flex items-center gap-3 text-xs text-white/50"}`}>
                                             {log.engineer_name ? (
                                               <div className="flex items-center gap-1.5">
-                                                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black/10 dark:bg-white/10">
+                                                <div className={`flex h-5 w-5 items-center justify-center rounded-full ${isLight ? "bg-black/10" : "bg-white/10"}`}>
                                                   <User className="h-3 w-3" />
                                                 </div>
                                                 <span>{log.engineer_name}</span>

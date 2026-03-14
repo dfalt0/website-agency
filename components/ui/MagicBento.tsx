@@ -553,6 +553,7 @@ export default function MagicBento({
             className: baseClassName,
             style: {
               backgroundColor: card.color,
+              transition: "background-color 0.42s ease-out, border-color 0.42s ease-out",
               ["--glow-color" as string]: glowColor,
               ...(card.gridColumn != null && { gridColumn: card.gridColumn }),
               ...(card.gridRow != null && { gridRow: card.gridRow }),

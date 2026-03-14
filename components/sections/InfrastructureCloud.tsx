@@ -15,6 +15,14 @@ const PLATFORMS = [
   { id: "wp", name: "WordPress", slug: "wordpress" },
 ];
 
+/** Center exclusion x (half-width %) scales with label length so short names (e.g. AWS) get a narrower clear zone. */
+function excludeXForLabel(name: string): string {
+  const minX = 10;
+  const maxX = 28;
+  const x = Math.min(maxX, minX + name.length * 1.6);
+  return `${Math.round(x)}%`;
+}
+
 /**
  * Your stack, connected: platform cards with pixel-card hover animation (green variant).
  */
@@ -73,10 +81,15 @@ export default function InfrastructureCloud() {
             >
               <Link
                 href={`/integrations#${platform.slug}`}
-                className="block h-full rounded-[var(--radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                className="block h-full rounded-(--radius) focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
                 <PixelCard
                   variant="green"
+                  excludeCenter={{
+                    x: excludeXForLabel(platform.name),
+                    y: { top: "10%", bottom: "5%" },
+                    feather: "24%",
+                  }}
                   className="group min-h-[140px] w-full bg-surface transition-colors duration-200 hover:bg-[#166534]"
                 >
                   <div className="relative z-10 font-mono text-2xl font-semibold text-foreground transition-colors duration-200 group-hover:text-white">
