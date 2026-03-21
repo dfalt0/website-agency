@@ -9,21 +9,24 @@ type NavVariant = "dark" | "light";
 export default function Navigation({ navVariant }: { navVariant?: NavVariant } = {}) {
   const pathname = usePathname();
   const [hasScrolled, setHasScrolled] = useState(false);
-  const [hasScrolledPastHero, setHasScrolledPastHero] = useState(false);
 
   // navVariant overrides: "dark" = dark background page (white nav text), "light" = light page (black nav text).
-  // Otherwise: home = white text until scroll past hero; dark pages (/transfer, /scan) = always white text; other pages = black text.
+  // Otherwise: home = dark nav text once glass bar shows (scrollY > 10), same threshold as glass; dark pages = always white text; other pages = black text.
   const isDarkPage = pathname === "/transfer" || pathname === "/scan";
   const isLightPage = pathname !== "/" && !isDarkPage;
   const scrolled =
-    navVariant === "dark" ? false : navVariant === "light" ? true : isDarkPage ? false : isLightPage || hasScrolledPastHero;
+    navVariant === "dark"
+      ? false
+      : navVariant === "light"
+        ? true
+        : isDarkPage
+          ? false
+          : isLightPage || (pathname === "/" && hasScrolled);
   const showGlass = hasScrolled || isDarkPage;
 
   useEffect(() => {
     const handleScroll = () => {
-      const y = window.scrollY;
-      setHasScrolled(y > 10);
-      setHasScrolledPastHero(y > window.innerHeight);
+      setHasScrolled(window.scrollY > 10);
     };
     handleScroll();
     window.addEventListener("scroll", handleScroll);
