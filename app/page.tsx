@@ -5,6 +5,7 @@ import ConnectionBeam from "@/components/sections/ConnectionBeam";
 
 /* Below-the-fold sections: code-split to reduce initial JS and speed up load */
 const StatsBar = dynamic(() => import("@/components/sections/StatsBar"), { ssr: true });
+const AIConsulting = dynamic(() => import("@/components/sections/AIConsulting"), { ssr: true });
 const Features = dynamic(() => import("@/components/sections/Features"), { ssr: true });
 const InfrastructureCloud = dynamic(() => import("@/components/sections/InfrastructureCloud"), { ssr: true });
 const Comparison = dynamic(() => import("@/components/sections/Comparison"), { ssr: true });
@@ -22,6 +23,7 @@ export default function Home() {
         <Navigation />
         <Hero />
         <StatsBar />
+        <AIConsulting />
         <Features />
         <InfrastructureCloud />
         <Comparison />

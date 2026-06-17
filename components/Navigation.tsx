@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { CardNav, type CardNavItem } from "@/components/ui/CardNav";
+import { BRAND } from "@/lib/config";
 
 type NavVariant = "dark" | "light";
 
@@ -10,9 +11,7 @@ export default function Navigation({ navVariant }: { navVariant?: NavVariant } =
   const pathname = usePathname();
   const [hasScrolled, setHasScrolled] = useState(false);
 
-  // navVariant overrides: "dark" = dark background page (white nav text), "light" = light page (black nav text).
-  // Otherwise: home = dark nav text once glass bar shows (scrollY > 10), same threshold as glass; dark pages = always white text; other pages = black text.
-  const isDarkPage = pathname === "/transfer" || pathname === "/scan";
+  const isDarkPage = pathname === "/transfer" || pathname === "/scan" || pathname === "/contact";
   const isLightPage = pathname !== "/" && !isDarkPage;
   const scrolled =
     navVariant === "dark"
@@ -35,25 +34,25 @@ export default function Navigation({ navVariant }: { navVariant?: NavVariant } =
 
   const items: CardNavItem[] = [
     {
-      label: "Services",
-      href: "#services",
+      label: "AI Engineering",
+      href: "#ai-engineering",
       bgColor: "#0C0F0C",
       textColor: "#E2E8E2",
       links: [
-        { label: "Website Management", href: "#services", ariaLabel: "Website Management" },
-        { label: "Cloud Infrastructure", href: "#services", ariaLabel: "Cloud Infrastructure" },
-        { label: "Hosting & Security", href: "#services", ariaLabel: "Hosting & Security" },
+        { label: "Consulting & custom AI", href: "/#ai-engineering", ariaLabel: "AI consulting" },
+        { label: "Custom MCPs", href: "/#ai-engineering", ariaLabel: "Custom MCPs" },
+        { label: "Modern stacks", href: "/#ai-engineering", ariaLabel: "Modern stacks" },
       ],
     },
     {
-      label: "Solutions",
-      href: "#solutions",
+      label: "Services",
+      href: "#services",
       bgColor: "#080A08",
       textColor: "#E2E8E2",
       links: [
-        { label: "For Startups", href: "#solutions", ariaLabel: "Solutions for Startups" },
-        { label: "For Agencies", href: "#solutions", ariaLabel: "Solutions for Agencies" },
-        { label: "Case Studies", href: "#solutions", ariaLabel: "Case Studies" },
+        { label: "Managed hosting", href: "#services", ariaLabel: "Managed hosting" },
+        { label: "Cloud infrastructure", href: "#services", ariaLabel: "Cloud infrastructure" },
+        { label: "Security & monitoring", href: "#services", ariaLabel: "Security" },
       ],
     },
     {
@@ -67,22 +66,24 @@ export default function Navigation({ navVariant }: { navVariant?: NavVariant } =
       bgColor: "#0C0F0C",
       textColor: "#E2E8E2",
       links: [
-        { label: "Tech Stack Scanner", href: "/scan", ariaLabel: "Tech Stack Scanner" },
-        { label: "Blog", href: "#resources", ariaLabel: "Blog" },
-        { label: "Docs", href: "#resources", ariaLabel: "Documentation" },
-        { label: "Support", href: "#resources", ariaLabel: "Support" },
+        { label: "Stack & AI scan", href: "/scan", ariaLabel: "Stack and AI opportunity scan" },
+        { label: "Intake form", href: "/start", ariaLabel: "Start intake form" },
+        { label: "Discovery call", href: "/contact", ariaLabel: "Book discovery call" },
       ],
     },
   ];
 
   return (
     <CardNav
+      logo={BRAND.shortName}
       items={items}
       scrolled={scrolled}
       glass={showGlass}
       theme="dark"
       buttonBgColor={scrolled ? "var(--primary)" : "#E2E8E2"}
       buttonTextColor={scrolled ? "var(--primary-foreground)" : "var(--dark)"}
+      ctaHref="/contact"
+      ctaLabel="Book discovery"
     />
   );
 }

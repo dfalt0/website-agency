@@ -1,41 +1,35 @@
 import Link from "next/link";
+import { BRAND } from "@/lib/config";
 
 const footerColumns = [
   {
-    title: "Services",
+    title: "AI Engineering",
     links: [
-      { label: "Website Management", url: "/services/website" },
-      { label: "Cloud Infrastructure", url: "/services/cloud" },
-      { label: "Security & Monitoring", url: "/services/security" },
-      { label: "Custom Development", url: "/services/development" },
+      { label: "Consulting & custom AI", url: "/#ai-engineering" },
+      { label: "Custom MCPs", url: "/#ai-engineering" },
+      { label: "Discovery call", url: "/contact" },
+      { label: "Intake form", url: "/start" },
     ],
   },
   {
-    title: "Solutions",
+    title: "Services",
     links: [
-      { label: "Small Business", url: "/solutions/small-business" },
-      { label: "Ecommerce", url: "/solutions/ecommerce" },
-      { label: "Enterprise", url: "/solutions/enterprise" },
-      { label: "Agencies", url: "/solutions/agencies" },
+      { label: "Managed hosting", url: "/#services" },
+      { label: "Cloud infrastructure", url: "/#services" },
+      { label: "Security & monitoring", url: "/#services" },
     ],
   },
   {
     title: "Resources",
     links: [
-      { label: "Tech Stack Scanner", url: "/scan" },
-      { label: "Blog", url: "/blog" },
-      { label: "Help Center", url: "/help" },
-      { label: "Case Studies", url: "/case-studies" },
-      { label: "Documentation", url: "/docs" },
+      { label: "Stack & AI scan", url: "/scan" },
+      { label: "Integrations", url: "/integrations" },
     ],
   },
   {
     title: "Company",
     links: [
-      { label: "About Us", url: "/about" },
-      { label: "Careers", url: "/careers" },
       { label: "Contact", url: "/contact" },
-      { label: "Partners", url: "/partners" },
     ],
   },
 ];
@@ -76,7 +70,7 @@ export default function Footer() {
 
         <div className="flex flex-col items-center justify-between gap-6 py-8 md:flex-row">
           <div className="text-sm text-dark-foreground/60">
-            © 2026 YourCompany. All rights reserved.
+            © 2026 {BRAND.name}. All rights reserved.
           </div>
           <div className="flex gap-6">
             {legalLinks.map((link, index) => (

@@ -12,13 +12,13 @@ import Squares from "@/components/ui/Squares";
 const FOREST_MIST = "rgba(34, 197, 94, 0.08)";
 
 const ROTATING_TEXTS = [
-  "website",
-  "online store",
-  "blog",
-  "site builder",
-  "ecommerce",
-  "cloud",
-  "hosting",
+  "operations",
+  "support workflow",
+  "sales pipeline",
+  "internal tools",
+  "customer portal",
+  "reporting",
+  "field teams",
 ];
 
 /** Extra pixels so the word isn’t cut off by the box edge (font/subpixel variance) */
@@ -126,7 +126,7 @@ export default function Hero() {
           >
             <span ref={measureInnerRef} className="inline-block text-[clamp(3rem,10vw,6rem)] font-normal leading-[1.1] tracking-[-0.02em]" />
           </span>
-          Your{" "}
+          AI for your{" "}
           <motion.span
             className="font-heading inline-flex items-baseline justify-center align-baseline px-2 py-0.5 sm:px-3 sm:py-1 md:px-4 md:py-1.5 bg-[#E2E8E2] text-[#080A08] rounded-lg shrink-0"
             style={
@@ -151,7 +151,7 @@ export default function Hero() {
               />
             </span>
           </motion.span><br />
-          fully managed
+          built with engineers
         </motion.h1>
 
         <motion.p
@@ -161,11 +161,13 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
         >
-          Professional engineers managing your web services and cloud infrastructure—affordable, competitive, and worry-free.
+          You&apos;re already running a business. We help you find where AI actually moves the needle — then
+          our engineers build custom apps, MCPs, and workflows that ship to production. Not another chatbot
+          wrapper.
         </motion.p>
 
         <motion.div
-          className="mb-8 flex flex-col items-center gap-4"
+          className="mb-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.14, ease: [0.22, 1, 0.36, 1] }}
@@ -177,7 +179,15 @@ export default function Hero() {
             asChild
             className="w-full max-w-[280px] border border-[#E2E8E2]/90 bg-transparent text-[#E2E8E2] shadow-emerald hover:bg-primary hover:text-primary-foreground hover:border-primary"
           >
-            <Link href="/start">Get started</Link>
+            <Link href="/contact">Book a discovery call</Link>
+          </Button>
+          <Button
+            variant="secondary"
+            size="lg"
+            asChild
+            className="w-full max-w-[280px] border border-[#E2E8E2]/40 bg-transparent text-[#E2E8E2] hover:bg-[#E2E8E2]/10"
+          >
+            <Link href="/start">Start intake form</Link>
           </Button>
         </motion.div>
 
@@ -187,7 +197,7 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.25 }}
         >
-          Start for free. No credit card required.
+          Free discovery. Scoped builds. Managed hosting when you need it.
         </motion.p>
         </div>
 

@@ -1,8 +1,8 @@
 export default function StatsBar() {
   const stats = [
-    { number: "500+", label: "Websites Managed" },
-    { number: "99.9%", label: "Uptime Guarantee" },
-    { number: "24/7", label: "Expert Support" },
+    { number: "10+", label: "Modern stacks we ship on" },
+    { number: "MCP", label: "Custom tool servers built" },
+    { number: "24hr", label: "Typical discovery response" },
   ];
 
   return (

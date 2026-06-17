@@ -27,6 +27,8 @@ interface CardNavProps {
   menuColor?: string;
   buttonBgColor?: string;
   buttonTextColor?: string;
+  ctaHref?: string;
+  ctaLabel?: string;
   theme?: "light" | "dark";
   className?: string;
   scrolled?: boolean;
@@ -42,6 +44,8 @@ export function CardNav({
   menuColor,
   buttonBgColor = "var(--dark)",
   buttonTextColor = "var(--dark-foreground)",
+  ctaHref = "/start",
+  ctaLabel = "Get Started",
   theme = "dark",
   className,
   scrolled = false,
@@ -169,14 +173,14 @@ export function CardNav({
               Log In
             </Link>
             <Link
-              href="/start"
+              href={ctaHref}
               className="inline-flex h-11 items-center justify-center rounded-lg px-6 text-base font-semibold transition-all hover:opacity-90"
               style={{
                 backgroundColor: buttonBgColor,
                 color: buttonTextColor,
               }}
             >
-              Get Started
+              {ctaLabel}
             </Link>
           </div>
 
@@ -250,12 +254,12 @@ export function CardNav({
                   Log In
                 </Link>
                 <Link
-                  href="/start"
+                  href={ctaHref}
                   className="block w-full rounded-lg py-3.5 text-center text-lg font-semibold text-primary-foreground"
                   style={{ backgroundColor: buttonBgColor }}
                   onClick={() => setMobileOpen(false)}
                 >
-                  Get Started
+                  {ctaLabel}
                 </Link>
               </div>
             </div>
