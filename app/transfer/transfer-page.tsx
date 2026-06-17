@@ -5,18 +5,40 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Step3Contact } from "@/components/transfer/Step3Contact";
-import { SERVICE_OPTIONS, type TransferServiceType, type TransferPath, type TransferState } from "@/lib/transfer";
 import {
+  INTENT_OPTIONS,
+  SERVICE_OPTIONS,
+  PATH_OPTIONS,
+  type TransferIntent,
+  type TransferServiceType,
+  type TransferPath,
+  type TransferState,
+} from "@/lib/transfer";
+import {
+  Brain,
+  Code2,
+  Workflow,
+  Plug,
+  Server,
   Globe,
   Cloud,
   Store,
   Layout,
   Box,
-  Server,
   ArrowRight,
   Check,
   Sparkles,
+  Map,
+  Hammer,
 } from "lucide-react";
+
+const INTENT_ICONS: Record<TransferIntent, React.ComponentType<{ className?: string }>> = {
+  ai_discovery: Brain,
+  custom_ai_app: Code2,
+  workflow_automation: Workflow,
+  mcp_skills: Plug,
+  managed_hosting: Server,
+};
 
 const SERVICE_ICONS: Record<TransferServiceType, React.ComponentType<{ className?: string }>> = {
   website: Globe,
@@ -29,11 +51,19 @@ const SERVICE_ICONS: Record<TransferServiceType, React.ComponentType<{ className
   other: Server,
 };
 
+const PATH_ICONS: Record<TransferPath, React.ComponentType<{ className?: string }>> = {
+  discover: Map,
+  build: Hammer,
+  stay: Server,
+  migrate: Sparkles,
+};
+
 const initialState: TransferState = {
   step: 1,
+  intents: [],
   serviceTypes: [],
   path: null,
-  contact: { name: "", email: "", note: "" },
+  contact: { name: "", email: "", company: "", teamSize: "", industry: "", note: "" },
 };
 
 export default function TransferPage() {
@@ -42,6 +72,11 @@ export default function TransferPage() {
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const setStep = (step: 1 | 2 | 3 | 4) => setState((s) => ({ ...s, step }));
+  const toggleIntent = (key: TransferIntent) =>
+    setState((s) => ({
+      ...s,
+      intents: s.intents.includes(key) ? s.intents.filter((t) => t !== key) : [...s.intents, key],
+    }));
   const toggleServiceType = (key: TransferServiceType) =>
     setState((s) => ({
       ...s,
@@ -63,8 +98,12 @@ export default function TransferPage() {
         body: JSON.stringify({
           name: state.contact.name.trim(),
           email: state.contact.email.trim(),
+          company: state.contact.company.trim(),
+          teamSize: state.contact.teamSize.trim(),
+          industry: state.contact.industry.trim(),
           note: state.contact.note.trim(),
           path: state.path,
+          intents: state.intents,
           serviceTypes: state.serviceTypes,
         }),
       });
@@ -98,22 +137,16 @@ export default function TransferPage() {
           </Link>
           <span className="text-[#E2E8E2]/30">|</span>
           <Link
-            href="/#services"
+            href="/#ai-engineering"
             className="font-mono text-xs uppercase tracking-wider text-[#E2E8E2]/80 transition-colors hover:text-[#E2E8E2]"
           >
-            Services
+            AI Engineering
           </Link>
           <Link
-            href="/#pricing"
+            href="/contact"
             className="font-mono text-xs uppercase tracking-wider text-[#E2E8E2]/80 transition-colors hover:text-[#E2E8E2]"
           >
-            Pricing
-          </Link>
-          <Link
-            href="/#resources"
-            className="font-mono text-xs uppercase tracking-wider text-[#E2E8E2]/80 transition-colors hover:text-[#E2E8E2]"
-          >
-            Resources
+            Discovery call
           </Link>
         </nav>
 
@@ -138,18 +171,21 @@ export default function TransferPage() {
 
         <AnimatePresence mode="wait">
           {state.step === 1 && (
-            <Step1
+            <Step1Intents
               key="step1"
-              selectedIds={state.serviceTypes}
-              onToggle={toggleServiceType}
+              selectedIds={state.intents}
+              onToggle={toggleIntent}
               onNext={() => setStep(2)}
             />
           )}
           {state.step === 2 && (
-            <Step2
+            <Step2Path
               key="step2"
-              selected={state.path}
-              onSelect={setPath}
+              intents={state.intents}
+              selectedPath={state.path}
+              selectedServices={state.serviceTypes}
+              onSelectPath={setPath}
+              onToggleService={toggleServiceType}
               onBack={() => setStep(1)}
               onNext={() => setStep(3)}
             />
@@ -172,20 +208,14 @@ export default function TransferPage() {
 
         <footer className="mt-16 border-t border-[#E2E8E2]/15 pt-8">
           <p className="mb-3 font-mono text-[10px] uppercase tracking-wider text-[#E2E8E2]/60">
-            Not ready to transfer?
+            Prefer to talk first?
           </p>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            <Link href="/" className="text-sm text-[#E2E8E2]/90 transition-colors hover:text-[#E2E8E2]">
-              Back to home
-            </Link>
-            <Link href="/#services" className="text-sm text-[#E2E8E2]/90 transition-colors hover:text-[#E2E8E2]">
-              Our services
-            </Link>
-            <Link href="/#pricing" className="text-sm text-[#E2E8E2]/90 transition-colors hover:text-[#E2E8E2]">
-              Pricing
+            <Link href="/contact" className="text-sm text-emerald transition-colors hover:text-emerald/80">
+              Book a discovery call
             </Link>
             <Link href="/scan" className="text-sm text-[#E2E8E2]/90 transition-colors hover:text-[#E2E8E2]">
-              Tech stack scanner
+              Stack & AI opportunity scan
             </Link>
           </div>
         </footer>
@@ -194,13 +224,13 @@ export default function TransferPage() {
   );
 }
 
-function Step1({
+function Step1Intents({
   selectedIds,
   onToggle,
   onNext,
 }: {
-  selectedIds: TransferServiceType[];
-  onToggle: (key: TransferServiceType) => void;
+  selectedIds: TransferIntent[];
+  onToggle: (key: TransferIntent) => void;
   onNext: () => void;
 }) {
   return (
@@ -212,16 +242,16 @@ function Step1({
     >
       <p className="mb-2 font-mono text-xs uppercase tracking-wider text-emerald">[Step 1 of 4]</p>
       <h1 className="font-heading mb-2 text-[clamp(1.5rem,4vw,2.25rem)] font-semibold leading-snug tracking-wide text-[#E2E8E2]">
-        What is your tech stack?
+        What brings you here?
       </h1>
       <p className="mb-6 text-[#E2E8E2]/70">
-        Choose everything that applies—we&apos;ll recommend a plan that fits.
+        Select everything that applies — we&apos;ll tailor the next steps to your goals.
       </p>
 
       <div className="space-y-3">
-        {(Object.entries(SERVICE_OPTIONS) as [TransferServiceType, (typeof SERVICE_OPTIONS)["website"]][]).map(
+        {(Object.entries(INTENT_OPTIONS) as [TransferIntent, (typeof INTENT_OPTIONS)["ai_discovery"]][]).map(
           ([key, opt]) => {
-            const Icon = SERVICE_ICONS[key];
+            const Icon = INTENT_ICONS[key];
             const isSelected = selectedIds.includes(key);
             return (
               <button
@@ -274,17 +304,25 @@ function Step1({
   );
 }
 
-function Step2({
-  selected,
-  onSelect,
+function Step2Path({
+  intents,
+  selectedPath,
+  selectedServices,
+  onSelectPath,
+  onToggleService,
   onBack,
   onNext,
 }: {
-  selected: TransferPath | null;
-  onSelect: (v: TransferPath) => void;
+  intents: TransferIntent[];
+  selectedPath: TransferPath | null;
+  selectedServices: TransferServiceType[];
+  onSelectPath: (v: TransferPath) => void;
+  onToggleService: (key: TransferServiceType) => void;
   onBack: () => void;
   onNext: () => void;
 }) {
+  const hostingIntent = intents.includes("managed_hosting");
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 12 }}
@@ -297,85 +335,96 @@ function Step2({
         How do you want to work with us?
       </h1>
       <p className="mb-8 text-[#E2E8E2]/70">
-        You can keep your current platform and have us manage it, or migrate to our stack for a new, improved experience.
+        Pick the engagement model that fits — discovery, a scoped build, ongoing management, or migration.
       </p>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <button
-          type="button"
-          onClick={() => onSelect("stay")}
-          className={`relative flex flex-col rounded-xl border p-6 text-left transition-all ${
-            selected === "stay"
-              ? "border-[#22C55E] bg-[#22C55E]/20 shadow-[0_0_0_2px_rgba(34,197,94,0.35)]"
-              : "border-[#15803D]/35 bg-[#052E16]/20 hover:border-[#15803D]/50 hover:bg-[#052E16]/25"
-          }`}
-        >
-          {selected === "stay" && (
-            <div className="absolute right-4 top-4 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#22C55E] text-[#052E16]">
-              <Check className="h-4 w-4 shrink-0" strokeWidth={2.5} />
-            </div>
-          )}
-          <div
-            className={`mb-3 flex h-10 w-10 items-center justify-center rounded-lg ${
-              selected === "stay" ? "bg-[#15803D]/50 text-[#22C55E]" : "bg-[#15803D]/25 text-[#15803D]"
-            }`}
-          >
-            <Server className="h-5 w-5" />
-          </div>
-          <h3 className="font-heading text-xl font-semibold leading-snug tracking-wide text-[#E2E8E2]">
-            Stay on your platform
-          </h3>
-          <p className="mt-2 text-base leading-relaxed text-[#E2E8E2]/80">
-            Keep using your current host (Shopify, Wix, etc.). Add us as a collaborator or share access—we’ll manage
-            everything as your main developer. No migration needed.
-          </p>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => onSelect("migrate")}
-          className={`relative flex flex-col rounded-xl border p-6 text-left transition-all ${
-            selected === "migrate"
-              ? "border-[#22C55E] bg-[#22C55E]/20 shadow-[0_0_0_2px_rgba(34,197,94,0.35)]"
-              : "border-[#15803D]/35 bg-[#052E16]/20 hover:border-[#15803D]/50 hover:bg-[#052E16]/25"
-          }`}
-        >
-          {selected === "migrate" && (
-            <div className="absolute right-4 top-4 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#22C55E] text-[#052E16]">
-              <Check className="h-4 w-4 shrink-0" strokeWidth={2.5} />
-            </div>
-          )}
-          <div
-            className={`mb-3 flex h-10 w-10 items-center justify-center rounded-lg ${
-              selected === "migrate" ? "bg-[#15803D]/50 text-[#22C55E]" : "bg-[#15803D]/25 text-[#15803D]"
-            }`}
-          >
-            <Sparkles className="h-5 w-5" />
-          </div>
-          <h3 className="font-heading text-xl font-semibold leading-snug tracking-wide text-[#E2E8E2]">
-            Migrate to our stack
-          </h3>
-          <p className="mt-2 text-base leading-relaxed text-[#E2E8E2]/80">
-            Move from your current setup to our infrastructure. We build or rebuild on modern hosting (Vercel, AWS,
-            etc.) for better performance and control. Available on paid tiers.
-          </p>
-          <span className="mt-3 inline-block font-mono text-[10px] uppercase tracking-wider text-[#22C55E]">
-            Paid tiers only
-          </span>
-        </button>
+      <div className="mb-10 grid gap-4 sm:grid-cols-2">
+        {(Object.entries(PATH_OPTIONS) as [TransferPath, (typeof PATH_OPTIONS)["discover"]][]).map(
+          ([key, opt]) => {
+            const Icon = PATH_ICONS[key];
+            const isSelected = selectedPath === key;
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => onSelectPath(key)}
+                className={`relative flex flex-col rounded-xl border p-5 text-left transition-all ${
+                  isSelected
+                    ? "border-[#22C55E] bg-[#22C55E]/20 shadow-[0_0_0_2px_rgba(34,197,94,0.35)]"
+                    : "border-[#15803D]/35 bg-[#052E16]/20 hover:border-[#15803D]/50 hover:bg-[#052E16]/25"
+                }`}
+              >
+                {isSelected && (
+                  <div className="absolute right-4 top-4 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#22C55E] text-[#052E16]">
+                    <Check className="h-4 w-4 shrink-0" strokeWidth={2.5} />
+                  </div>
+                )}
+                <div
+                  className={`mb-3 flex h-10 w-10 items-center justify-center rounded-lg ${
+                    isSelected ? "bg-[#15803D]/50 text-[#22C55E]" : "bg-[#15803D]/25 text-[#15803D]"
+                  }`}
+                >
+                  <Icon className="h-5 w-5" />
+                </div>
+                <h3 className="font-heading text-lg font-semibold leading-snug tracking-wide text-[#E2E8E2]">
+                  {opt.label}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-[#E2E8E2]/80">{opt.short}</p>
+                {opt.badge && (
+                  <span className="mt-3 inline-block font-mono text-[10px] uppercase tracking-wider text-[#22C55E]">
+                    {opt.badge}
+                  </span>
+                )}
+              </button>
+            );
+          }
+        )}
       </div>
 
-      <div className="mt-10 flex justify-between">
+      <div className="mb-8">
+        <h2 className="font-heading mb-2 text-lg font-semibold text-[#E2E8E2]">
+          {hostingIntent ? "Your current stack" : "Current stack (optional)"}
+        </h2>
+        <p className="mb-4 text-sm text-[#E2E8E2]/65">
+          Helps us understand integrations and migration scope. Skip if you&apos;re starting fresh.
+        </p>
+        <div className="space-y-2">
+          {(Object.entries(SERVICE_OPTIONS) as [TransferServiceType, (typeof SERVICE_OPTIONS)["website"]][]).map(
+            ([key, opt]) => {
+              const Icon = SERVICE_ICONS[key];
+              const isSelected = selectedServices.includes(key);
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => onToggleService(key)}
+                  className={`flex w-full items-center gap-3 rounded-lg border px-4 py-3 text-left transition-all ${
+                    isSelected
+                      ? "border-[#22C55E]/60 bg-[#22C55E]/10"
+                      : "border-[#15803D]/25 bg-[#052E16]/15 hover:border-[#15803D]/40"
+                  }`}
+                >
+                  <Icon className={`h-4 w-4 shrink-0 ${isSelected ? "text-emerald" : "text-[#15803D]"}`} />
+                  <span className="text-sm text-[#E2E8E2]">{opt.label}</span>
+                  {isSelected && <Check className="ml-auto h-4 w-4 text-emerald" />}
+                </button>
+              );
+            }
+          )}
+        </div>
+      </div>
+
+      <div className="flex justify-between">
         <Button variant="secondary" size="lg" onClick={onBack} className="border-dark-foreground/30 text-[#E2E8E2]">
           Back
         </Button>
         <Button
-          variant={selected ? "white-primary" : "secondary"}
+          variant={selectedPath ? "white-primary" : "secondary"}
           size="lg"
           onClick={onNext}
-          disabled={!selected}
+          disabled={!selectedPath}
           className={`duration-300 ease-out transition-[background-color,border-color,color,box-shadow] ${
-            selected ? "shadow-[0_0_10px_rgba(34,197,94,0.15)]" : "border-[#E2E8E2]/35 text-[#E2E8E2]/60 shadow-none"
+            selectedPath ? "shadow-[0_0_10px_rgba(34,197,94,0.15)]" : "border-[#E2E8E2]/35 text-[#E2E8E2]/60 shadow-none"
           }`}
         >
           Continue
@@ -387,10 +436,10 @@ function Step2({
 }
 
 function Step4Summary({ state, onBack }: { state: TransferState; onBack: () => void }) {
+  const intentLabels = state.intents.map((id) => INTENT_OPTIONS[id].label).join(", ") || "—";
   const serviceLabels =
-    state.serviceTypes.map((id) => SERVICE_OPTIONS[id].label).join(", ") || "—";
-  const pathLabel = state.path === "stay" ? "Stay on your platform" : "Migrate to our stack";
-  const multipleServices = state.serviceTypes.length > 1;
+    state.serviceTypes.map((id) => SERVICE_OPTIONS[id].label).join(", ") || "Not specified";
+  const pathLabel = state.path ? PATH_OPTIONS[state.path].label : "—";
   const email = state.contact.email.trim();
 
   return (
@@ -405,35 +454,36 @@ function Step4Summary({ state, onBack }: { state: TransferState; onBack: () => v
         You&apos;re all set
       </h1>
       <p className="mb-2 text-[#E2E8E2]/80">
-        We&apos;ll send your plan to <span className="font-medium text-[#E2E8E2]">{email}</span>.
+        We&apos;ll follow up at <span className="font-medium text-[#E2E8E2]">{email}</span>.
       </p>
       <p className="mb-8 text-[#E2E8E2]/70">Here&apos;s what happens next:</p>
 
       <ol className="mb-8 list-decimal space-y-2 pl-5 text-sm text-[#E2E8E2]/80">
         <li>Confirmation in your inbox (check spam if you don&apos;t see it).</li>
-        <li>We review your setup and audit what you shared.</li>
-        <li>You get a personalized plan—usually within 24 hours.</li>
+        <li>We review your goals, stack, and engagement model.</li>
+        <li>You get a tailored response — discovery invite or scoped plan — usually within 24 hours.</li>
       </ol>
 
       <div className="rounded-xl border border-[#15803D]/30 bg-[#052E16]/25 p-6">
         <div className="space-y-4">
           <div className="flex flex-col gap-1 border-b border-[#15803D]/20 pb-4 sm:flex-row sm:items-center sm:justify-between">
-            <span className="font-mono text-[10px] uppercase tracking-wider text-[#E2E8E2]/50">
-              What you&apos;re bringing
-            </span>
-            <span className="font-medium text-[#E2E8E2]">{serviceLabels}</span>
+            <span className="font-mono text-[10px] uppercase tracking-wider text-[#E2E8E2]/50">Goals</span>
+            <span className="font-medium text-[#E2E8E2]">{intentLabels}</span>
           </div>
-          {multipleServices && (
-            <div className="rounded-lg border border-[#15803D]/40 bg-[#15803D]/15 px-4 py-2">
-              <p className="text-xs font-medium text-[#22C55E]">
-                Multiple properties often map to a higher tier—we&apos;ll spell that out in your plan.
-              </p>
-            </div>
-          )}
-          <div className="flex justify-between border-b border-[#15803D]/20 pb-4">
-            <span className="font-mono text-[10px] uppercase tracking-wider text-[#E2E8E2]/50">How we&apos;ll work</span>
+          <div className="flex flex-col gap-1 border-b border-[#15803D]/20 pb-4 sm:flex-row sm:items-center sm:justify-between">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-[#E2E8E2]/50">Engagement</span>
             <span className="font-medium text-[#E2E8E2]">{pathLabel}</span>
           </div>
+          <div className="flex flex-col gap-1 border-b border-[#15803D]/20 pb-4 sm:flex-row sm:items-center sm:justify-between">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-[#E2E8E2]/50">Stack</span>
+            <span className="font-medium text-[#E2E8E2]">{serviceLabels}</span>
+          </div>
+          {state.contact.company.trim() && (
+            <div className="flex flex-col gap-1 border-b border-[#15803D]/20 pb-4 sm:flex-row sm:items-center sm:justify-between">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-[#E2E8E2]/50">Company</span>
+              <span className="font-medium text-[#E2E8E2]">{state.contact.company.trim()}</span>
+            </div>
+          )}
           {state.contact.note.trim() ? (
             <div className="flex flex-col gap-1 pt-2">
               <span className="font-mono text-[10px] uppercase tracking-wider text-[#E2E8E2]/50">You noted</span>

@@ -1,18 +1,11 @@
 "use client";
 
 import { motion } from "motion/react";
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ScrambleHeading } from "@/components/ui/ScrambleHeading";
-
-const comparisonData = [
-  { feature: "Monthly Cost", diy: "$16-50/mo", managed: "$99-299/mo" },
-  { feature: "Your Time Required", diy: "5-20 hours/month", managed: "0 hours" },
-  { feature: "Technical Expertise Needed", diy: "Yes", managed: "No" },
-  { feature: "Custom Features", diy: "Limited", managed: "Unlimited" },
-  { feature: "Dedicated Engineer", diy: "No", managed: "Yes" },
-  { feature: "Proactive Monitoring", diy: "No", managed: "24/7" },
-];
+import { AI_COMPARISON_ROWS } from "@/lib/ai-content";
 
 export default function Comparison() {
   return (
@@ -31,41 +24,83 @@ export default function Comparison() {
             as="h2"
             className="font-heading mb-6 text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-[1.3] tracking-[-0.02em] text-foreground"
           >
-            Why choose managed over DIY?
+            Products over prompts
           </ScrambleHeading>
           <p className="mx-auto max-w-[700px] text-lg leading-[1.8] text-foreground-muted">
-            Get the benefits of popular DIY website builders and all-in-one site platforms—with expert engineers doing all the work.
+            Operating businesses don&apos;t need another AI productivity app. They need software that fits how
+            they already work — built with engineers who ship.
           </p>
         </motion.div>
 
-        <Card className="overflow-hidden">
+        {/* Desktop table */}
+        <Card className="hidden overflow-hidden md:block">
           <CardHeader className="bg-surface-muted">
-            <div className="grid grid-cols-3 gap-4">
-              <CardTitle className="text-xl font-semibold tracking-wide">Feature</CardTitle>
-              <CardTitle className="text-xl font-semibold tracking-wide">DIY Platforms</CardTitle>
-              <CardTitle className="text-xl font-semibold tracking-wide">Our Managed Service</CardTitle>
+            <div className="grid grid-cols-4 gap-4">
+              <CardTitle className="text-lg font-semibold tracking-wide">Capability</CardTitle>
+              <CardTitle className="text-lg font-semibold tracking-wide text-foreground/70">
+                Prompting alone
+              </CardTitle>
+              <CardTitle className="text-lg font-semibold tracking-wide text-foreground/70">
+                Off-the-shelf AI SaaS
+              </CardTitle>
+              <CardTitle className="text-lg font-semibold tracking-wide text-primary">
+                Built with our engineers
+              </CardTitle>
             </div>
           </CardHeader>
           <CardContent className="p-0">
-            {comparisonData.map((row, index) => (
-              <div key={index}>
-                <div className="grid grid-cols-3 gap-4 p-6">
+            {AI_COMPARISON_ROWS.map((row, index) => (
+              <div key={row.feature}>
+                <div className="grid grid-cols-4 gap-4 p-6">
                   <div className="font-medium text-foreground">{row.feature}</div>
-                  <div className="text-foreground/70">{row.diy}</div>
-                  <div className="font-semibold text-foreground">{row.managed}</div>
+                  <div className="text-foreground/60">{row.prompting}</div>
+                  <div className="text-foreground/60">{row.saas}</div>
+                  <div className="font-semibold text-foreground">{row.engineered}</div>
                 </div>
-                {index < comparisonData.length - 1 && <Separator />}
+                {index < AI_COMPARISON_ROWS.length - 1 && <Separator />}
               </div>
             ))}
-            <Separator />
-            <div className="grid grid-cols-3 gap-4 px-6 py-4">
-              <p className="col-span-3 text-xs leading-relaxed text-foreground-muted/80">
-                <span className="font-medium text-foreground-muted">†</span>{" "}
-                “Unlimited” custom features under our managed service means we add and implement whatever is within scope and scale for your project—we’re not miracle workers, but we’ll build what makes sense for you as a custom feature.
-              </p>
-            </div>
           </CardContent>
         </Card>
+
+        {/* Mobile cards */}
+        <div className="space-y-4 md:hidden">
+          {AI_COMPARISON_ROWS.map((row) => (
+            <Card key={row.feature} className="overflow-hidden">
+              <CardHeader className="bg-surface-muted pb-3">
+                <CardTitle className="text-base font-semibold">{row.feature}</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3 p-4">
+                <div>
+                  <p className="mb-1 font-mono text-[10px] uppercase tracking-wider text-foreground/50">
+                    Prompting
+                  </p>
+                  <p className="text-sm text-foreground/70">{row.prompting}</p>
+                </div>
+                <div>
+                  <p className="mb-1 font-mono text-[10px] uppercase tracking-wider text-foreground/50">
+                    AI SaaS
+                  </p>
+                  <p className="text-sm text-foreground/70">{row.saas}</p>
+                </div>
+                <div className="rounded-lg border border-primary/20 bg-primary/5 p-3">
+                  <p className="mb-1 font-mono text-[10px] uppercase tracking-wider text-primary">
+                    Our engineers
+                  </p>
+                  <p className="text-sm font-medium text-foreground">{row.engineered}</p>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        <p className="mt-8 text-center text-sm text-foreground-muted">
+          Also need managed hosting and infrastructure?{" "}
+          <Link href="#services" className="font-medium text-primary underline-offset-4 hover:underline">
+            See our managed services
+          </Link>
+          .
+        </p>
       </div>
     </section>
   );

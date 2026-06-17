@@ -3,6 +3,7 @@ import { Inter, Instrument_Serif, JetBrains_Mono, Caveat } from "next/font/googl
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import ClickSparkWrapper from "@/components/ClickSparkWrapper";
+import { BRAND } from "@/lib/config";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -33,9 +34,19 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "Managed Web Services - Your Website, Fully Managed",
-  description: "Professional engineers managing your website and cloud infrastructure—affordable, competitive, and worry-free.",
-  keywords: ["website management", "cloud infrastructure", "managed services", "web hosting"],
+  title: `${BRAND.name} — Custom AI Built With Engineers`,
+  description:
+    "AI consulting and custom app development for operating businesses. Discovery, MCPs, agent skills, and production software on modern stacks — built with engineers, not endless prompting.",
+  keywords: [
+    "AI consulting",
+    "custom AI apps",
+    "MCP development",
+    "agent skills",
+    "AI engineering",
+    "managed web services",
+    "Next.js",
+    "Convex",
+  ],
 };
 
 export default function RootLayout({

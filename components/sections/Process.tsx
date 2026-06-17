@@ -8,20 +8,23 @@ import { ScrambleHeading } from "@/components/ui/ScrambleHeading";
 const steps = [
   {
     number: "01",
-    title: "Share your website & services",
-    description: "Enter your website, domain, and service details into our system for AI-powered analysis. We get a clear picture of your stack and needs fast.",
+    title: "Map your operations",
+    description:
+      "We learn how your business actually runs — workflows, data sources, pain points, and where your team wastes time. No generic AI audit; a focused discovery on what’s worth building.",
     icon: Icons.MessageCircle,
   },
   {
     number: "02",
-    title: "We bring it into our stack",
-    description: "We onboard your tech into our management platform and get to work—whether that means building new, migrating to better services, or rebuilding. Your setup, our bubble.",
+    title: "Scope & prototype with engineers",
+    description:
+      "We define the smallest useful product — custom app, MCP, agent skills, or automation — and build a working prototype on modern stacks. You see real software, not slide decks.",
     icon: Icons.Settings,
   },
   {
     number: "03",
-    title: "Launch and grow",
-    description: "We focus on managing and improving what you already have. Your site and services stay live with ongoing optimization and support—and we can build new when you need it.",
+    title: "Ship, integrate, iterate",
+    description:
+      "Production deploy, integration with your existing tools, and ongoing engineering as requirements evolve. Optional managed hosting when you want us to run the infrastructure too.",
     icon: Icons.Rocket,
   },
 ];
@@ -43,10 +46,10 @@ export default function Process() {
             as="h2"
             className="font-heading mb-6 text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-[1.3] tracking-[-0.02em] text-foreground"
           >
-            How it works
+            From uncertainty to shipped software
           </ScrambleHeading>
           <p className="mx-auto max-w-[700px] text-lg leading-[1.8] text-foreground-muted">
-            Get started in minutes, not hours
+            A clear path for businesses that know AI matters but don&apos;t know where to start
           </p>
         </motion.div>
 

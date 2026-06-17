@@ -33,29 +33,33 @@ function getStackAnalysis(stack: DetectedTech[]) {
   const names = stack.map((t) => t.name.toLowerCase());
   if (names.includes("wordpress")) {
     return {
-      currentPain: "Monolithic architecture with high plugin overhead and frequent security vulnerabilities.",
-      upgradePath: "Headless Decoupling: Keep your CMS, but serve the frontend via our hardened global edge nodes.",
-      statChange: "+140% faster LCP",
+      currentPain: "Content and customer data live in silos — hard to wire into modern AI workflows or internal tools.",
+      upgradePath: "AI integration layer: connect CMS data to custom apps, RAG search, or company MCPs while keeping WordPress for content.",
+      statChange: "Unified ops data",
+      aiOpportunity: "Internal knowledge search, automated intake forms, support agent wired to your content API.",
     };
   }
   if (names.includes("next.js") || names.includes("react")) {
     return {
-      currentPain: "Standard serverless cold starts and unoptimized hydration cycles.",
-      upgradePath: "ISR Optimization: We deploy custom caching layers to ensure 0ms global response times.",
-      statChange: "-300ms Time-to-First-Byte",
+      currentPain: "Strong frontend foundation, but AI features are often bolted on as chat widgets instead of integrated product flows.",
+      upgradePath: "Engineered AI layer: Convex or API-backed realtime state, custom MCPs, and agent skills that use your existing React stack.",
+      statChange: "Ship AI as product",
+      aiOpportunity: "Operator dashboards, customer portals, and MCP tools that read from the same data your app already uses.",
     };
   }
   if (names.includes("shopify")) {
     return {
-      currentPain: "Liquid-based frontend constraints limiting SEO and custom UX performance.",
-      upgradePath: "Hydrogen/Oxygen Bridge: Moving your storefront to a custom-engineered React environment.",
-      statChange: "Custom UX Freedom",
+      currentPain: "Storefront data is trapped in Shopify — custom AI for inventory, support, and quoting needs a bridge.",
+      upgradePath: "Custom integration surface: Shopify APIs + engineered apps or MCPs for ops, not another generic ecommerce AI plugin.",
+      statChange: "Ops-connected AI",
+      aiOpportunity: "Inventory-aware support agent, quote automation, internal ops dashboard on Next.js + Convex.",
     };
   }
   return {
-    currentPain: "Unmanaged infrastructure with manual scaling and inconsistent monitoring.",
-    upgradePath: "Full Concierge Migration: Automated CI/CD, 24/7 uptime guards, and performance tuning.",
-    statChange: "99.99% Uptime SLA",
+    currentPain: "Running without a clear map of where AI connects to your existing systems and workflows.",
+    upgradePath: "Discovery-first: we audit your stack, identify integration points, and scope a useful first build — app, MCP, or automation.",
+    statChange: "Clear AI roadmap",
+    aiOpportunity: "Company MCP, workflow automation, or internal tool scoped to your highest-friction process.",
   };
 }
 
@@ -132,14 +136,14 @@ export default function StackScanner() {
   const caseId = useMemo(() => Math.random().toString(36).slice(2, 10), [result?.url]);
   const stackAnalysis = result?.stack?.length ? getStackAnalysis(result.stack) : null;
   const engineerNote = hasLegacy
-    ? `Your site relies on ${firstTech ?? "legacy stack"}. While functional, it's currently a bottleneck for core web vitals. We recommend offloading your backend processing to a headless architecture to improve load times by ~40%.`
-    : `You've got a great foundation with ${firstTech ?? "your stack"}. Our managed service would focus on cost-optimization and 24/7 security monitoring rather than a full rewrite.`;
+    ? `Your stack includes ${firstTech ?? "legacy components"} — a common starting point. The AI opportunity isn't a rip-and-replace; it's connecting what you have to custom tools, MCPs, or automations that fit how your team already works.`
+    : `Solid foundation with ${firstTech ?? "modern tooling"}. We'd focus on where AI plugs into your existing systems — custom apps, company MCPs, or workflow automation — rather than generic SaaS add-ons.`;
 
   return (
     <div className="mx-auto w-full max-w-4xl rounded-xl border border-[#1A1F1A] bg-[#080A08] p-6 shadow-2xl" style={{ borderWidth: "0.5px" }}>
       <div className="mb-6 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-emerald/70">
         <span className="h-2 w-2 rounded-full bg-emerald animate-pulse" />
-        Infrastructure Analyzer v1.0
+        Stack & AI Opportunity Analyzer
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:gap-2">
@@ -271,7 +275,7 @@ export default function StackScanner() {
                             </div>
                           </div>
                           <span className="font-mono text-[10px] text-[#E2E8E2]/40 transition-colors group-hover:text-emerald">
-                            [READY_TO_MIGRATE]
+                            [DETECTED]
                           </span>
                         </motion.div>
                       ))}
@@ -291,7 +295,7 @@ export default function StackScanner() {
               >
                 <div className="flex flex-col border-b border-[#1A1F1A] pb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
                   <div>
-                    <h2 className="font-heading text-2xl font-medium text-[#E2E8E2]">Migration Blueprint</h2>
+                    <h2 className="font-heading text-2xl font-medium text-[#E2E8E2]">AI Opportunity Blueprint</h2>
                     <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-emerald/50">
                       Prepared for: {result.url} • Case ID: {caseId}
                     </p>
@@ -308,7 +312,7 @@ export default function StackScanner() {
                       <div className="mb-6 flex items-center gap-2">
                         <div className="h-2 w-2 rounded-full bg-red-500/50" />
                         <h4 className="font-mono text-[10px] uppercase tracking-widest text-red-500/50">
-                          Current Bottlenecks
+                          Current gaps
                         </h4>
                       </div>
                       <p className="mb-6 text-sm italic leading-relaxed text-[#E2E8E2]/40">
@@ -330,15 +334,21 @@ export default function StackScanner() {
                       <div className="mb-6 flex items-center gap-2">
                         <div className="h-2 w-2 rounded-full bg-emerald animate-pulse" />
                         <h4 className="font-mono text-[10px] uppercase tracking-widest text-emerald-500">
-                          Nodus Optimized
+                          Engineered path
                         </h4>
                       </div>
                       <p className="mb-6 text-sm font-medium leading-relaxed text-[#E2E8E2]">
                         {stackAnalysis.upgradePath}
                       </p>
-                      <div className="rounded border border-emerald-500/20 bg-emerald-500/5 p-4 text-center">
+                      <div className="rounded border border-emerald-500/20 bg-emerald-500/5 p-4">
                         <span className="mb-1 block font-mono text-[9px] uppercase text-emerald-500/50">
-                          Predicted Outcome
+                          AI opportunity
+                        </span>
+                        <span className="text-sm leading-relaxed text-[#E2E8E2]/85">{stackAnalysis.aiOpportunity}</span>
+                      </div>
+                      <div className="mt-4 rounded border border-emerald-500/20 bg-emerald-500/5 p-4 text-center">
+                        <span className="mb-1 block font-mono text-[9px] uppercase text-emerald-500/50">
+                          Likely outcome
                         </span>
                         <span className="font-heading text-2xl text-emerald-400">{stackAnalysis.statChange}</span>
                       </div>
@@ -357,10 +367,10 @@ export default function StackScanner() {
                     {engineerNote}
                   </p>
                   <Link
-                    href="/start"
+                    href="/contact"
                     className="mt-4 inline-block font-mono text-xs text-emerald underline decoration-emerald/30 transition-colors hover:decoration-emerald"
                   >
-                    → View full migration blueprint
+                    → Book a discovery call
                   </Link>
                 </div>
 

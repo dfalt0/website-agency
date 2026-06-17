@@ -68,9 +68,9 @@ const typeIcons = { website: Globe, api: Zap, cloud: Cloud } as const;
 
 /** Mock recent changes (ChangeLog style – type, source, title, description, engineer, commit, date) */
 const MOCK_CHANGE_LOGS = [
-  { type: "feature" as const, source: "github" as const, title: "New checkout flow deployed", description: "Implemented the new 3-step checkout process with improved mobile experience.", engineer_name: "Jordan Lee", commit_hash: "b7e8c1f", created_date: "Feb 4, 10:10 AM" },
-  { type: "security" as const, source: "github" as const, title: "Security patch deployed", description: "Applied latest security updates to Node.js dependencies and updated SSL certificates.", engineer_name: "Alex Chen", commit_hash: "a3f2d9c", created_date: "Feb 4, 10:10 AM" },
-  { type: "update" as const, source: "manual" as const, title: "Performance optimization", description: "Reduced page load times by 40% through image optimization and CDN configuration.", engineer_name: "Sam Rivera", commit_hash: null, created_date: "Feb 4, 9:45 AM" },
+  { type: "feature" as const, source: "github" as const, title: "Deployed company MCP v2", description: "Added inventory and quoting tools for Cursor and Claude Desktop with role-scoped auth.", engineer_name: "Jordan Lee", commit_hash: "b7e8c1f", created_date: "Feb 4, 10:10 AM" },
+  { type: "security" as const, source: "github" as const, title: "RAG search over internal SOPs", description: "Shipped document search for ops team on Convex with realtime index updates.", engineer_name: "Alex Chen", commit_hash: "a3f2d9c", created_date: "Feb 4, 10:10 AM" },
+  { type: "update" as const, source: "manual" as const, title: "Agent skills pack for support", description: "Tailored escalation and ticket-format skills for the support team's workflow.", engineer_name: "Sam Rivera", commit_hash: null, created_date: "Feb 4, 9:45 AM" },
   { type: "maintenance" as const, source: "automated" as const, title: "Database backup completed", description: "Automated weekly backup completed successfully. All data verified.", engineer_name: null, commit_hash: null, created_date: "Feb 4, 8:00 AM" },
 ];
 
@@ -261,7 +261,7 @@ export default function Features() {
     { color: cardColors[1], title: "Security & Monitoring", description: "Enterprise-grade protection and 24/7 monitoring.", label: "Security", gridColumn: "2", gridRow: "1" },
     { color: cardColors[2], title: "Performance Optimization", description: "CDN, caching, and speed tuning.", label: "CDN", gridColumn: "3", gridRow: "1" },
     { color: LOG_CARD_BG, title: "", description: "", label: "", gridColumn: "1 / 3", gridRow: "2 / 4", customContent: systemLogContent },
-    { color: cardColors[4], title: "Custom Development", description: "Features, integrations, and bespoke builds.", label: "Build", gridColumn: "3", gridRow: "2" },
+    { color: cardColors[4], title: "AI & Custom Builds", description: "Custom apps, MCPs, and integrations — engineered, not prompted.", label: "AI-04", gridColumn: "3", gridRow: "2" },
     { color: cardColors[5], title: "Expert Support", description: "Dedicated engineers when you need them.", label: "Support", gridColumn: "3", gridRow: "3" },
   ];
 
@@ -283,10 +283,10 @@ export default function Features() {
             as="h2"
             className="font-heading mb-6 text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-[1.3] tracking-[-0.02em] text-foreground"
           >
-            Everything you need, fully managed
+            Managed infrastructure — when you need it
           </ScrambleHeading>
           <p className="mx-auto max-w-[700px] text-lg leading-[1.8] text-foreground-muted">
-            Our team of expert engineers handles all your website and cloud infrastructure needs.
+            Hosting, security, and cloud ops handled by engineers. Pairs with our AI consulting when you want us to run what we build.
           </p>
         </div>
 

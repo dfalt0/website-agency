@@ -12,7 +12,7 @@ const plans = [
     name: "Starter",
     price: "$99",
     period: "per month",
-    description: "Perfect for small businesses and blogs",
+    description: "Managed hosting for small businesses and blogs",
     features: [
       "Up to 5,000 visitors/month",
       "Custom domain & SSL",
@@ -21,14 +21,14 @@ const plans = [
       "Basic SEO optimization",
       "Content updates (2 hrs/month)",
     ],
-    cta: { label: "Start Free Trial", variant: "secondary" as const },
+    cta: { label: "Start intake", href: "/start", variant: "secondary" as const },
     highlighted: false,
   },
   {
     name: "Professional",
     price: "$199",
     period: "per month",
-    description: "For growing businesses and ecommerce",
+    description: "Growing businesses with custom integration needs",
     features: [
       "Up to 25,000 visitors/month",
       "Everything in Starter",
@@ -39,7 +39,7 @@ const plans = [
       "Custom integrations",
       "Performance optimization",
     ],
-    cta: { label: "Start Free Trial", variant: "default" as const },
+    cta: { label: "Start intake", href: "/start", variant: "default" as const },
     highlighted: true,
     badge: "Most Popular",
   },
@@ -47,7 +47,7 @@ const plans = [
     name: "Enterprise",
     price: "$299+",
     period: "per month",
-    description: "For high-traffic sites and agencies",
+    description: "High-traffic sites, agencies, and ongoing engineering",
     features: [
       "Unlimited visitors",
       "Everything in Professional",
@@ -58,10 +58,25 @@ const plans = [
       "Custom development",
       "SLA guarantee",
     ],
-    cta: { label: "Contact Sales", variant: "secondary" as const },
+    cta: { label: "Contact us", href: "/contact", variant: "secondary" as const },
     highlighted: false,
   },
 ];
+
+const consultingBanner = {
+  title: "AI consulting & custom builds",
+  price: "Project-based",
+  description:
+    "Discovery, scoped prototypes, custom MCPs, agent skills, and production AI apps — priced per engagement, not per seat.",
+  features: [
+    "Operations discovery & AI roadmap",
+    "Custom apps on Next.js, Convex, Python, and more",
+    "Company MCPs wired to your systems",
+    "Agent skills tailored to your workflows",
+    "Optional ongoing engineering retainer",
+  ],
+  cta: { label: "Book discovery call", href: "/contact" },
+};
 
 const DEFAULT_HIGHLIGHTED_INDEX = 1; // Professional
 
@@ -90,7 +105,7 @@ export default function Pricing() {
             />
           </div>
           <p className="mx-auto max-w-[700px] text-lg leading-[1.8] text-foreground/70">
-            All plans include expert engineering support and managed infrastructure
+            Managed infrastructure when you need it — plus project-based AI engineering when you&apos;re ready to build
           </p>
         </div>
 
@@ -147,12 +162,46 @@ export default function Pricing() {
                   className="w-full"
                   asChild
                 >
-                  <Link href="/start">{plan.cta.label}</Link>
+                  <Link href={plan.cta.href}>{plan.cta.label}</Link>
                 </Button>
               </CardFooter>
             </Card>
           ))}
         </div>
+
+        <Card className="mt-12 border-2 border-primary/30 bg-surface-muted">
+          <CardHeader className="text-center md:text-left">
+            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+              <div>
+                <Badge variant="default" className="mb-3">
+                  Consulting
+                </Badge>
+                <CardTitle className="text-2xl">{consultingBanner.title}</CardTitle>
+                <div className="mt-4">
+                  <span className="font-heading text-4xl font-semibold text-foreground">
+                    {consultingBanner.price}
+                  </span>
+                </div>
+                <CardDescription className="mt-4 max-w-xl text-base">
+                  {consultingBanner.description}
+                </CardDescription>
+              </div>
+              <Button variant="default" size="lg" className="shrink-0" asChild>
+                <Link href={consultingBanner.cta.href}>{consultingBanner.cta.label}</Link>
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {consultingBanner.features.map((feature) => (
+                <li key={feature} className="flex items-start gap-2">
+                  <span className="mt-1 text-primary">✓</span>
+                  <span className="text-foreground/80">{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
       </div>
     </section>
   );

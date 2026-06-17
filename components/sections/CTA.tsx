@@ -37,14 +37,15 @@ export default function CTA() {
       <div className="relative z-10 mx-auto max-w-[1200px] px-8 lg:px-16">
         <div className="mx-auto max-w-[700px] text-center">
           <h2 className="font-heading mb-6 text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-[1.3] tracking-[-0.02em] text-white">
-            Ready to go fully managed?
+            Ready to build something useful?
           </h2>
           <p className="mb-8 text-lg leading-[1.8] text-white/90">
-            Start your 14-day free trial. No credit card required.
+            Book a free discovery call. We&apos;ll map where AI fits in your business — no pitch deck, no
+            irrelevant SaaS recommendations.
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Button variant="white-primary" size="lg" asChild>
-              <Link href="/start">Get started free</Link>
+              <Link href="/contact">Book a discovery call</Link>
             </Button>
             <Button
               variant="secondary"
@@ -52,7 +53,7 @@ export default function CTA() {
               className="border-white/50 bg-transparent text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground hover:border-primary"
               asChild
             >
-              <Link href="/demo">Schedule a demo</Link>
+              <Link href="/scan">Run stack & AI scan</Link>
             </Button>
           </div>
         </div>
