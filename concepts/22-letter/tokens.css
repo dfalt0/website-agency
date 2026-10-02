@@ -1,0 +1,15 @@
+:root {
+  --desk: #bcc7d3;
+  --desk-2: #aab7c5;
+  --paper: #fdfdfb;
+  --ink: #14284b;
+  --ink-soft: #3b4d70;
+  --seal: #9b1c1c;
+  --rule: #c8d0dc;
+  --slip: #eef2f7;
+  --serif: "EB Garamond", Georgia, serif;
+  --head: "Cormorant Garamond", Georgia, serif;
+  --type: "Courier Prime", "Courier New", monospace;
+  --sig: "Mrs Saint Delafield", "Brush Script MT", cursive;
+  --measure: 800px;
+}

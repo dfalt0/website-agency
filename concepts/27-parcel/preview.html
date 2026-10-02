@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parcel — Websites developed in order</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+@import url("tokens.css");
+*{box-sizing:border-box;margin:0}
+body{background:var(--sheet);color:var(--ink);font-family:var(--font-body);
+  background-image:linear-gradient(var(--grid) .5px,transparent .5px),linear-gradient(90deg,var(--grid) .5px,transparent .5px);background-size:32px 32px;background-attachment:fixed}
+.band{display:grid;grid-template-columns:auto 1fr auto;border-bottom:var(--line);background:var(--sheet);font:600 .78rem/1 var(--font-label);letter-spacing:.14em;text-transform:uppercase}
+.band>*{padding:.9rem 1.25rem;border-right:var(--hair)}
+.band>*:last-child{border-right:0}
+.band .brand{font-size:1.15rem;letter-spacing:.3em;background:var(--ink);color:var(--sheet)}
+.band .mid{color:var(--ink-soft)}
+main{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(300px,1fr);min-height:calc(100vh - 44px)}
+.board{position:relative;border-right:var(--line);padding:1rem 1rem 0}
+.notice{max-width:34rem;margin:0 0 1.25rem;background:var(--sheet);border:var(--line);padding:.9rem 1.1rem;font-size:1.02rem;line-height:1.45;box-shadow:5px 5px 0 var(--ink)}
+.notice h1{font:700 .8rem var(--font-label);letter-spacing:.18em;text-transform:uppercase;margin-bottom:.4rem}
+.notice em{font-family:var(--font-mono);font-style:normal;font-size:.76rem;background:var(--zone-plan);padding:.05rem .35rem}
+svg{width:100%;height:auto;display:block;overflow:visible}
+.plot{cursor:pointer;outline:none}
+.plot polygon.fill{stroke:var(--ink);stroke-width:1;transition:filter .15s, stroke-width .15s;fill-opacity:.86}
+.plot:hover polygon.fill,.plot:focus-visible polygon.fill{stroke-width:2.5;filter:brightness(1.08)}
+.plot.sel polygon.fill{stroke-width:3}
+.plot.sel polygon.ants{opacity:1;fill:url(#hatch)}
+.ants{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-dasharray:6 5;opacity:0;animation:march 1s linear infinite;pointer-events:none}
+@keyframes march{to{stroke-dashoffset:-22}}
+.lbl{font:700 15px var(--font-label);letter-spacing:.14em;text-transform:uppercase;fill:var(--ink);pointer-events:none}
+.num{font:500 34px var(--font-mono);fill:var(--ink);pointer-events:none;opacity:.9}
+.sm{font:500 11px var(--font-mono);fill:var(--ink);pointer-events:none}
+.road{fill:var(--road);stroke:var(--ink);stroke-width:.5}
+.rname{font:600 10px var(--font-label);letter-spacing:.3em;fill:var(--ink-soft);text-transform:uppercase}
+.rail{stroke:var(--ink);stroke-width:2;fill:none}.ties{stroke:var(--ink);stroke-width:6;stroke-dasharray:1.5 9;fill:none}
+.trail{fill:none;stroke:var(--ink);stroke-width:1;stroke-dasharray:2 6;opacity:.55}
+.legend{display:flex;flex-wrap:wrap;gap:.4rem 1.4rem;padding:.9rem .25rem;font:600 .72rem var(--font-label);letter-spacing:.12em;text-transform:uppercase;border-top:var(--hair);margin-top:1rem}
+.legend span{display:flex;align-items:center;gap:.45rem}
+.legend i{width:16px;height:12px;border:var(--hair);display:inline-block}
+.titleblock{display:grid;grid-template-columns:1fr auto auto;border:var(--line);margin:.5rem 0 1rem;font:500 .72rem var(--font-mono);background:var(--sheet)}
+.titleblock>div{padding:.7rem .9rem;border-right:var(--hair)}.titleblock>div:last-child{border:0}
+.titleblock b{display:block;font:700 .62rem var(--font-label);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:.15rem}
+/* deed */
+aside{background:var(--sheet);position:relative}
+.deed{position:sticky;top:0;padding:1.5rem 1.5rem 2rem;max-height:100vh;overflow:auto}
+.deed .tag{font:600 .7rem var(--font-label);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+.deed h2{font:600 2.3rem/1.05 var(--font-body);letter-spacing:-.02em;margin:.3rem 0 .2rem}
+.zone{display:inline-block;font:600 .72rem var(--font-mono);padding:.2rem .5rem;border:var(--line);margin-bottom:1rem}
+.deed p.use{font-size:1.1rem;line-height:1.5;margin-bottom:1.2rem}
+.deed dl{border-top:var(--line)}
+.deed dl div{display:grid;grid-template-columns:7.5rem 1fr;gap:.7rem;padding:.6rem 0;border-bottom:var(--hair)}
+.deed dt{font:600 .68rem var(--font-label);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);padding-top:.2rem}
+.deed dd{font:500 .88rem/1.4 var(--font-mono)}
+.fade{animation:fade .25s ease}@keyframes fade{from{opacity:0;transform:translateY(5px)}}
+.nav{display:flex;gap:.6rem;margin-top:1.2rem}
+.nav button,.cta{font:700 .76rem var(--font-label);letter-spacing:.16em;text-transform:uppercase;border:var(--line);background:var(--sheet);color:var(--ink);padding:.75rem 1rem;cursor:pointer;transition:background .15s,color .15s}
+.nav button:hover,.cta:hover{background:var(--ink);color:var(--sheet)}
+.cta{background:var(--ink);color:var(--sheet);text-decoration:none;display:inline-block}
+.cta:hover{background:var(--zone-build)}
+.hearing{border:var(--line);padding:1rem 1.2rem;margin-top:1.8rem;background:repeating-linear-gradient(135deg,transparent 0 8px,rgba(34,48,58,.05) 8px 9px)}
+.hearing h3{font:700 1.5rem var(--font-body);margin-bottom:.3rem}.hearing p{line-height:1.45;margin-bottom:.9rem}
+@media(max-width:900px){main{grid-template-columns:1fr}.board{border-right:0;border-bottom:var(--line)}.deed{position:static;max-height:none}.band .mid{display:none}.band{grid-template-columns:auto 1fr}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<header class="band"><div class="brand">PARCEL</div><div class="mid">Websites developed in order</div><div>Sheet 1 / 1</div></header>
+<main>
+<section class="board">
+  <div class="notice"><h1>Notice of development</h1>Land isn't built on all at once. Neither is a site. We survey, grade, pour, frame, connect utilities <em>(hosting)</em> and stay on as property manager <em>(care)</em>. <b>Click any plot.</b></div>
+  <svg viewBox="0 0 900 640" role="group" aria-label="Parcel map of engagement stages">
+    <defs>
+      <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="#22303a" stroke-width="1.2" opacity=".35"/></pattern>
+    </defs>
+    <rect x="0" y="0" width="900" height="640" fill="none" stroke="#22303a" stroke-width="1"/>
+    <!-- roads -->
+    <path class="road" d="M0 262 L900 250 L900 292 L0 304Z"/>
+    <path class="road" d="M286 0 L322 0 L336 640 L298 640Z"/>
+    <path class="road" d="M520 0 L552 0 L690 262 L650 262Z" />
+    <text class="rname" transform="translate(60 288) rotate(-0.8)">Main Street</text>
+    <text class="rname" transform="translate(316 120) rotate(88)">Cross Road</text>
+    <!-- rail -->
+    <path class="ties" d="M0 612 L900 596"/><path class="rail" d="M0 608 L900 592"/><path class="rail" d="M0 616 L900 600"/>
+    <text class="rname" x="560" y="586">Rail corridor — no build</text>
+    <!-- parcels -->
+    <g class="plot" data-i="0" tabindex="0" role="button" aria-label="Parcel 01 Survey"><polygon class="fill" fill="var(--zone-plan)" points="22,26 270,18 278,240 30,246"/><polygon class="ants" points="22,26 270,18 278,240 30,246"/><text class="num" x="42" y="76">01</text><text class="lbl" x="42" y="214">Survey</text><text class="sm" x="42" y="232">R-1 · 1 wk</text></g>
+    <g class="plot" data-i="1" tabindex="0" role="button" aria-label="Parcel 02 Grade"><polygon class="fill" fill="var(--zone-plan)" points="344,14 506,12 478,238 352,232"/><polygon class="ants" points="344,14 506,12 478,238 352,232"/><text class="num" x="364" y="62">02</text><text class="lbl" x="364" y="204">Grade</text><text class="sm" x="364" y="222">R-2 · 1–2 wk</text></g>
+    <g class="plot" data-i="2" tabindex="0" role="button" aria-label="Parcel 03 Foundation"><polygon class="fill" fill="var(--zone-build)" points="566,12 880,10 884,236 686,236"/><polygon class="ants" points="566,12 880,10 884,236 686,236"/><text class="num" x="740" y="62">03</text><text class="lbl" x="740" y="198">Foundation</text><text class="sm" x="740" y="218">C-1 · 2–3 wk</text></g>
+    <g class="plot" data-i="3" tabindex="0" role="button" aria-label="Parcel 04 Frame"><polygon class="fill" fill="var(--zone-build)" points="26,322 278,314 288,548 40,560"/><polygon class="ants" points="26,322 278,314 288,548 40,560"/><text class="num" x="46" y="374">04</text><text class="lbl" x="46" y="516">Frame</text><text class="sm" x="46" y="534">C-2 · 1 wk</text></g>
+    <g class="plot" data-i="4" tabindex="0" role="button" aria-label="Parcel 05 Utilities"><polygon class="fill" fill="var(--zone-infra)" points="352,312 600,300 650,420 620,566 358,574"/><polygon class="ants" points="352,312 600,300 650,420 620,566 358,574"/><text class="num" x="376" y="362">05</text><text class="lbl" x="376" y="526">Utilities</text><text class="sm" x="376" y="544">I-1 · continuous</text></g>
+    <g class="plot" data-i="5" tabindex="0" role="button" aria-label="Parcel 06 Occupancy"><polygon class="fill" fill="var(--zone-serve)" points="676,296 880,286 884,560 650,562 690,430"/><polygon class="ants" points="676,296 880,286 884,560 650,562 690,430"/><text class="num" x="740" y="350">06</text><text class="lbl" x="740" y="500">Occupancy</text><text class="sm" x="740" y="518">S-1 · continuous</text></g>
+    <g class="plot" data-i="6" tabindex="0" role="button" aria-label="Parcel 07 Reserved lot"><polygon class="fill" fill="var(--sheet)" stroke-dasharray="7 5" points="420,412 520,408 520,490 420,494" style="fill-opacity:.7"/><polygon class="ants" points="420,412 520,408 520,490 420,494"/><text class="sm" x="432" y="446" >07 RESERVED</text><text class="sm" x="432" y="462">expansion lot</text></g>
+    <!-- trail -->
+    <path class="trail" d="M200 140 L410 130 L800 140 L860 262 L110 282 L110 420 L480 440 L780 420"/>
+    <!-- north arrow -->
+    <g transform="translate(846 612)"><circle r="18" fill="var(--sheet)" stroke="#22303a"/><path d="M0 -14 L6 8 L0 4 L-6 8Z" fill="#22303a"/><text y="-22" text-anchor="middle" class="sm">N</text></g>
+  </svg>
+  <div class="legend"><span><i style="background:var(--zone-plan)"></i>R Planning</span><span><i style="background:var(--zone-build)"></i>C Construction</span><span><i style="background:var(--zone-infra)"></i>I Infrastructure</span><span><i style="background:var(--zone-serve)"></i>S Service</span><span><i style="background:var(--sheet);border-style:dashed"></i>Reserved</span></div>
+  <div class="titleblock"><div><b>Drawn by</b>Parcel · checked by you</div><div><b>Build</b>from $6,500 fixed</div><div><b>Scale</b>1 : 1 engagement</div></div>
+</section>
+
+<aside><div class="deed" id="deed" aria-live="polite"></div></aside>
+</main>
+<script>
+const P=[
+{n:'01',t:'Survey',z:'R-1 · Planning',c:'var(--zone-plan)',a:'1 week',u:'Discovery calls, an audit of your current site, goals and constraints written down before anything is drawn.',s:'Access to your domain registrar and analytics.',e:'One working session with the person who knows the customers.',v:'Included in build'},
+{n:'02',t:'Grade',z:'R-2 · Planning',c:'var(--zone-plan)',a:'1–2 weeks',u:'Sitemap, wireframes and visual design in your brand — shown to you at full size, not as thumbnails.',s:'Logos, photos, any brand rules you already have.',e:'Two revision rounds.',v:'Included in build'},
+{n:'03',t:'Foundation',z:'C-1 · Construction',c:'var(--zone-build)',a:'2–3 weeks',u:'Custom code on a performance budget. CMS or flat files, whichever fits how often you change things.',s:'A named approver on your side.',e:'A staging site you can click through while it is built.',v:'Included in build'},
+{n:'04',t:'Frame',z:'C-2 · Construction',c:'var(--zone-build)',a:'1 week',u:'Content migration, accessibility pass, forms, redirects from the old site, load testing.',s:'Final copy sign-off.',e:'Launch checklist signed by both sides.',v:'Build from $6,500, fixed'},
+{n:'05',t:'Utilities',z:'I-1 · Infrastructure',c:'var(--zone-infra)',a:'Continuous',u:'Managed hosting, TLS, DNS, daily backups kept 35 days, uptime checks from three regions.',s:'None — we connect it.',e:'Public status page. Full export within 5 business days if you leave.',v:'$79 / month'},
+{n:'06',t:'Occupancy',z:'S-1 · Service',c:'var(--zone-serve)',a:'Continuous',u:'Patches, edits, a monthly report, and a named person to call when something looks wrong.',s:'Tell us when business changes.',e:'3 edit hours monthly, rolling one month. 2-hour response on urgent breakage.',v:'$249 / month (incl. hosting)'},
+{n:'07',t:'Reserved lot',z:'Unzoned · Expansion',c:'var(--reserved)',a:'When ready',u:'Room for a store, a booking flow, a second site. Zoned for expansion — no fee until you build on it.',s:'—',e:'First look at new lots before we take other clients.',v:'No fee until developed'}];
+const deed=document.getElementById('deed'),plots=[...document.querySelectorAll('.plot')];let cur=0;
+function render(i){cur=(i+P.length)%P.length;const p=P[cur];
+  plots.forEach((g,k)=>g.classList.toggle('sel',k===cur));
+  deed.innerHTML=`<div class="fade"><div class="tag">Parcel ${p.n} of 07 · Deed</div><h2>${p.t}</h2><span class="zone" style="background:${p.c}">${p.z}</span>
+  <p class="use">${p.u}</p><dl><div><dt>Area</dt><dd>${p.a}</dd></div><div><dt>Setbacks</dt><dd>${p.s}</dd></div><div><dt>Easements</dt><dd>${p.e}</dd></div><div><dt>Assessed</dt><dd>${p.v}</dd></div></dl>
+  <div class="nav"><button id="pv">← Prev</button><button id="nx">Next →</button></div>
+  <div class="hearing"><h3>Claim a parcel.</h3><p>Tell us what you're building on. We'll tell you which plots you need, which you can skip, and what each costs.</p><a class="cta" href="#">Request a site visit</a></div></div>`;
+  document.getElementById('pv').onclick=()=>render(cur-1);document.getElementById('nx').onclick=()=>render(cur+1);}
+plots.forEach((g,k)=>{g.onclick=()=>render(k);g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();render(k)}}});
+addEventListener('keydown',e=>{if(e.target.closest('input'))return;if(e.key==='ArrowRight')render(cur+1);if(e.key==='ArrowLeft')render(cur-1)});
+render(0);
+</script>
+</body>
+</html>

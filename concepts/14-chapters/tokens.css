@@ -1,0 +1,12 @@
+:root {
+  --chapters-black: #101010;
+  --chapters-white: #fafaf7;
+  --chapters-green: #2fd46b;     /* flat fill color, never a glow */
+  --chapters-steel: #7f97a8;
+  --chapters-steel-deep: #1f2a33;
+  --font-display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --pad-x: 6vw;
+  --pad-y: 7vh;
+  --snap: y mandatory;
+}

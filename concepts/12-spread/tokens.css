@@ -1,0 +1,15 @@
+:root {
+  --spread-paper: #e8ecee;
+  --spread-desk: #d3d9dc;
+  --spread-ink: #0f1317;
+  --spread-mute: #5d6870;
+  --spread-hair: #aab4ba;
+  --spread-green: #0a6b52;     /* single editorial accent */
+  --spread-green-light: #c8e3d9;
+  --font-serif: "Newsreader", Georgia, serif;
+  --font-sans: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --grid-cols: 12;
+  --rule-heavy: 3px solid var(--spread-ink);
+  --rule-hair: 0.5px solid var(--spread-hair);
+}

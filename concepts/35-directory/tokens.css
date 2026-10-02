@@ -1,0 +1,20 @@
+/* Directory — index yellow, newsprint, black rules */
+:root {
+  --yellow: #f5d327;
+  --yellow-soft: #fff1a0;
+  --paper: #fbfaf3;
+  --ink: #111111;
+  --ink-soft: #55554d;
+  --rule: #111111;
+  --hair: #cfcdbf;
+
+  --cat-build: #111111;
+  --cat-host: #2d6cdf;
+  --cat-care: #1c8a4b;
+  --cat-terms: #c23b22;
+
+  --font-sans: "Libre Franklin", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --rail-w: 3.2rem;
+}

@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spread — websites with an editor's eye, hosted and kept</title>
+<style>
+:root{--paper:#e8ecee;--ink:#0f1317;--mute:#5d6870;--rule:#0f1317;--hair:#aab4ba;--acc:#0a6b52;--accl:#c8e3d9;--sans:"Instrument Sans","Helvetica Neue",Arial,sans-serif;--serif:"Newsreader",Georgia,serif;--mono:ui-monospace,"JetBrains Mono",Consolas,monospace}
+*{box-sizing:border-box;margin:0}
+body{background:#d3d9dc;color:var(--ink);font:16px/1.6 var(--sans)}
+.spread{position:relative;max-width:1360px;margin:28px auto;background:var(--paper);display:grid;grid-template-columns:repeat(12,1fr);column-gap:18px;padding:56px 56px 64px;box-shadow:0 1px 0 #b9c1c6}
+.spread::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(transparent,var(--hair) 8%,var(--hair) 92%,transparent)}
+.run{grid-column:1/-1;display:flex;justify-content:space-between;font:11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);border-bottom:3px solid var(--rule);padding-bottom:8px;margin:-24px 0 36px}
+.run b{color:var(--ink);font-weight:500}
+.folio{position:absolute;bottom:22px;font:11px var(--mono);color:var(--mute)}
+.folio.l{left:56px}.folio.r{right:56px}
+h1,h2{font-family:var(--serif);font-weight:500;letter-spacing:-.03em}
+.k{font:11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc)}
+p{margin-bottom:1em}
+/* ---- spread 1 ---- */
+.s1 .spine{grid-column:1/2;grid-row:2/6;writing-mode:vertical-rl;transform:rotate(180deg);font:500 clamp(48px,6.4vw,100px)/.9 var(--serif);letter-spacing:-.04em;white-space:nowrap}
+.s1 .spine i{color:var(--acc);font-style:italic}
+.s1 .intro{grid-column:2/6;grid-row:2/3;padding-top:6px}
+.s1 .intro h1{font-size:24px;line-height:1.25;font-weight:400;margin-bottom:14px}
+.s1 .intro p{color:#38434b;font-size:15px}
+.s1 .cols{grid-column:2/7;grid-row:3/6;column-count:2;column-gap:22px;font-size:14.5px;color:#2b353c;border-top:.5px solid var(--hair);padding-top:16px;align-self:end}
+.s1 .cols p:first-child::first-letter{font:500 64px/.8 var(--serif);float:left;padding:4px 8px 0 0;color:var(--acc)}
+.well{grid-column:7/13;grid-row:2/6;position:relative;background:var(--ink);overflow:hidden;min-height:520px}
+.well .a{position:absolute;left:0;top:0;width:58%;height:62%;background:var(--accl)}
+.well .b{position:absolute;right:-12%;top:8%;width:62%;aspect-ratio:1;border-radius:50%;background:var(--acc)}
+.well .c{position:absolute;left:8%;bottom:12%;width:44%;height:28%;background:#f6f8f8;display:grid;gap:7px;padding:12px}
+.well .c i{display:block;height:7px;background:#c3ccd1}
+.well .c i:first-child{width:45%;height:12px;background:var(--ink)}
+.well .c i:nth-child(3){width:70%}.well .c i:nth-child(4){width:30%}
+.well .d{position:absolute;right:6%;bottom:6%;width:36%;height:34%;background:repeating-linear-gradient(135deg,transparent 0 9px,#ffffff30 9px 10px)}
+.well .e{position:absolute;left:10%;top:9%;font:500 clamp(48px,6vw,92px)/.9 var(--serif);color:var(--ink);letter-spacing:-.04em}
+.cap{grid-column:7/13;grid-row:6/7;display:flex;justify-content:space-between;gap:20px;font:12px/1.4 var(--mono);color:var(--mute);padding-top:8px;border-top:.5px solid var(--ink);margin-top:0}
+/* ---- spread 2 ---- */
+.s2 .head{grid-column:1/8;grid-row:2/3;margin-bottom:28px}
+.s2 h2{font-size:clamp(40px,5vw,72px);line-height:.98}
+.s2 .main{grid-column:1/5;grid-row:3/5;column-count:1;font-size:15.5px;color:#2b353c}
+.s2 .main p:first-child{font:400 21px/1.4 var(--serif);color:var(--ink)}
+.s2 .pull{grid-column:5/13;grid-row:4/6;position:relative;z-index:1;font:italic 400 clamp(30px,3.6vw,52px)/1.08 var(--serif);letter-spacing:-.025em;padding:26px 0 0 28px;border-top:3px solid var(--rule);align-self:center;background:var(--paper);margin-left:20px}
+.s2 .pull small{display:block;font:11px var(--mono);letter-spacing:.1em;color:var(--mute);text-transform:uppercase;margin-top:16px;font-style:normal}
+.s2 .pull em{color:var(--acc)}
+.s2 .side{grid-column:9/13;grid-row:2/4;border-left:.5px solid var(--ink);padding-left:18px;align-self:start}
+.s2 .side h3{font:11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc);font-weight:400;margin-bottom:8px}
+.s2 .side dl{display:grid;grid-template-columns:auto 1fr;gap:0 16px;font-size:14px}
+.s2 .side dt,.s2 .side dd{padding:9px 0;border-top:.5px solid var(--hair)}
+.s2 .side dt{font:500 20px var(--serif);color:var(--ink)}
+.s2 .side dd{color:#3c474f;align-self:center}
+.s2 .low{grid-column:1/5;grid-row:5/6;font-size:14px;color:#3c474f;border-top:.5px solid var(--ink);padding-top:12px;margin-top:20px}
+/* ---- spread 3 ---- */
+.s3 .a1{grid-column:1/5;grid-row:2/3}
+.s3 .a1 h2{font-size:clamp(36px,4vw,56px);line-height:1;margin:8px 0 18px}
+.s3 .a1 p{font-size:15px;color:#2b353c}
+.rack{grid-column:5/8;grid-row:2/5;background:#cfd7dc;position:relative;min-height:340px;display:grid;grid-template-rows:repeat(7,1fr);gap:6px;padding:14px}
+.rack i{display:block;background:var(--ink);position:relative}
+.rack i::before{content:"";position:absolute;left:8px;top:50%;width:6px;height:6px;background:var(--acc);transform:translateY(-50%)}
+.rack i::after{content:"";position:absolute;right:8px;left:30px;top:50%;border-top:1px dashed #667;}
+.rack i:nth-child(3)::before{background:#e1a63a}
+.rack i:nth-child(5){background:var(--acc)}
+.rackcap{grid-column:5/8;grid-row:5/6;font:11px/1.4 var(--mono);color:var(--mute);margin-top:8px}
+.s3 .a2{grid-column:8/11;grid-row:2/4;padding-left:18px;border-left:.5px solid var(--hair)}
+.s3 .a2 h3,.s3 .a3 h3{font:500 28px/1.05 var(--serif);letter-spacing:-.02em;margin-bottom:10px}
+.s3 .a2 p,.s3 .a3 p{font-size:14.5px;color:#2b353c}
+.s3 .a3{grid-column:11/13;grid-row:3/6;padding-left:14px;border-left:.5px solid var(--hair);font-size:14px}
+.s3 .a3 ul{list-style:none;margin-top:12px}
+.s3 .a3 li{border-top:.5px solid var(--hair);padding:8px 0;font:12px var(--mono);color:var(--mute)}
+.s3 .a3 li b{display:block;color:var(--ink);font-weight:500;font-size:13px}
+.s3 .bigq{grid-column:1/5;grid-row:3/6;align-self:end;background:var(--acc);color:#f1f7f4;padding:26px;font:400 28px/1.15 var(--serif);letter-spacing:-.02em}
+.s3 .bigq small{display:block;margin-top:14px;font:11px var(--mono);letter-spacing:.1em;text-transform:uppercase;opacity:.8}
+/* ---- spread 4 ---- */
+.s4 .l{grid-column:1/5;grid-row:2/5;align-self:start}
+.s4 .l h2{font-size:clamp(48px,6vw,92px);line-height:.92}
+.s4 .l p{font-size:15px;color:#2b353c;margin-top:20px;max-width:30ch}
+.s4 .f{grid-column:7/13;grid-row:2/5}
+.s4 .f h3{font:11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc);font-weight:400;margin-bottom:18px;border-bottom:3px solid var(--rule);padding-bottom:8px}
+form{display:grid;grid-template-columns:1fr 2fr;gap:0 20px}
+label{font:11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);padding:15px 0;border-bottom:.5px solid var(--hair)}
+input,select,textarea{border:0;border-bottom:.5px solid var(--hair);background:transparent;font:18px var(--serif);color:var(--ink);padding:10px 0;outline:0;border-radius:0}
+input:focus,select:focus,textarea:focus{border-bottom-color:var(--acc);background:#dde4e7}
+textarea{min-height:100px;font-size:16px}
+button{grid-column:2;justify-self:start;margin-top:22px;background:var(--ink);color:#fff;border:0;padding:14px 24px;font:500 13px var(--mono);letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:0}
+button:hover{background:var(--acc)}
+.ack{grid-column:2;font:12px var(--mono);color:var(--acc);margin-top:10px}
+.s4 .colo{grid-column:1/5;grid-row:5/6;align-self:end;font:11px/1.6 var(--mono);color:var(--mute);border-top:.5px solid var(--ink);padding-top:10px}
+@media (max-width:900px){.spread{display:block;padding:36px 22px 56px;margin:0}.spread::before{display:none}.spread>*{margin-bottom:26px}.s1 .spine{writing-mode:horizontal-tb;transform:none;font-size:52px}.s1 .cols{column-count:1}.well{min-height:320px}.s2 .pull{margin-left:0;padding-left:0}.rack{min-height:240px}.s3 .a2,.s3 .a3{padding:0;border:0}form{grid-template-columns:1fr}button,.ack{grid-column:1}.run{margin-top:0}.folio{display:none}}
+</style>
+</head>
+<body>
+
+<!-- SPREAD 1 -->
+<article class="spread s1">
+  <div class="run"><span><b>Spread</b> — a studio for sites that are built, hosted, kept</span><span>Issue 10 · Autumn</span></div>
+  <div class="spine">Editor’s <i>eye.</i></div>
+  <div class="intro"><div class="k">Custom websites · Hosting · Care</div><h1 style="margin-top:12px">We design, write, and run websites for businesses that would rather be read than scrolled past.</h1><p>One small team. One site at a time. Yours stays ours to look after.</p></div>
+  <div class="cols">
+    <p>A good website behaves like a good article: it has a point, a structure, and someone who answers for every sentence. We start there. Before any layout, we decide what the page must say and who must believe it.</p>
+    <p>Then we build it by hand and host it ourselves, so the people who made the page are the people who keep it alive. No hand-offs to a vendor you cannot name. Monthly care keeps the text correct and the machinery current.</p>
+  </div>
+  <div class="well" role="img" aria-label="Abstract composition of a website layout in green and ink">
+    <div class="a"></div><div class="b"></div><div class="c"><i></i><i></i><i></i><i></i></div><div class="d"></div><div class="e">Point<br>first.</div>
+  </div>
+  <div class="cap"><span>Plate 1 — A page, decided before drawn.</span><span>Studio work</span></div>
+  <div class="folio l">02</div><div class="folio r">03</div>
+</article>
+
+<!-- SPREAD 2 -->
+<article class="spread s2">
+  <div class="run"><span><b>Build</b> — features</span><span>Spread / 02</span></div>
+  <div class="head"><div class="k">The build</div><h2 style="margin-top:10px">Written, then<br>designed, then<br>coded.</h2></div>
+  <aside class="side"><h3>The build in numbers</h3>
+    <dl><dt>3–5</dt><dd>weeks from brief to launch for a typical site</dd><dt>2</dt><dd>design directions, one chosen</dd><dt>2</dt><dd>full rounds of revisions included</dd><dt>0</dt><dd>templates or theme resales</dd></dl></aside>
+  <div class="main">
+    <p>The strongest sites we make began as an argument on paper. What is the single claim? What proof sits underneath it? What is the one thing a visitor should do next?</p>
+    <p>From there the work is craft: type, spacing, structure, and code that loads quickly because it has nothing to hide. You receive the repository and every design file at launch. They are yours.</p>
+  </div>
+  <blockquote class="pull">“The site should read like <em>someone meant it.</em>”<small>— House principle</small></blockquote>
+  <div class="low">Every page is tested at three widths and with a keyboard before you see it.</div>
+  <div class="folio l">04</div><div class="folio r">05</div>
+</article>
+
+<!-- SPREAD 3 -->
+<article class="spread s3">
+  <div class="run"><span><b>Host &amp; Care</b> — departments</span><span>Spread / 03</span></div>
+  <div class="a1"><div class="k">The press room</div><h2>Hosted where we can see it.</h2><p>Your site runs on servers we operate, with TLS, daily backups, and a rollback that takes minutes.</p></div>
+  <div class="rack" role="img" aria-label="Server rack illustration"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="rackcap">Plate 2 — The rack that holds your pages.</div>
+  <div class="a2"><div class="k">Editorial desk</div><h3>Care is a standing appointment.</h3><p>Each month someone reads your site as a stranger would: links, speed, wording, security. Small fixes go in the same week. Larger changes come with a quote first.</p><p>Edits are emailed in plain language and shipped inside your plan.</p></div>
+  <div class="bigq">Websites rarely break all at once. They fray. We check the edges.<small>On monthly care</small></div>
+  <div class="a3"><div class="k">The standing order</div><ul><li><b>Uptime probe</b>every 5 minutes</li><li><b>Patches</b>weekly</li><li><b>Backup</b>nightly, 30 kept</li><li><b>Report</b>monthly</li></ul></div>
+  <div class="folio l">06</div><div class="folio r">07</div>
+</article>
+
+<!-- SPREAD 4 -->
+<article class="spread s4">
+  <div class="run"><span><b>Letters</b> — write to the studio</span><span>Spread / 04</span></div>
+  <div class="l"><div class="k">Commissions</div><h2 style="margin-top:12px">Tell us what the page is for.</h2><p>Send a note. A person, not a form-bot, will reply within a business day.</p></div>
+  <div class="f"><h3>Commission a site</h3>
+    <form id="f">
+      <label for="a">Name</label><input id="a" required>
+      <label for="b">Email</label><input id="b" type="email" required>
+      <label for="c">Existing site</label><input id="c" placeholder="URL or “none”">
+      <label for="d">Looking for</label><select id="d"><option>Build, host, and care</option><option>Host and care for my site</option><option>Care only</option></select>
+      <label for="e">The brief</label><textarea id="e"></textarea>
+      <button>Send the brief</button><div class="ack" id="ack" role="status"></div>
+    </form></div>
+  <div class="colo">Spread — custom websites, hosting, care.<br>Set in serif and sans. Kept online by the people who built it.</div>
+  <div class="folio l">08</div><div class="folio r">09</div>
+</article>
+<script>
+document.getElementById('f').addEventListener('submit',e=>{e.preventDefault();document.getElementById('ack').textContent='Received. Reply within one business day.';e.target.reset();});
+</script>
+</body>
+</html>

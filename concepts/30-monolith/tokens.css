@@ -1,0 +1,26 @@
+/* Monolith — near-zero chrome, one column, one accent */
+:root {
+  --page: #f7f8f5;
+  --ink: #16181a;
+  --ink-soft: #5b6064;
+  --hair: #cdd1cd;
+  --accent: #0f5c4d;
+
+  --font-text: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --font-small: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --measure: 34rem;
+  --size: 1.125rem;
+  --leading: 1.52;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #121413;
+    --ink: #e7e9e5;
+    --ink-soft: #8d948f;
+    --hair: #2b302d;
+    --accent: #6fcfb7;
+  }
+}

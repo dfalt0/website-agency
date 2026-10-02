@@ -1,0 +1,17 @@
+:root {
+  --board: #1b1c1e;
+  --dot: #34363a;
+  --bar: #26272a;
+  --bar-line: #3a3c40;
+  --sel: #0a84ff;
+  --white: #ffffff;
+  --paper: #f1f1f0;
+  --black: #0d0d0e;
+  --yel: #ffd60a;
+  --pink: #ff9ecb;
+  --text: #e6e7e9;
+  --dim: #8b8e95;
+  --sans: "Hanken Grotesk", "Segoe UI", system-ui, sans-serif;
+  --mono: "Red Hat Mono", ui-monospace, Consolas, monospace;
+  --grid: 24px;
+}

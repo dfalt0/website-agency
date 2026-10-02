@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thread — a website, in conversation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fragment+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#e3ecef; --side:#14213d; --side-2:#1d2f55; --ink:#101a2e; --white:#fff; --amber:#f5a524; --amber-d:#c97f00; --mute:#6b7a90; --line:#cdd9de; --ok:#1f9d6b;
+  --sans:"Figtree","Segoe UI",system-ui,sans-serif; --mono:"Fragment Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.45;display:grid;grid-template-columns:300px 1fr;overflow:hidden}
+.side{background:var(--side);color:#c8d3ea;padding:22px 20px;display:flex;flex-direction:column;gap:22px;overflow:auto}
+.side .brand{font-weight:700;color:#fff;font-size:20px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.side .brand i{width:22px;height:22px;border-radius:50%;background:var(--amber);display:block;position:relative}
+.side .brand i::after{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--side)}
+.side h6{font-family:var(--mono);font-weight:400;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#7f91b4;margin-bottom:10px}
+.proj{background:var(--side-2);border-radius:14px;padding:14px}
+.proj b{display:block;color:#fff;font-size:16px}
+.proj span{font-size:13px;color:#9fb0d2}
+.steps{list-style:none;display:grid;gap:9px;font-size:14px}
+.steps li{display:flex;gap:10px;align-items:center}
+.steps li::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid #4b5f8c;flex:none}
+.steps li.done::before{background:var(--ok);border-color:var(--ok)}
+.steps li.now::before{border-color:var(--amber);background:radial-gradient(circle,var(--amber) 35%,transparent 40%)}
+.steps li.done{color:#fff}
+.files a{display:flex;justify-content:space-between;gap:8px;padding:8px 10px;border-radius:10px;color:#dfe7f7;text-decoration:none;font-size:13.5px}
+.files a:hover{background:var(--side-2)}
+.files a span{font-family:var(--mono);font-size:11px;color:#7f91b4}
+.side .who{margin-top:auto;display:flex;gap:10px;align-items:center;font-size:13px;color:#9fb0d2}
+.av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
+.av.s{background:var(--amber);color:#2b1b00}
+.av.c{background:#9fd8c9;color:#073b2e}
+/* main thread */
+.main{display:flex;flex-direction:column;min-width:0;height:100vh}
+.head{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;border-bottom:1px solid var(--line);background:#edf3f5}
+.head h1{font-size:18px;font-weight:700;letter-spacing:-.01em}
+.head small{display:block;font-weight:400;font-size:12.5px;color:var(--mute)}
+.head .pill{font-family:var(--mono);font-size:11.5px;background:#fff;border:1px solid var(--line);padding:5px 10px;border-radius:99px;display:flex;align-items:center;gap:7px}
+.head .pill::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ok)}
+.scroll{flex:1;overflow-y:auto;padding:26px 28px 10px;display:flex;flex-direction:column;gap:6px;scroll-behavior:smooth}
+.day{align-self:center;font-family:var(--mono);font-size:11px;color:var(--mute);margin:14px 0 8px;letter-spacing:.06em;text-transform:uppercase}
+.m{display:flex;gap:10px;max-width:min(680px,88%);align-items:flex-end;opacity:0;transform:translateY(10px);animation:in .5s ease forwards}
+.m.c{align-self:flex-start}
+.m.s{align-self:flex-end;flex-direction:row-reverse}
+@keyframes in{to{opacity:1;transform:none}}
+.b{padding:11px 15px;border-radius:20px;box-shadow:0 1px 0 #0001}
+.m.c .b{background:#fff;border-bottom-left-radius:6px}
+.m.s .b{background:var(--side);color:#eef3ff;border-bottom-right-radius:6px}
+.b p+p{margin-top:8px}
+.b ol{margin:8px 0 0 18px}
+.t{font-family:var(--mono);font-size:10.5px;color:var(--mute);margin:2px 48px 6px;align-self:flex-start}
+.t.s{align-self:flex-end}
+/* attachment cards inside bubbles */
+.att{margin-top:10px;border-radius:14px;background:#fff;color:var(--ink);padding:4px;overflow:hidden}
+.q{display:grid;grid-template-columns:auto 1fr auto;gap:2px 14px;padding:10px 12px;align-items:baseline}
+.q+.q{border-top:1px solid var(--line)}
+.q b{font-family:var(--mono);font-weight:400;font-size:11px;color:var(--mute)}
+.q span{font-weight:600}
+.q em{font-style:normal;font-family:var(--mono);font-size:13.5px;font-weight:400}
+.q small{grid-column:2/-1;color:var(--mute);font-size:13px}
+.att.sum{background:var(--amber);color:#2b1b00;display:flex;justify-content:space-between;padding:12px 14px;font-weight:700}
+.tl{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:10px}
+.tl div{background:#eef3f5;border-radius:8px;padding:8px;font-size:12px}
+.tl div b{display:block;font-family:var(--mono);font-weight:400;font-size:10.5px;color:var(--mute)}
+.tl div:last-child{background:var(--ok);color:#fff}
+.tl div:last-child b{color:#d8f3e8}
+.mini{display:flex;gap:16px;padding:10px 12px;font-family:var(--mono);font-size:12px;align-items:center}
+.mini i{display:block;width:100%;height:18px;background:repeating-linear-gradient(90deg,var(--ok) 0 3px,transparent 3px 4px);border-radius:3px;flex:1}
+.typing{display:flex;gap:4px;padding:14px 16px}
+.typing i{width:7px;height:7px;border-radius:50%;background:#9db0c6;animation:dot 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes dot{0%,60%,100%{transform:none;opacity:.5}30%{transform:translateY(-4px);opacity:1}}
+/* composer */
+.comp{padding:12px 28px 20px;background:#edf3f5;border-top:1px solid var(--line)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.chips button{font:600 13.5px var(--sans);border:1.5px solid var(--side);background:transparent;color:var(--side);padding:8px 14px;border-radius:99px;cursor:pointer}
+.chips button:hover{background:var(--side);color:#fff}
+.chips button.pri{background:var(--amber);border-color:var(--amber);color:#2b1b00}
+.chips button.pri:hover{background:var(--amber-d);border-color:var(--amber-d);color:#fff}
+.field{display:flex;gap:10px;background:#fff;border-radius:99px;padding:6px 6px 6px 18px;align-items:center;border:1px solid var(--line)}
+.field span{flex:1;color:var(--mute)}
+.field b{background:var(--side);color:#fff;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:16px}
+@media (max-width:860px){
+  body{grid-template-columns:1fr}.side{display:none}
+  .scroll,.comp,.head{padding-left:14px;padding-right:14px}
+  .tl{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<aside class="side">
+  <div class="brand"><i></i>Thread</div>
+  <div class="proj"><b>Tidal Physio</b><span>New website · hosting · care</span></div>
+  <div>
+    <h6>Where this thread is</h6>
+    <ul class="steps">
+      <li class="done">Scope understood</li>
+      <li class="done">Quote sent</li>
+      <li class="done">Timeline agreed</li>
+      <li class="now">Kickoff call</li>
+      <li>Launch on our hosting</li>
+    </ul>
+  </div>
+  <div class="files">
+    <h6>Pinned in this thread</h6>
+    <a href="#q">Quote v1 <span>PDF</span></a>
+    <a href="#tl">5-week timeline <span>LINK</span></a>
+    <a href="#">Care terms <span>1 pg</span></a>
+  </div>
+  <div class="who"><span class="av s">M</span><span><b style="color:#fff">Mara</b> and the studio<br>Typical reply 38 min</span></div>
+</aside>
+
+<div class="main">
+  <header class="head"><h1>Tidal Physio — new website<small>A conversation with the studio, start to launch</small></h1><span class="pill">Mara is online</span></header>
+
+  <div class="scroll" id="sc">
+    <div class="day">Monday · 9:02</div>
+
+    <div class="m c" style="animation-delay:.1s"><span class="av c">D</span><div class="b"><p>Hi. Our website was built by my cousin in 2019. It's slow, and "booking" is a phone number. Can you help?</p></div></div>
+    <div class="m s" style="animation-delay:.9s"><span class="av s">M</span><div class="b"><p>Yes, that's a good fit. Three quick questions so we can quote properly:</p><ol><li>What do patients do most on the site?</li><li>Who will update it?</li><li>Where is it hosted today?</li></ol></div></div>
+    <div class="m c" style="animation-delay:1.8s"><span class="av c">D</span><div class="b"><p>Book appointments. Me, when I have time. No idea on hosting. Something my cousin set up.</p></div></div>
+    <div class="t" style="animation:in .5s ease 2s forwards;opacity:0">Dana · 9:06</div>
+
+    <div class="m s" style="animation-delay:2.7s"><span class="av s">M</span><div class="b"><p>Perfect. That's three things: a site that books, hosting that doesn't depend on a cousin, and someone to make changes. Here's how that looks.</p>
+      <div class="att" id="q">
+        <div class="q"><b>BUILD</b><span>Custom site, 8 pages + booking</span><em>$8,900</em><small>Designed and coded for you. You own the source.</small></div>
+        <div class="q"><b>HOST</b><span>Our hosting</span><em>$49/mo</em><small>Fast edge network, SSL, daily backups, uptime watched.</small></div>
+        <div class="q"><b>CARE</b><span>Monthly care</span><em>$199/mo</em><small>Four changes a month, patches, a quarterly review.</small></div>
+        <div class="att sum"><span>Year one</span><span>$11,876</span></div>
+      </div></div></div>
+
+    <div class="m c" style="animation-delay:3.7s"><span class="av c">D</span><div class="b"><p>What happens after launch? I don't want to be left holding it again.</p></div></div>
+    <div class="m s" style="animation-delay:4.5s"><span class="av s">M</span><div class="b"><p>That's the hosting and care part. We monitor it, patch it, and when you need a change you message us right here.</p>
+      <div class="att"><div class="mini"><span>UPTIME 90D</span><i></i><span>99.98%</span></div></div></div></div>
+
+    <div class="m c" style="animation-delay:5.4s"><span class="av c">D</span><div class="b"><p>How long until it's live?</p></div></div>
+    <div class="m s" style="animation-delay:6.1s"><span class="av s">M</span><div class="b"><p>Five weeks from the kickoff call.</p>
+      <div class="att" id="tl"><div class="tl"><div><b>WK 1</b>Discovery</div><div><b>WK 2</b>Design</div><div><b>WK 3–4</b>Build</div><div><b>WK 5</b>Test</div><div><b>LIVE</b>On our hosting</div></div></div></div></div>
+
+    <div class="m c" style="animation-delay:7s"><span class="av c">D</span><div class="b"><p>OK. What do you need from me?</p></div></div>
+    <div class="m s" style="animation-delay:7.8s"><span class="av s">M</span><div class="b"><p>Your current URL and 20 minutes this week. That's all. We'll do the rest and tell you what we're doing as we go.</p></div></div>
+
+    <div class="m s" style="animation-delay:8.4s"><span class="av s">M</span><div class="b typing"><i></i><i></i><i></i></div></div>
+  </div>
+
+  <div class="comp">
+    <div class="chips" id="chips">
+      <button class="pri" data-r="Here's my URL: tidalphysio.com. Thursday works.">Send my URL and book 20 minutes</button>
+      <button data-r="Can we change the scope or the price?">Ask about scope or price</button>
+      <button data-r="Can you show me a site you've built?">See a site you built</button>
+    </div>
+    <div class="field"><span>Reply to the studio…</span><b>↑</b></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var sc=document.getElementById('sc'),chips=document.getElementById('chips');
+  // follow the reveal
+  var n=0,iv=setInterval(function(){sc.scrollTop=sc.scrollHeight;if(++n>100)clearInterval(iv)},100);
+  sc.addEventListener('wheel',function(){clearInterval(iv)},{passive:true});
+  sc.addEventListener('touchstart',function(){clearInterval(iv)},{passive:true});
+  chips.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;
+    var t=sc.querySelector('.typing');if(t)t.closest('.m').remove();
+    var m=document.createElement('div');m.className='m c';m.style.animationDelay='0s';
+    m.innerHTML='<span class="av c">D</span><div class="b"><p></p></div>';m.querySelector('p').textContent=b.dataset.r;
+    sc.appendChild(m);
+    var r=document.createElement('div');r.className='m s';r.style.animationDelay='1s';
+    r.innerHTML='<span class="av s">M</span><div class="b"><p>Got it. A calendar link and a one-page intake are on their way. Talk Thursday.</p></div>';
+    sc.appendChild(r);sc.scrollTop=sc.scrollHeight;
+    b.disabled=true;b.style.opacity=.4;
+  });
+})();
+</script>
+</body>
+</html>

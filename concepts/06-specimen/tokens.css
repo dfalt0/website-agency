@@ -1,0 +1,14 @@
+:root {
+  --specimen-bg: #0c0d0e;
+  --specimen-panel: #121416;
+  --specimen-plane: #16181a;
+  --specimen-line: #2b2f32;
+  --specimen-ink: #e7e8e5;
+  --specimen-mute: #878c8f;
+  --specimen-accent: #ff5a1f; /* the one sharp accent: inspection orange */
+  --specimen-pass: #7cc79a;   /* status text only */
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --rule: 0.5px solid var(--specimen-line);
+  --radius: 0;
+}

@@ -1,0 +1,12 @@
+:root {
+  --ledger-white: #f7f8f6;
+  --ink-graphite: #1e2420;
+  --column-rule: #c9cec8;
+  --balance-green: #2f6f4e;
+  --statement-blue: #3d5a6c;
+  --soft-sage: #eef2ef;
+  --font-display: "Libre Baskerville", Georgia, serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --radius: 0.25rem;
+}

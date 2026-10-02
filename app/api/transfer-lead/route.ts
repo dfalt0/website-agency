@@ -15,11 +15,11 @@ const SERVICE_TYPES: TransferServiceType[] = [
 ];
 
 const INTENTS: TransferIntent[] = [
-  "ai_discovery",
-  "custom_ai_app",
-  "workflow_automation",
-  "mcp_skills",
+  "new_website",
+  "redesign",
   "managed_hosting",
+  "growth_creatives",
+  "full_ops",
 ];
 
 function isServiceType(x: unknown): x is TransferServiceType {

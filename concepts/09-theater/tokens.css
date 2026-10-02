@@ -1,0 +1,16 @@
+:root {
+  --theater-bg: #e9ecef;
+  --theater-panel: #ffffff;
+  --theater-soft: #f5f6f8;
+  --theater-line: #d6dadf;
+  --theater-ink: #12161b;
+  --theater-mute: #66707c;
+  --theater-accent: #1f5bff;      /* cobalt, interface accent */
+  --theater-accent-soft: #e6edff;
+  --theater-ok: #1e9e5a;
+  --theater-warn: #c98a00;
+  --theater-log: #101419;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --radius: 8px;
+}

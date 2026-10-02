@@ -1,0 +1,21 @@
+/* Strip — film base, edge-print orange, storyboard paper */
+:root {
+  --dark: #110d09;
+  --base: #1f1812;
+  --base-hi: #2a2018;
+  --edge: #f28c28;
+  --cell: #e9e0c8;
+  --cell-ink: #1c1712;
+  --cell-soft: #6b6050;
+  --hole: #110d09;
+  --hi: #e8892b;
+
+  --font-title: "Bebas Neue", Impact, sans-serif;
+  --font-slate: "Courier Prime", "Courier New", monospace;
+  --font-body: "Barlow", system-ui, sans-serif;
+
+  --frame-w: min(80vw, 640px);
+  --frame-h: min(62vh, 460px);
+  --gap: 14px;
+  --hole-pitch: 34px;
+}

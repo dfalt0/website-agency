@@ -37,7 +37,7 @@ export default function ContactPage() {
           industry: "",
           note: form.message.trim(),
           path: "discover",
-          intents: ["ai_discovery"],
+          intents: ["full_ops"],
           serviceTypes: [],
         }),
       });
@@ -71,10 +71,10 @@ export default function ContactPage() {
               We&apos;ll be in touch
             </h1>
             <p className="mb-8 text-[#E2E8E2]/75">
-              Thanks for reaching out. We typically respond within one business day with next steps for a
+              Thanks for reaching out. We typically reply within one business day with next steps for a
               discovery conversation.
             </p>
-            <Button variant="white-primary" size="lg" asChild>
+            <Button variant="emerald" asChild>
               <Link href="/">Back to home</Link>
             </Button>
           </motion.div>
@@ -85,8 +85,8 @@ export default function ContactPage() {
               Book a discovery conversation
             </h1>
             <p className="mb-8 text-lg leading-relaxed text-[#E2E8E2]/70">
-              Tell us about your business and where you&apos;re stuck with AI. No sales deck — just a direct
-              conversation about whether we can help you ship something useful.
+              Tell us about your business and what you need online — site, infra, growth creatives, or all
+              three. We&apos;ll reply with a clear next step.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -142,7 +142,7 @@ export default function ContactPage() {
                   value={form.message}
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
                   className={`${field} resize-none`}
-                  placeholder="Describe your operations, current tools, and what a useful AI outcome looks like for your team…"
+                  placeholder="Tell us about your site, stack, or growth goals…"
                 />
               </div>
 
@@ -150,13 +150,12 @@ export default function ContactPage() {
 
               <Button
                 type="submit"
-                variant="white-primary"
-                size="lg"
+                variant="emerald"
                 disabled={!canSubmit || loading}
-                className="w-full shadow-[0_0_10px_rgba(34,197,94,0.15)]"
+                className="w-full"
               >
                 {loading ? "Sending…" : "Request discovery call"}
-                {!loading && <ArrowRight className="ml-2 h-4 w-4" />}
+                {!loading && <ArrowRight />}
               </Button>
             </form>
 

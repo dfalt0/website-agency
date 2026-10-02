@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Monolith — The site is the easy part</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+@import url("tokens.css");
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--page);color:var(--ink);font:400 var(--size)/var(--leading) var(--font-text);font-optical-sizing:auto;
+  padding:clamp(1.25rem,4vw,3rem) 1.25rem 8rem;margin-left:clamp(0px,22vw,24rem)}
+#prog{position:fixed;left:0;top:0;height:2px;width:0;background:var(--accent);z-index:5}
+.col{max-width:var(--measure)}
+.top{font:400 .72rem/1.4 var(--font-mono);color:var(--ink-soft);letter-spacing:.02em;margin-bottom:5rem}
+h1{font:600 clamp(2.3rem,5.4vw,3.3rem)/1.02 var(--font-text);letter-spacing:-.025em;margin-bottom:2.4rem}
+p{text-align:justify;hyphens:auto;-webkit-hyphens:auto;text-wrap:pretty;margin-bottom:0;text-indent:1.4em}
+p:first-of-type,p.ni{text-indent:0}
+.h{font:600 .86em var(--font-small);font-variant-caps:all-small-caps;letter-spacing:.08em;margin-right:.35em;text-indent:0}
+.h i{font-style:normal;color:var(--accent);margin-right:.35em}
+a{color:var(--accent);text-underline-offset:.2em;text-decoration-thickness:1px}
+a:hover{text-underline-offset:.35em}
+sup{font:500 .62em var(--font-mono);line-height:0;vertical-align:.5em}
+sup a{text-decoration:none;padding:0 .1em}
+figure{margin:2.2rem 0;text-indent:0}
+figcaption{font:400 .8rem/1.4 var(--font-small);color:var(--ink-soft);margin-top:.7rem;letter-spacing:.01em}
+figcaption b{font-weight:600;color:var(--ink)}
+svg{width:100%;height:auto;display:block;overflow:visible}
+svg text{font:400 10px var(--font-mono);fill:var(--ink)}svg .s{fill:var(--ink-soft)}
+pre{font:400 .74rem/1.5 var(--font-mono);border-top:.5px solid var(--ink);border-bottom:.5px solid var(--ink);padding:.8rem 0;overflow:auto;white-space:pre;color:var(--ink)}
+table{width:100%;border-collapse:collapse;font:400 .8rem var(--font-mono);border-top:.5px solid var(--ink);border-bottom:.5px solid var(--ink)}
+td{padding:.45rem 0;border-bottom:.5px solid var(--hair)}tr:last-child td{border:0}td:last-child{text-align:right}
+.notes{margin-top:4rem;padding-top:1rem;border-top:.5px solid var(--hair);font:400 .86rem/1.5 var(--font-small);color:var(--ink-soft)}
+.notes p{text-align:left;text-indent:0;margin-bottom:.4rem}
+.sig{margin-top:2.4rem;font:400 .75rem var(--font-mono);color:var(--ink-soft)}
+@media(max-width:700px){body{margin-left:0}p{text-align:left}}
+@media print{#prog{display:none}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<main class="col">
+<div class="top">Monolith — custom websites, hosting, care. A note on who we are and what we do. Read time 7 min.</div>
+<h1>The site is the easy part.</h1>
+
+<p><span class="h"><i>I.</i>What we do</span> We build custom websites, host them on infrastructure we run, and look after them afterwards. That is the whole business. We do not do branding exercises, social media, or "growth." If you need a site that looks like your company, loads quickly, takes payments or bookings or enquiries without drama, and is still working in three years, we are probably useful. If you need something else, we will say so on the first call and save you the hour.</p>
+
+<p><span class="h"><i>II.</i>Why launches mislead</span> Most agencies are paid at launch, so launch is where they are good. But a website's cost is mostly incurred after it. In the sites we have inherited from other firms, a little under a fifth of five-year spending went to the original build.<sup><a href="#n1" id="r1">1</a></sup> The remainder went to hosting, to changes and fixes, and to a rebuild forced when the foundation could not take the changes. The build is the cheap part of owning a website. It is also the part that decides how expensive the rest will be.</p>
+
+<figure>
+<svg viewBox="0 0 440 92" role="img" aria-label="Stacked bar of five-year website cost: build 18 percent, hosting 12, changes and fixes 54, rebuild 16">
+<rect x="0" y="22" width="79" height="26" fill="var(--accent)"/><rect x="79" y="22" width="53" height="26" fill="var(--ink-soft)" opacity=".55"/><rect x="132" y="22" width="238" height="26" fill="var(--ink)" opacity=".85"/><rect x="370" y="22" width="70" height="26" fill="none" stroke="var(--ink)" stroke-dasharray="3 2"/>
+<text x="0" y="14">Build 18%</text><text x="79" y="64" class="s">Host 12%</text><text x="132" y="14">Changes &amp; fixes 54%</text><text x="370" y="64">Rebuild 16%</text>
+<line x1="0" y1="80" x2="440" y2="80" stroke="var(--ink)" stroke-width=".5"/><text x="0" y="90" class="s">Year 0</text><text x="400" y="90" class="s">Year 5</text>
+</svg>
+<figcaption><b>Fig. 1.</b> Where five years of spending went, median of forty inherited small-business sites.</figcaption>
+</figure>
+
+<p><span class="h"><i>III.</i>What building is</span> A build takes four to eight weeks and costs from $6,500, fixed, quoted in writing before we start. You receive designs of the pages that matter, a working site on a private address, your content moved across, redirects from the old URLs, and the source code in a repository you own. We take forty per cent up front and the rest on launch. Changes to scope are written down and priced before they are made, not discovered on an invoice. We write the code so that someone else could maintain it, because one day someone might, and that is not an insult to us.</p>
+
+<p><span class="h"><i>IV.</i>What hosting is</span> Your site runs on servers we operate, behind a cache close to your customers, with a certificate that renews itself. Backups are taken daily and kept for thirty-five days. Uptime is checked every minute from three regions and published on a page anyone can read.<sup><a href="#n2" id="r2">2</a></sup> Your domain and DNS are registered in your name; we administer them. Hosting is seventy-nine dollars a month. If you leave, we give you a complete export within five business days, and we do not charge for it. We would rather be chosen monthly than trapped annually.</p>
+
+<p><span class="h"><i>V.</i>What care is</span> Care is a calendar and a person. The calendar covers patches, dependency updates, and tests of the forms and payment paths that quietly break. The person has a name, answers within a business day, and within two hours when something is on fire between seven in the morning and ten at night, Eastern. Every month you receive one page saying what changed and what we recommend.</p>
+
+<figure>
+<pre>MONTHLY REPORT · March
+  Uptime            99.98%   (1 incident, 4 min)
+  Patches applied   7
+  Edits completed   3 of 3 hrs   (2 hrs carried over)
+  Slowest page      /services   2.1 s  →  fixed, now 0.9 s
+  Recommend         compress hero images; add FAQ schema</pre>
+<figcaption><b>Fig. 2.</b> A real report, lightly anonymised. This is the entire deliverable.</figcaption>
+</figure>
+
+<p>Care costs two hundred and forty-nine dollars a month and includes the hosting and three hours of edits.<sup><a href="#n3" id="r3">3</a></sup> Hours that are not used roll into the next month and then expire. We would sooner you used them.</p>
+
+<p><span class="h"><i>VI.</i>Who we are not for</span> We are a poor fit for anyone who needs a site by Friday, who wants to choose between six designs, or who is comparing us to a template that costs less than our monthly fee. Those are reasonable needs. We are the wrong people for them. We take on a limited number of new clients each quarter so that the ones we have can reach us.</p>
+
+<p><span class="h"><i>VII.</i>Terms</span> After the initial build everything is month to month. You may leave with thirty days' notice, taking your code, your content, and your domain.</p>
+
+<figure>
+<table>
+<tr><td>Build — fixed quote</td><td>from $6,500</td></tr>
+<tr><td>Host</td><td>$79 / month</td></tr>
+<tr><td>Care — includes host, 3 edit hours</td><td>$249 / month</td></tr>
+</table>
+<figcaption><b>Fig. 3.</b> The complete price list. There is no other page.</figcaption>
+</figure>
+
+<p><span class="h"><i>VIII.</i>How to begin</span> Write to <a href="mailto:hello@monolith.example">hello@monolith.example</a> and tell us what the business does, who buys from it, and what is wrong with the site you have. A person will reply within two business days, with either a time for a call or an honest explanation of why we cannot help.</p>
+
+<div class="sig">— Monolith. Sixteen people who would rather be reading.</div>
+
+<div class="notes">
+<p id="n1"><b>1.</b> Median of forty sites inherited between 2021 and 2026, excluding e-commerce. <a href="#r1">↩</a></p>
+<p id="n2"><b>2.</b> Checked every sixty seconds; incidents shorter than one check are invisible to us and to you. <a href="#r2">↩</a></p>
+<p id="n3"><b>3.</b> An "edit" is a copy, image, or layout change that takes under about thirty minutes. Larger work is quoted. <a href="#r3">↩</a></p>
+</div>
+</main>
+<script>
+const b=document.getElementById('prog');
+addEventListener('scroll',()=>{const h=document.documentElement;b.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%'},{passive:true});
+</script>
+</body>
+</html>

@@ -170,7 +170,6 @@ export function Step3Contact({
       <div className="mt-8 flex justify-between">
         <Button
           variant="secondary"
-          size="lg"
           onClick={onBack}
           disabled={isSubmitting}
           className="border-[#E2E8E2]/35 text-[#E2E8E2]"
@@ -178,18 +177,13 @@ export function Step3Contact({
           Back
         </Button>
         <Button
-          variant={canContinue ? "white-primary" : "secondary"}
-          size="lg"
+          variant={canContinue ? "emerald" : "secondary"}
           onClick={onNext}
           disabled={!canContinue || isSubmitting}
-          className={`transition-[background-color,border-color,color,box-shadow] duration-300 ease-out ${
-            canContinue
-              ? "shadow-[0_0_10px_rgba(34,197,94,0.15)]"
-              : "border-[#E2E8E2]/35 text-[#E2E8E2]/60 shadow-none"
-          }`}
+          className={canContinue ? undefined : "border-[#E2E8E2]/35 text-[#E2E8E2]/55"}
         >
           {isSubmitting ? "Sending…" : "Submit intake"}
-          {!isSubmitting ? <ArrowRight className="ml-2 h-4 w-4" /> : null}
+          {!isSubmitting ? <ArrowRight /> : null}
         </Button>
       </div>
     </motion.div>

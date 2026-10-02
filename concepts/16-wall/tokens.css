@@ -1,0 +1,17 @@
+:root {
+  --bg: #0a0e13;
+  --panel: #10161d;
+  --panel-hi: #151d26;
+  --line: #233040;
+  --line-soft: #182230;
+  --text: #d5dde6;
+  --dim: #7b8b9d;
+  --faint: #4a596a;
+  --ok: #3fcf8e;
+  --warn: #ffb020;
+  --bad: #ff4d4d;
+  --info: #5aa9ff;
+  --display: "Barlow Condensed", "Arial Narrow", Impact, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --radius: 0;
+}

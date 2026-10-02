@@ -1,0 +1,14 @@
+:root {
+  --overlay-night: #040d11;
+  --overlay-deep: #0a2128;
+  --overlay-ridge: #123b42;
+  --overlay-line: #2f5c60;
+  --overlay-ink: #dbe9e6;
+  --overlay-mute: #84a3a1;
+  --overlay-survey: #f2c94c; /* survey-marker yellow, only accent */
+  --overlay-ok: #8fd8a5;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --glass: rgba(5, 20, 25, 0.62);
+  --glass-blur: blur(14px);
+}

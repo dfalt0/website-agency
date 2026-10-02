@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kiln — Concept Preview</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Source+Sans+3:wght@400;600&family=Syne:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --soot:#1c1410; --ash:#d9d2c5; --copper:#b87333; --ember:#e85d04; --clay:#3d2b22; --bone:#f0ebe3; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Source Sans 3", system-ui, sans-serif; background: var(--soot); color: var(--ash); }
+    h1,h2,h3 { font-family: Syne, system-ui, sans-serif; letter-spacing: -0.03em; }
+    .tag { position: fixed; top: 0.75rem; left: 0.75rem; z-index: 20; background: var(--copper); color: #1c1410; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; padding: 0.35rem 0.55rem; }
+    .noise { position: fixed; inset: 0; pointer-events: none; opacity: 0.04; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+    .nav { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 2rem; border-bottom: 1px solid var(--clay); position: relative; z-index: 1; }
+    .brand { font-family: Syne, sans-serif; font-weight: 700; font-size: 1.4rem; }
+    .btn { display: inline-flex; padding: 0.7rem 1.1rem; font-size: 0.85rem; font-weight: 600; text-decoration: none; border-radius: 0.35rem; }
+    .btn-c { background: var(--copper); color: var(--soot); }
+    .btn-o { border: 1px solid var(--copper); color: var(--ash); }
+    .hero { padding: 5rem 2rem 4rem; max-width: 820px; margin: 0 auto; position: relative; z-index: 1; }
+    .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--copper); margin-bottom: 1.25rem; }
+    .hero h1 { font-size: clamp(2.3rem, 5.5vw, 3.5rem); line-height: 1.08; margin-bottom: 1.1rem; }
+    .hero p { font-size: 1.08rem; line-height: 1.7; color: #b7aea0; margin-bottom: 1.75rem; max-width: 36rem; }
+    .shelf { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.75rem; padding: 2rem; max-width: 1040px; margin: 0 auto; position: relative; z-index: 1; }
+    .shelf article { background: var(--clay); border: 1px solid #5a4030; border-radius: 0.35rem; padding: 1.4rem; }
+    .shelf .id { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; color: var(--ember); letter-spacing: 0.1em; margin-bottom: 0.6rem; }
+    .shelf h3 { font-size: 1.25rem; margin-bottom: 0.45rem; color: var(--bone); }
+    .shelf p { font-size: 0.92rem; line-height: 1.6; color: #a89a88; }
+    .light { background: var(--bone); color: var(--soot); padding: 4rem 2rem; text-align: center; position: relative; z-index: 1; }
+    .light h2 { font-size: 2rem; margin-bottom: 0.75rem; }
+    .light p { color: #5c5046; margin-bottom: 1.25rem; }
+    @media (max-width:800px){ .shelf{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="tag">Concept 04 · Kiln</div>
+  <header class="nav">
+    <div class="brand">Kiln</div>
+    <a class="btn btn-c" href="#">Book a workshop visit</a>
+  </header>
+  <section class="hero">
+    <p class="eyebrow">Batch · Custom websites · Hosted in-house</p>
+    <h1>Websites made in the kiln — then kept under heat.</h1>
+    <p>We shape and build custom sites, host them ourselves, and stay in the shop after the first firing. No cold handoffs. No stock forms with a new coat of glaze.</p>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+      <a class="btn btn-c" href="#">Book a workshop visit</a>
+      <a class="btn btn-o" href="#">See recent firings</a>
+    </div>
+  </section>
+  <section class="shelf">
+    <article><div class="id">BATCH · SHAPE</div><h3>Build</h3><p>Hand-built pages from your material — brand, offer, audience — hardened into something solid.</p></article>
+    <article><div class="id">BATCH · FIRE</div><h3>Host</h3><p>We fire on our own hosting. Domains, SSL, deploys. The kiln stays ours; the site stays yours.</p></article>
+    <article><div class="id">BATCH · HEAT</div><h3>Care</h3><p>Updates and new pages so the workshop doesn’t go cold after launch day.</p></article>
+  </section>
+  <section class="light">
+    <h2>Want a seat at the bench?</h2>
+    <p>Tell us what you’re making. We’ll say if we have kiln space.</p>
+    <a class="btn btn-c" href="#">Book a workshop visit</a>
+  </section>
+</body>
+</html>

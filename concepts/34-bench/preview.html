@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bench — Custom websites, made to tolerance</title>
+<link href="https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@400;600&family=Saira+Condensed:wght@500;700;800&family=Saira+Semi+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+@import url("tokens.css");
+*{box-sizing:border-box;margin:0}
+body{background:var(--board);color:#e8eee9;font:400 1.05rem/1.5 var(--font-body)}
+.sign{display:flex;justify-content:space-between;align-items:center;background:var(--ink);padding:.7rem clamp(1rem,4vw,3rem);border-bottom:4px solid var(--hivis)}
+.sign b{font:800 1.9rem/1 var(--font-head);letter-spacing:.14em}
+.sign b i{font-style:normal;background:var(--hivis);color:var(--ink);padding:0 .35rem;margin-right:.4rem}
+.sign span{font:500 .78rem var(--font-mono);letter-spacing:.06em;color:#9aa59f;text-transform:uppercase}
+.sign a{color:var(--hivis);text-decoration:none;font:700 .95rem var(--font-head);letter-spacing:.12em;text-transform:uppercase}
+/* wall */
+.wall{position:relative;padding:clamp(1.5rem,4vw,3rem) clamp(1rem,4vw,3rem) 1rem;
+  background:radial-gradient(circle at 50% 50%,var(--board-hole) 0 3px,transparent 3.5px) 0 0/var(--peg) var(--peg),var(--board)}
+.wall::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,transparent 70%,rgba(0,0,0,.35));pointer-events:none}
+.intro{position:relative;z-index:2;max-width:46rem;background:var(--board);padding:.3rem 1rem 1rem 0;margin-bottom:1.5rem}
+.intro h1{font:800 clamp(2.6rem,6.5vw,5.4rem)/.92 var(--font-head);letter-spacing:-.005em;text-transform:uppercase}
+.intro h1 em{font-style:normal;color:var(--hivis)}
+.intro p{margin-top:1rem;max-width:34rem;color:#b8c2bc}
+.rack{position:relative;z-index:2;display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(.5rem,2vw,1.5rem);padding-bottom:3.5rem}
+.slot{position:relative;background:none;border:0;color:inherit;font:inherit;text-align:center;cursor:pointer;padding:0;transition:transform .3s}
+.slot:nth-child(2n){margin-top:2.2rem}.slot:nth-child(3n){margin-top:.8rem}
+.slot svg{display:block;width:100%;height:auto;aspect-ratio:1}
+.sil{color:var(--outline);--acc:var(--outline);--notch:var(--board)}
+.tool{position:absolute;left:0;top:0;color:var(--steel);--acc:var(--hivis);--notch:var(--board);filter:drop-shadow(5px 7px 0 rgba(0,0,0,.35));transform-origin:50% 8%;transition:transform .45s cubic-bezier(.3,1.3,.5,1),opacity .35s}
+.slot:hover .tool{transform:rotate(3deg)}
+.slot.out .tool{opacity:0;transform:translateY(-30px) rotate(-14deg)}
+.slot::before,.slot::after{content:"";position:absolute;top:-6px;width:8px;height:16px;background:#9aa59f;border-radius:4px;z-index:3;left:calc(50% - 22px)}
+.slot::after{left:calc(50% + 14px)}
+.slot:focus-visible{outline:2px dashed var(--hazard);outline-offset:4px}
+.tag{display:inline-block;margin-top:.3rem;background:#e8dfc4;color:var(--ink);font:600 .64rem var(--font-mono);padding:.2rem .5rem;letter-spacing:.06em;transform:rotate(-1.5deg);box-shadow:2px 3px 0 rgba(0,0,0,.35);position:relative}
+.slot.out .tag{background:var(--hivis);color:#fff}.slot.out .tag::after{content:" · OUT"}
+.hint{position:absolute;right:clamp(1rem,4vw,3rem);top:clamp(1.5rem,4vw,3rem);z-index:2;font:600 .74rem var(--font-mono);color:var(--hazard);letter-spacing:.1em;text-transform:uppercase;writing-mode:vertical-rl}
+/* bench */
+.bench{position:relative;min-height:440px;padding:3rem clamp(1rem,4vw,3rem) 4.4rem;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:clamp(1rem,4vw,4rem);align-items:center;
+  background:repeating-linear-gradient(90deg,rgba(60,30,0,.05) 0 2px,transparent 2px 9px),repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 5px),linear-gradient(#c6996a,var(--beech));
+  box-shadow:inset 0 14px 30px rgba(0,0,0,.45);border-top:10px solid #6f4f33}
+.bench::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent calc(33.33% - 1px),rgba(60,35,10,.35) 33.33%,transparent calc(33.33% + 1px),transparent calc(66.66% - 1px),rgba(60,35,10,.35) 66.66%,transparent calc(66.66% + 1px));pointer-events:none}
+.ruler{position:absolute;left:0;right:0;bottom:0;height:34px;background:#ead9a6;border-top:2px solid #333;
+  background-image:repeating-linear-gradient(90deg,#222 0 1px,transparent 1px 10px),repeating-linear-gradient(90deg,#222 0 2px,transparent 2px 100px);background-size:100% 9px,100% 18px;background-repeat:repeat-x;background-position:bottom,bottom}
+.ruler span{position:absolute;top:4px;font:600 .62rem var(--font-mono);color:#222}
+.work{position:relative;display:grid;place-items:center;min-height:300px}
+.work svg{width:min(320px,70%);height:auto;filter:drop-shadow(14px 20px 12px rgba(40,20,0,.45));color:var(--steel);--acc:var(--hivis);--notch:var(--beech);transform:rotate(-8deg);transition:transform .5s cubic-bezier(.3,1.2,.5,1)}
+.work svg.drop{animation:land .55s cubic-bezier(.3,1.4,.5,1)}
+@keyframes land{from{transform:translate(-120px,-180px) rotate(-30deg);opacity:0}to{transform:rotate(-8deg);opacity:1}}
+.work::before{content:"";position:absolute;width:75%;aspect-ratio:1.4;background:#d8c8a2;transform:rotate(2deg);z-index:0;box-shadow:3px 5px 10px rgba(40,20,0,.3);
+  background-image:linear-gradient(rgba(60,90,160,.28) 1px,transparent 1px),linear-gradient(90deg,rgba(60,90,160,.28) 1px,transparent 1px);background-size:18px 18px}
+.work svg{position:relative;z-index:1}
+.plate{position:relative;background:linear-gradient(135deg,#e5e8e3,#c9cec8);color:var(--plate-ink);padding:1.6rem 1.8rem 1.5rem;border-radius:3px;box-shadow:0 14px 28px rgba(40,20,0,.4),inset 0 0 0 2px #aab1ab;text-shadow:0 1px 0 rgba(255,255,255,.7)}
+.plate i{position:absolute;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#7d857f);box-shadow:0 1px 2px rgba(0,0,0,.5)}
+.plate i:nth-of-type(1){left:9px;top:9px}.plate i:nth-of-type(2){right:9px;top:9px}.plate i:nth-of-type(3){left:9px;bottom:9px}.plate i:nth-of-type(4){right:9px;bottom:9px}
+.plate .id{font:600 .7rem var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:#59635d}
+.plate h2{font:800 clamp(2rem,4.5vw,3.2rem)/1 var(--font-head);text-transform:uppercase;letter-spacing:.01em;margin:.2rem 0 .1rem}
+.plate h2 em{font-style:normal;color:#c93e0c}
+.plate .fn{font-size:1rem;margin-bottom:1rem;max-width:32rem}
+.plate dl{font:500 .8rem var(--font-mono);border-top:2px solid var(--plate-ink)}
+.plate dl div{display:grid;grid-template-columns:8.5rem 1fr;gap:.6rem;padding:.45rem 0;border-bottom:1px solid rgba(0,0,0,.25);opacity:0;transform:translateX(-8px);animation:row .35s forwards}
+.plate dt{text-transform:uppercase;color:#59635d;font-size:.68rem;padding-top:.15rem;letter-spacing:.08em}
+@keyframes row{to{opacity:1;transform:none}}
+.price{display:flex;justify-content:space-between;align-items:baseline;margin-top:1rem;font:800 2rem/1 var(--font-head)}
+.price span{font:600 .7rem var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:#59635d}
+/* order strip */
+.order{position:relative;padding:3.5rem clamp(1rem,4vw,3rem);background:repeating-linear-gradient(-45deg,var(--hazard) 0 20px,#111 20px 40px)}
+.order .in{background:var(--ink);padding:1.8rem 2rem;max-width:42rem;border:3px solid var(--hazard);display:grid;gap:.7rem}
+.order h2{font:800 clamp(2rem,5vw,3.4rem)/.95 var(--font-head);text-transform:uppercase;color:var(--hazard)}
+.order a{justify-self:start;background:var(--hivis);color:#fff;font:800 1.1rem var(--font-head);letter-spacing:.12em;text-transform:uppercase;padding:.8rem 1.4rem;text-decoration:none;box-shadow:5px 5px 0 #000;transition:.15s}
+.order a:hover{transform:translate(3px,3px);box-shadow:2px 2px 0 #000}
+.shop{display:flex;flex-wrap:wrap;gap:.4rem 1.6rem;padding:1rem clamp(1rem,4vw,3rem);background:var(--ink);font:500 .72rem var(--font-mono);color:#8c9792;letter-spacing:.06em;text-transform:uppercase}
+@media(max-width:900px){.rack{grid-template-columns:repeat(3,1fr)}.bench{grid-template-columns:1fr}.hint{display:none}.work{min-height:220px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.plate dl div{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="t1" viewBox="0 0 100 100"><g fill="currentColor"><rect x="6" y="38" width="88" height="9" rx="2"/><rect x="6" y="38" width="9" height="52" rx="2"/><rect x="50" y="47" width="10" height="40" rx="2"/><rect x="44" y="30" width="22" height="28" rx="4"/></g><circle cx="55" cy="30" r="8" style="fill:var(--acc)"/></symbol>
+ <symbol id="t2" viewBox="0 0 100 100"><g fill="currentColor"><rect x="34" y="12" width="32" height="42" rx="8"/><rect x="22" y="54" width="56" height="10" rx="3"/><rect x="46" y="64" width="8" height="24"/><path d="M46 88 L50 97 L54 88z"/></g><rect x="38" y="4" width="24" height="10" rx="3" style="fill:var(--acc)"/><rect x="10" y="28" width="26" height="8" rx="4" style="fill:var(--acc)"/><rect x="64" y="28" width="26" height="8" rx="4" style="fill:var(--acc)"/></symbol>
+ <symbol id="t3" viewBox="0 0 100 100"><g fill="currentColor"><rect x="12" y="76" width="66" height="12" rx="2"/><rect x="12" y="46" width="20" height="30" rx="2"/><rect x="58" y="46" width="20" height="30" rx="2"/><rect x="32" y="58" width="26" height="6"/><rect x="78" y="59" width="14" height="4"/></g><rect x="90" y="42" width="6" height="38" rx="3" style="fill:var(--acc)"/></symbol>
+ <symbol id="t4" viewBox="0 0 100 100"><g fill="currentColor"><rect x="28" y="6" width="44" height="88" rx="9"/></g><rect x="35" y="14" width="30" height="20" rx="2" style="fill:var(--acc)"/><circle cx="50" cy="56" r="13" style="fill:var(--acc)"/><rect x="34" y="76" width="12" height="9" rx="2" style="fill:var(--acc)"/><rect x="54" y="76" width="12" height="9" rx="2" style="fill:var(--acc)"/></symbol>
+ <symbol id="t5" viewBox="0 0 100 100"><g transform="rotate(35 50 50)"><g fill="currentColor"><rect x="43" y="26" width="14" height="68" rx="7"/><circle cx="50" cy="24" r="18"/></g><rect x="44" y="0" width="12" height="22" style="fill:var(--notch)"/><rect x="43" y="62" width="14" height="30" rx="7" style="fill:var(--acc)"/></g></symbol>
+ <symbol id="t6" viewBox="0 0 100 100"><g fill="currentColor"><rect x="20" y="46" width="44" height="44" rx="9"/><path d="M58 52 L82 24 L90 31 L66 60z"/></g><path d="M22 58 C4 58 4 80 22 80" style="fill:none;stroke:currentColor;stroke-width:6"/><rect x="32" y="36" width="20" height="12" rx="3" style="fill:var(--acc)"/><circle cx="88" cy="24" r="6" style="fill:var(--acc)"/></symbol>
+</svg>
+
+<header class="sign"><b><i>B</i>ENCH</b><span>Custom websites, made to tolerance</span><a href="#order">Order work ↓</a></header>
+
+<section class="wall">
+  <span class="hint">↓ take a tool down</span>
+  <div class="intro"><h1>Every job starts by <em>taking a tool down.</em></h1><p>Six tools on the wall. Each one is a service. Pick one and it goes on the bench with its spec.</p></div>
+  <div class="rack" id="rack"></div>
+</section>
+
+<section class="bench" aria-live="polite">
+  <div class="work" id="work"></div>
+  <article class="plate" id="plate"><i></i><i></i><i></i><i></i></article>
+  <div class="ruler" id="ruler"></div>
+</section>
+
+<section class="order" id="order"><div class="in"><h2>Put in an order.</h2><p>Tell us the job. We'll quote it on one page, fixed, before anything gets cut.</p><a href="mailto:hello@bench.example">Order work →</a></div></section>
+<div class="shop"><span>Quoted in writing</span><span>Made to spec</span><span>You own the parts</span><span>Month-to-month after build</span></div>
+
+<script>
+const TOOLS=[
+{id:'t1',t:'T-01',n:'Calipers',s:'Scope',f:'Measure the job before cutting anything.',rows:[['Does','Discovery call, audit of existing site, written scope'],['Output','One-page scope + fixed quote'],['Tolerance','No surprise line items'],['Time','3–5 business days']],p:'Included',pl:'with build'},
+{id:'t2',t:'T-02',n:'Router',s:'Build',f:'Custom design and code, cut to your shape. No templates in the stock.',rows:[['Does','Design, code, content migration, redirects'],['Output','Live site + source in your repo'],['Tolerance','Zero scope drift w/o written change order'],['Time','4–8 weeks'],['Own','Code and content. Always.']],p:'from $6,500',pl:'fixed · 40% deposit'},
+{id:'t3',t:'T-03',n:'Vise',s:'Host',f:'Holds your site fast so it does not move.',rows:[['Does','Edge cache, TLS, DNS in your name'],['Backups','Daily, kept 35 days'],['Tolerance','99.95% uptime target'],['Exit','Full export in 5 business days']],p:'$79',pl:'per month'},
+{id:'t4',t:'T-04',n:'Multimeter',s:'Monitor',f:'Continuity checks on everything that should be on.',rows:[['Does','Checks every 60s from 3 regions'],['Tests','Forms, payments, certificates'],['Tolerance','Alert to human < 10 min'],['Public','Status page, no login']],p:'Included',pl:'with host'},
+{id:'t5',t:'T-05',n:'Wrench',s:'Edits',f:'Small adjustments, made the day you ask.',rows:[['Does','Copy, image and layout changes'],['Allowance','3 hrs / month, rolls 1 month'],['Tolerance','1 business day'],['Ask by','Email or text']],p:'Included',pl:'with care'},
+{id:'t6',t:'T-06',n:'Oil can',s:'Care',f:'The regular maintenance that keeps it from seizing.',rows:[['Does','Patches, updates, monthly one-page report'],['Person','A named human who answers'],['Urgent','2-hour response, 7a–10p ET'],['Includes','Host + 3 edit hours']],p:'$249',pl:'per month'}];
+const rack=document.getElementById('rack'),work=document.getElementById('work'),plate=document.getElementById('plate');
+TOOLS.forEach((o,i)=>{const b=document.createElement('button');b.className='slot';b.dataset.i=i;b.setAttribute('aria-label',`${o.n} — ${o.s}`);
+  b.innerHTML=`<svg class="sil"><use href="#${o.id}"/></svg><svg class="tool"><use href="#${o.id}"/></svg><span class="tag">${o.t} · ${o.s.toUpperCase()}</span>`;
+  b.onclick=()=>take(i);rack.appendChild(b)});
+function take(i){const o=TOOLS[i];
+  [...rack.children].forEach((s,k)=>s.classList.toggle('out',k===i));
+  work.innerHTML=`<svg class="drop"><use href="#${o.id}"/></svg>`;
+  const rows=o.rows.map((r,k)=>`<div style="animation-delay:${.15+k*.09}s"><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join('');
+  plate.innerHTML=`<i></i><i></i><i></i><i></i><div class="id">${o.t} · ${o.n} · Service: ${o.s}</div><h2>${o.s} <em>/</em> ${o.n}</h2><p class="fn">${o.f}</p><dl>${rows}</dl><div class="price"><span>Price</span><b>${o.p} <small style="font:600 .7rem 'Overpass Mono';letter-spacing:.1em;text-transform:uppercase;color:#59635d">${o.pl}</small></b></div>`;}
+take(1);
+const ru=document.getElementById('ruler');for(let n=0;n<=2000;n+=100){const s=document.createElement('span');s.style.left=(n+4)+'px';s.textContent=n/10;ru.appendChild(s)}
+</script>
+</body>
+</html>

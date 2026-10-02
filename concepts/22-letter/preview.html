@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Letter — correspondence from a website studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Courier+Prime&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<style>
+:root{
+  --desk:#bcc7d3; --desk-2:#aab7c5; --paper:#fdfdfb; --ink:#14284b; --ink-soft:#3b4d70; --seal:#9b1c1c; --rule:#c8d0dc; --slip:#eef2f7;
+  --serif:"EB Garamond",Georgia,serif; --head:"Cormorant Garamond",Georgia,serif; --type:"Courier Prime","Courier New",monospace; --sig:"Mrs Saint Delafield","Brush Script MT",cursive;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--desk);background-image:linear-gradient(115deg,#ffffff18 0 50%,transparent 50%),repeating-linear-gradient(90deg,#00000006 0 2px,transparent 2px 6px);color:var(--ink);font-family:var(--serif);font-size:19px;line-height:1.55;padding:48px 24px 80px}
+.desk{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:minmax(0,800px) 300px;gap:44px;align-items:start}
+/* the sheet */
+.sheet{background:var(--paper);box-shadow:0 1px 0 #fff inset,0 2px 2px #0002,0 24px 50px -20px #0a1a3a99;position:relative;padding:64px 84px 70px}
+.sheet::before,.sheet::after{content:"";position:absolute;left:0;right:0;height:14px;pointer-events:none}
+.sheet::before{top:33.3%;background:linear-gradient(#0000,#0000000a 45%,#ffffff99 50%,#0000 100%)}
+.sheet::after{top:66.6%;background:linear-gradient(#0000,#0000000a 45%,#ffffff99 50%,#0000 100%)}
+.lh{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;padding-bottom:16px;border-bottom:1px solid var(--ink);position:relative}
+.lh::after{content:"";position:absolute;left:0;right:0;bottom:-5px;border-bottom:.5px solid var(--ink)}
+.mono{width:62px;height:62px;border:1.5px solid var(--ink);display:grid;place-items:center;font-family:var(--head);font-weight:700;font-size:40px;line-height:1}
+.lh h1{font-family:var(--head);font-weight:600;font-size:36px;letter-spacing:.2em;text-transform:uppercase;line-height:1}
+.lh h1 small{display:block;font-family:var(--serif);font-size:13px;font-style:italic;letter-spacing:.06em;text-transform:none;margin-top:6px;color:var(--ink-soft)}
+.contact{display:flex;justify-content:space-between;font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin-top:12px;color:var(--ink-soft);gap:10px;flex-wrap:wrap}
+.meta{margin-top:38px;display:grid;grid-template-columns:1fr auto;gap:20px}
+.addr{line-height:1.4}
+.date{font-style:italic;text-align:right}
+.re{margin:30px 0 22px;font-weight:500;letter-spacing:.02em}
+.re span{font-variant:small-caps;letter-spacing:.1em;margin-right:12px}
+.sheet p{margin-bottom:16px;text-wrap:pretty}
+.sheet p.first::first-letter{font-family:var(--head);font-weight:700;font-size:3.4em;float:left;line-height:.8;padding:6px 8px 0 0}
+.para{display:grid;grid-template-columns:34px 1fr;gap:6px}
+.para b{font-family:var(--head);font-size:24px;line-height:1.1;color:var(--seal);font-weight:700}
+.para p strong{font-weight:500;font-variant:small-caps;letter-spacing:.06em}
+/* fee schedule — dot leaders */
+.fees{margin:26px 0 28px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:14px 0}
+.fees h3{font-family:var(--head);font-size:15px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.fees div{display:flex;align-items:baseline;gap:8px;padding:3px 0}
+.fees div span:nth-child(2){flex:1;border-bottom:1.5px dotted var(--ink-soft);transform:translateY(-4px)}
+.fees div em{font-style:normal;font-size:15px;color:var(--ink-soft);display:block}
+.fees div b{font-weight:500;font-variant-numeric:tabular-nums}
+.close{margin-top:30px}
+.sig{font-family:var(--sig);font-size:66px;line-height:1;margin:2px 0 -6px -4px;color:#0d2a6b;transform:rotate(-3deg);transform-origin:left;display:block}
+.who{line-height:1.35}
+.who small{display:block;font-size:14px;color:var(--ink-soft);font-style:italic}
+.ps{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-size:18px}
+.ps b{font-family:var(--head);font-weight:700;letter-spacing:.06em}
+.ps a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--seal);padding-bottom:1px}
+.ps a:hover{background:#9b1c1c14}
+.seal{position:absolute;right:70px;bottom:70px;width:78px;height:78px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#c23030,var(--seal) 60%,#6e1010);box-shadow:0 3px 5px #0005,inset 0 0 0 5px #9b1c1c,inset 0 0 0 6px #ffffff33;display:grid;place-items:center;font-family:var(--head);font-weight:700;font-size:34px;color:#d94a4a;text-shadow:0 1px 0 #ffffff33,0 -1px 0 #0006;transform:rotate(8deg)}
+.pgfoot{margin-top:44px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);display:flex;justify-content:space-between;border-top:.5px solid var(--ink);padding-top:8px}
+/* enclosures */
+.enc{display:flex;flex-direction:column;gap:30px;position:sticky;top:24px}
+.slip{background:var(--slip);box-shadow:0 1px 1px #0002,0 14px 28px -16px #0a1a3a99;padding:20px 20px 22px;font-family:var(--type);font-size:13px;line-height:1.5;position:relative}
+.slip.a{transform:rotate(1.2deg)}
+.slip.b{transform:rotate(-1deg);background:#fff}
+.slip h4{font-family:var(--head);font-size:14px;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid var(--ink);padding-bottom:6px;margin-bottom:10px}
+.slip .tag{position:absolute;top:-12px;left:14px;background:var(--ink);color:#fff;font-size:10.5px;letter-spacing:.14em;padding:2px 8px;text-transform:uppercase}
+.slip ul{list-style:none}
+.slip li{padding:4px 0;border-bottom:1px dotted #0004}
+.slip.b::before{content:"";position:absolute;left:-1px;right:-1px;top:-1px;height:14px;background:radial-gradient(circle at 7px 0,var(--desk) 4px,transparent 4.5px) 0 0/14px 14px repeat-x}
+.cb{display:flex;gap:10px;align-items:flex-start;padding:5px 0;cursor:pointer}
+.cb i{width:14px;height:14px;border:1.5px solid var(--ink);flex:none;margin-top:3px;position:relative}
+.cb input{position:absolute;opacity:0}
+.cb input:checked+i::after{content:"";position:absolute;inset:1px;background:var(--seal)}
+.line{border-bottom:1px solid var(--ink);height:26px;margin:2px 0 4px;color:#889;font-size:11px;padding-top:6px}
+.send{display:block;margin-top:12px;text-align:center;background:var(--seal);color:#fff;text-decoration:none;letter-spacing:.14em;text-transform:uppercase;padding:10px;font-size:12px}
+.send:hover{background:#7d1414}
+.stamp{position:absolute;top:-16px;right:-8px;width:56px;height:68px;background:#fff;border:1px solid #0003;padding:4px;transform:rotate(5deg);box-shadow:0 2px 4px #0003}
+.stamp div{width:100%;height:100%;border:2px dashed var(--seal);display:grid;place-items:center;font-family:var(--head);font-weight:700;color:var(--seal);font-size:11px;text-align:center;line-height:1.1}
+@media (max-width:1020px){.desk{grid-template-columns:1fr}.enc{position:static}.sheet{padding:40px 28px}.seal{display:none}.lh h1{font-size:26px}}
+</style>
+</head>
+<body>
+<div class="desk">
+  <article class="sheet">
+    <header class="lh">
+      <div class="mono">L</div>
+      <h1>Letter &amp; Company<small>Websites made to measure, housed and kept in good order</small></h1>
+    </header>
+    <div class="contact"><span>14 Mercer Lane, Suite 3</span><span>hello@letter.studio</span><span>Established 2017</span></div>
+
+    <div class="meta">
+      <div class="addr">To the Proprietor<br>of a business with an out-of-date website<br><em>Wherever you are</em></div>
+      <div class="date">2 October 2026</div>
+    </div>
+
+    <p class="re"><span>Re:</span>A website built for you, housed with us, and kept in order thereafter.</p>
+
+    <p>Dear Proprietor,</p>
+    <p class="first">I am writing because most businesses we meet are paying for a website that no longer does its job. It may have been drawn from a template, or built by a relation, and nobody now has the responsibility of keeping it standing. We should like to relieve you of that. Our practice is simple, and it comes in three parts.</p>
+
+    <div class="para"><b>I.</b><p><strong>The work.</strong> We design and write the code for your website by hand, for your business alone. You receive a written scope and a fixed price before we begin, and you own the result outright.</p></div>
+    <div class="para"><b>II.</b><p><strong>The housing.</strong> We host the finished site on our own network. It is fast, backed up each night and watched around the clock. Should anything fail, the alarm sounds at our desk and not yours.</p></div>
+    <div class="para"><b>III.</b><p><strong>The keeping.</strong> Each month we make up to four changes at your request, apply every security update, and once a quarter we write to you plainly about how the site is performing.</p></div>
+
+    <div class="fees">
+      <h3>Schedule of fees</h3>
+      <div><span>The work <em>(one-time, from)</em></span><span></span><b>$4,500</b></div>
+      <div><span>The housing <em>(monthly)</em></span><span></span><b>$49</b></div>
+      <div><span>The keeping <em>(monthly)</em></span><span></span><b>$199</b></div>
+    </div>
+
+    <p>There are no contracts beyond the scope itself. Hosting and care run month to month, and should you wish to leave, we shall hand over every file with our compliments.</p>
+
+    <div class="close">
+      <p>Yours sincerely,</p>
+      <span class="sig">Margaret Lowe</span>
+      <div class="who">Margaret Lowe<small>Principal, Letter &amp; Company</small></div>
+    </div>
+
+    <p class="ps"><b>P.S.</b> A reply is all it takes. Write to <a href="mailto:hello@letter.studio">hello@letter.studio</a> with the address of your current site, and we shall answer by return of post, or very nearly.</p>
+
+    <div class="pgfoot"><span>Letter &amp; Company · Website studio</span><span>Page 1 of 1</span></div>
+    <div class="seal">L</div>
+  </article>
+
+  <aside class="enc" aria-label="Enclosures">
+    <div class="slip a"><span class="tag">Encl. 1</span>
+      <h4>What you receive</h4>
+      <ul><li>A written scope and fixed price</li><li>Design and code made for you</li><li>All source files, yours to keep</li><li>Hosting on our network</li><li>Nightly backups and monitoring</li><li>Four changes a month, if kept</li><li>A quarterly written report</li></ul>
+    </div>
+    <div class="slip b"><span class="stamp"><div>REPLY<br>PAID</div></span><span class="tag">Encl. 2</span>
+      <h4>Reply card</h4>
+      <label class="cb"><input type="checkbox" checked><i></i><span>Please write to me about a new website</span></label>
+      <label class="cb"><input type="checkbox"><i></i><span>I have a site; please review it</span></label>
+      <label class="cb"><input type="checkbox"><i></i><span>Tell me about hosting and care alone</span></label>
+      <div class="line">Name</div><div class="line">Address of current site</div>
+      <a class="send" href="mailto:hello@letter.studio">Post this reply</a>
+    </div>
+  </aside>
+</div>
+</body>
+</html>

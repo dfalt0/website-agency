@@ -1,0 +1,13 @@
+:root {
+  --paper: #f2f7fa;
+  --ink: #0b2545;
+  --hatch: #8da9c4;
+  --tint: #dfeaf3;
+  --call: #ff5a1f;
+  --call-bg: #ffe6da;
+  --mute: #4c6482;
+  --sans: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mono: "Overpass Mono", ui-monospace, Consolas, monospace;
+  --line-w: 1.5px;
+  --grid: 40px;
+}

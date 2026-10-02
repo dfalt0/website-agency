@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Theater — three programs that run your website</title>
+<style>
+:root{--bg:#e9ecef;--panel:#fff;--soft:#f5f6f8;--line:#d6dadf;--ink:#12161b;--mute:#66707c;--acc:#1f5bff;--accsoft:#e6edff;--ok:#1e9e5a;--warn:#c98a00;--bad:#d03a3a;
+ --sans:system-ui,"Inter","Segoe UI",sans-serif;--mono:ui-monospace,"JetBrains Mono",Consolas,monospace}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--sans);display:grid;grid-template-rows:auto 1fr auto;min-height:100vh}
+button{font:inherit;cursor:pointer}
+/* app bar */
+.bar{display:flex;align-items:center;gap:18px;padding:0 18px;height:52px;background:var(--panel);border-bottom:1px solid var(--line)}
+.logo{font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.logo i{width:14px;height:14px;background:var(--acc);display:block;clip-path:polygon(0 0,100% 50%,0 100%)}
+.crumbs{color:var(--mute);font-size:13px}
+.crumbs b{color:var(--ink);font-weight:500}
+.spacer{flex:1}
+.pp{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel);height:32px;padding:0 12px 0 8px;border-radius:6px;font-size:13px}
+.pp:hover{border-color:var(--acc)}
+.pp svg{width:16px;height:16px}
+.live{font:11px var(--mono);color:var(--mute);display:flex;align-items:center;gap:6px}
+.live i{width:7px;height:7px;border-radius:50%;background:var(--ok)}
+.paused .live i{background:var(--warn)}
+.playing .live i{animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.25}}
+/* body */
+.app{display:grid;grid-template-columns:320px 1fr;min-height:0}
+.list{background:var(--soft);border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:6px;overflow:auto}
+.list h1{font:600 22px/1.15 var(--sans);letter-spacing:-.02em;margin:4px 6px 4px}
+.list > p{color:var(--mute);margin:0 6px 14px;font-size:13px}
+.lbl{font:11px var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--mute);margin:10px 6px 4px}
+.prog{display:grid;grid-template-columns:34px 1fr auto;gap:2px 12px;text-align:left;border:1px solid transparent;background:transparent;padding:12px;border-radius:8px;position:relative;color:inherit}
+.prog:hover{background:#fff;border-color:var(--line)}
+.prog.on{background:#fff;border-color:var(--acc);box-shadow:0 1px 0 var(--acc)}
+.prog .ic{grid-row:1/3;width:34px;height:34px;border-radius:8px;background:var(--accsoft);color:var(--acc);display:grid;place-items:center;font:600 13px var(--mono)}
+.prog b{font-weight:600}
+.prog small{color:var(--mute);font-size:12px;grid-column:2/4}
+.prog .st{font:11px var(--mono);color:var(--ok);display:flex;align-items:center;gap:5px}
+.prog .st::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.prog .mini{grid-column:1/-1;height:3px;background:var(--line);border-radius:2px;overflow:hidden;margin-top:8px;opacity:0}
+.prog.on .mini{opacity:1}
+.mini i{display:block;height:100%;width:0;background:var(--acc)}
+.main{padding:22px 26px;overflow:auto}
+.panel[hidden]{display:none}
+.panel{display:grid;gap:16px;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+.ph{display:flex;justify-content:space-between;align-items:flex-end;gap:16px}
+.ph h2{font:600 26px/1.1 var(--sans);letter-spacing:-.02em}
+.ph p{color:var(--mute);max-width:56ch;margin-top:4px}
+.chips{display:flex;gap:6px}
+.chip{font:11px var(--mono);border:1px solid var(--line);background:#fff;padding:3px 8px;border-radius:4px;color:var(--mute)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.card > header{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;font-weight:600;font-size:13px}
+.card > header span{font:11px var(--mono);color:var(--mute);font-weight:400}
+.g2{display:grid;grid-template-columns:1.5fr 1fr;gap:16px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font:11px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--mute);padding:8px 14px;background:var(--soft);border-bottom:1px solid var(--line);font-weight:400}
+td{padding:9px 14px;border-bottom:1px solid #eceef1}
+tr:last-child td{border-bottom:0}
+tr:hover td{background:#fafbfc}
+.mono{font-family:var(--mono);font-size:12px}
+.b{font:11px var(--mono);padding:2px 7px;border-radius:4px;display:inline-block}
+.b.ok{background:#e4f5ec;color:var(--ok)}.b.run{background:var(--accsoft);color:var(--acc)}.b.wait{background:#f1f2f4;color:var(--mute)}.b.warn{background:#fbf1d8;color:var(--warn)}
+.pb{height:5px;background:#eceef1;border-radius:3px;min-width:90px;overflow:hidden}
+.pb i{display:block;height:100%;background:var(--acc);width:var(--w,0%);transition:width .8s}
+.log{background:#101419;color:#b9c4cf;font:12px/1.7 var(--mono);padding:12px 14px;height:178px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
+.log div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.log .t{color:#5d6a77}.log .g{color:#6fcf97}.log .y{color:#e5c06a}
+/* browser mock */
+.mock{padding:12px;background:var(--soft)}
+.mock .win{border:1px solid var(--line);background:#fff;border-radius:6px;overflow:hidden}
+.mock .tb{height:20px;background:#eceef1;display:flex;gap:4px;align-items:center;padding:0 8px}
+.mock .tb i{width:6px;height:6px;border-radius:50%;background:#c3c9d0}
+.mock .pg{padding:12px;display:grid;gap:7px}
+.mock .pg span{display:block;background:#e3e7eb;height:8px;border-radius:2px}
+.mock .pg .h{height:16px;width:60%;background:var(--ink)}
+.mock .pg .hero{height:54px;background:var(--accsoft)}
+.mock .pg .r{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.spark{display:flex;align-items:flex-end;gap:3px;height:56px;padding:10px 14px 0}
+.spark i{flex:1;background:var(--acc);opacity:.85;height:var(--h);border-radius:1px 1px 0 0;transition:height .6s}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr)}
+.kpis div{padding:12px 14px;border-right:1px solid var(--line)}
+.kpis div:last-child{border:0}
+.kpis b{display:block;font:600 22px var(--sans);letter-spacing:-.02em}
+.kpis span{color:var(--mute);font-size:12px}
+/* form */
+form{display:grid;gap:12px;padding:16px;max-width:560px}
+label{display:grid;gap:4px;font-size:12px;color:var(--mute)}
+input,select,textarea{border:1px solid var(--line);background:#fff;padding:9px 10px;border-radius:6px;font:inherit;color:var(--ink);outline:0}
+input:focus,select:focus,textarea:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--accsoft)}
+.go{justify-self:start;background:var(--acc);color:#fff;border:0;padding:10px 16px;border-radius:6px;font-weight:600}
+.go:hover{background:#1747d1}
+.ack{color:var(--ok);font:12px var(--mono);min-height:1.3em}
+.foot{display:flex;gap:20px;padding:0 18px;height:30px;align-items:center;background:var(--panel);border-top:1px solid var(--line);font:11px var(--mono);color:var(--mute)}
+@media (max-width:900px){.app{grid-template-columns:1fr}.list{border-right:0;border-bottom:1px solid var(--line)}.g2{grid-template-columns:1fr}.crumbs{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body class="playing" id="body">
+<header class="bar">
+  <div class="logo"><i></i>Theater</div>
+  <div class="crumbs">Your site / <b id="crumb">Build</b></div>
+  <div class="spacer"></div>
+  <div class="live"><i></i><span id="livetxt">demo running</span></div>
+  <button class="pp" id="pp" aria-label="Pause demo">
+    <svg viewBox="0 0 16 16" id="ico"><rect x="3" y="2" width="3.4" height="12" fill="currentColor"/><rect x="9.6" y="2" width="3.4" height="12" fill="currentColor"/></svg>
+    <span id="pptxt">Pause</span>
+  </button>
+</header>
+
+<div class="app">
+  <nav class="list" aria-label="Programs">
+    <h1>Three programs run your website.</h1>
+    <p>Custom build, our hosting, ongoing care. Watch each one work, or take over the demo.</p>
+    <div class="lbl">Programs</div>
+    <button class="prog on" data-i="0"><span class="ic">BLD</span><b>Build</b><span class="st">running</span><small>Design and write the site</small><span class="mini"><i></i></span></button>
+    <button class="prog" data-i="1"><span class="ic">HST</span><b>Host</b><span class="st">running</span><small>Serve, secure, back up</small><span class="mini"><i></i></span></button>
+    <button class="prog" data-i="2"><span class="ic">CRE</span><b>Care</b><span class="st">running</span><small>Fix, update, report</small><span class="mini"><i></i></span></button>
+    <div class="lbl">Manual</div>
+    <button class="prog" data-i="3"><span class="ic">NEW</span><b>Start a run</b><span class="st" style="color:var(--acc)">ready</span><small>Tell us about your site</small><span class="mini"><i></i></span></button>
+  </nav>
+
+  <main class="main">
+    <!-- BUILD -->
+    <section class="panel" data-p="0">
+      <div class="ph"><div><h2>Build</h2><p>A named designer-developer team ships your custom site to a staging link first, then to production.</p></div><div class="chips"><span class="chip">scope: fixed</span><span class="chip">3–5 wks</span></div></div>
+      <div class="g2">
+        <div class="card"><header>Pipeline <span>run #0417</span></header>
+          <table>
+            <tr><th>Stage</th><th>Owner</th><th>Status</th><th>Progress</th></tr>
+            <tr><td>Brief &amp; sitemap</td><td class="mono">strategist</td><td><span class="b ok">done</span></td><td><div class="pb" style="--w:100%"><i></i></div></td></tr>
+            <tr><td>Design direction</td><td class="mono">designer</td><td><span class="b ok">approved</span></td><td><div class="pb" style="--w:100%"><i></i></div></td></tr>
+            <tr><td>Build pages</td><td class="mono">developer</td><td><span class="b run">running</span></td><td><div class="pb live-pb" style="--w:62%"><i></i></div></td></tr>
+            <tr><td>Acceptance checks</td><td class="mono">qa</td><td><span class="b wait">queued</span></td><td><div class="pb" style="--w:0%"><i></i></div></td></tr>
+            <tr><td>Launch</td><td class="mono">ops</td><td><span class="b wait">queued</span></td><td><div class="pb" style="--w:0%"><i></i></div></td></tr>
+          </table></div>
+        <div class="card"><header>Staging preview <span>staging.acme.site</span></header>
+          <div class="mock"><div class="win"><div class="tb"><i></i><i></i><i></i></div><div class="pg"><span class="h"></span><span class="hero"></span><div class="r"><span style="height:30px"></span><span style="height:30px"></span><span style="height:30px"></span></div><span style="width:80%"></span><span style="width:55%"></span></div></div></div></div>
+      </div>
+      <div class="card"><header>Activity <span>live</span></header><div class="log" data-log="0"></div></div>
+    </section>
+
+    <!-- HOST -->
+    <section class="panel" data-p="1" hidden>
+      <div class="ph"><div><h2>Host</h2><p>Your site runs on infrastructure we operate: edge cache, TLS, daily backups, tested rollback.</p></div><div class="chips"><span class="chip">region: auto</span><span class="chip">backups: 30d</span></div></div>
+      <div class="card"><div class="kpis"><div><b>99.98%</b><span>uptime, 30 days</span></div><div><b>0.8s</b><span>median load</span></div><div><b>41</b><span>deploys, all rolled forward</span></div></div>
+        <div class="spark" id="spark"></div></div>
+      <div class="g2">
+        <div class="card"><header>Deployments <span>production</span></header>
+          <table><tr><th>Rev</th><th>Change</th><th>Region</th><th>Status</th></tr>
+            <tr><td class="mono">r41</td><td>Holiday hours</td><td class="mono">eu-central</td><td><span class="b ok">live</span></td></tr>
+            <tr><td class="mono">r40</td><td>Contact form fix</td><td class="mono">eu-central</td><td><span class="b wait">standby</span></td></tr>
+            <tr><td class="mono">r39</td><td>New team page</td><td class="mono">eu-central</td><td><span class="b wait">archived</span></td></tr>
+            <tr><td class="mono">r42</td><td>Pricing table</td><td class="mono">gate</td><td><span class="b warn">checking</span></td></tr>
+          </table></div>
+        <div class="card"><header>Health <span>auto</span></header>
+          <table><tr><td>TLS certificate</td><td class="mono">52d</td><td><span class="b ok">ok</span></td></tr>
+            <tr><td>Nightly backup</td><td class="mono">03:00</td><td><span class="b ok">ok</span></td></tr>
+            <tr><td>Form delivery</td><td class="mono">5m probe</td><td><span class="b ok">ok</span></td></tr>
+            <tr><td>DNS</td><td class="mono">verified</td><td><span class="b ok">ok</span></td></tr></table></div>
+      </div>
+      <div class="card"><header>Activity <span>live</span></header><div class="log" data-log="1"></div></div>
+    </section>
+
+    <!-- CARE -->
+    <section class="panel" data-p="2" hidden>
+      <div class="ph"><div><h2>Care</h2><p>Monthly inspection plus a request queue. You email a change; a person ships it and logs it.</p></div><div class="chips"><span class="chip">plan: care-8h</span><span class="chip">reply: ≤ 1 day</span></div></div>
+      <div class="g2">
+        <div class="card"><header>Request queue <span>this month</span></header>
+          <table><tr><th>ID</th><th>Request</th><th>Status</th><th>Hrs</th></tr>
+            <tr><td class="mono">C-118</td><td>Swap team photo</td><td><span class="b ok">shipped</span></td><td class="mono">0.4</td></tr>
+            <tr><td class="mono">C-119</td><td>Add spring menu page</td><td><span class="b run">in progress</span></td><td class="mono">2.0</td></tr>
+            <tr><td class="mono">C-120</td><td>Fix broken link in footer</td><td><span class="b ok">shipped</span></td><td class="mono">0.1</td></tr>
+            <tr><td class="mono">C-121</td><td>Booking form: add phone</td><td><span class="b wait">queued</span></td><td class="mono">0.5</td></tr>
+          </table></div>
+        <div class="card"><header>Monthly pass <span>Oct</span></header>
+          <table><tr><td>Dependencies patched</td><td><span class="b ok">9 / 9</span></td></tr>
+            <tr><td>Broken links</td><td><span class="b ok">0</span></td></tr>
+            <tr><td>Search index</td><td><span class="b ok">fresh</span></td></tr>
+            <tr><td>Hours used</td><td class="mono">3.0 / 8.0</td></tr></table></div>
+      </div>
+      <div class="card"><header>Activity <span>live</span></header><div class="log" data-log="2"></div></div>
+    </section>
+
+    <!-- FORM -->
+    <section class="panel" data-p="3" hidden>
+      <div class="ph"><div><h2>Start a run</h2><p>Describe the site. We answer with scope, a staging date, and a monthly plan.</p></div></div>
+      <div class="card"><header>New engagement <span>manual</span></header>
+        <form id="f">
+          <label>Name<input required></label>
+          <label>Email<input required type="email"></label>
+          <label>Programs<select><option>Build + Host + Care</option><option>Host + Care for my existing site</option><option>Build only</option></select></label>
+          <label>Current site<input placeholder="https://"></label>
+          <label>Notes<textarea rows="3"></textarea></label>
+          <button class="go">Dispatch</button><div class="ack" id="ack" role="status"></div>
+        </form></div>
+    </section>
+  </main>
+</div>
+<footer class="foot"><span>Theater</span><span>custom websites · hosting · care</span><span class="spacer"></span><span id="clock">00:00:00</span></footer>
+
+<script>
+const names=["Build","Host","Care","Start a run"];
+const logs=[
+ ["<span class='t'>[dev]</span> compiling /about … <span class='g'>ok</span>","<span class='t'>[dev]</span> image pass: 14 files, −62% weight","<span class='t'>[qa]</span> mobile 320px layout check <span class='g'>pass</span>","<span class='t'>[dev]</span> form → inbox route verified","<span class='t'>[design]</span> client comment resolved: logo size","<span class='t'>[dev]</span> compiling /services … <span class='g'>ok</span>","<span class='t'>[qa]</span> keyboard focus order <span class='y'>1 issue</span>","<span class='t'>[dev]</span> fix applied, re-run <span class='g'>pass</span>"],
+ ["<span class='t'>[edge]</span> cache warm: 128 paths","<span class='t'>[gate]</span> r42 visual-diff <span class='g'>pass</span>","<span class='t'>[gate]</span> r42 headers audit <span class='g'>pass</span>","<span class='t'>[vault]</span> snapshot 03:00 stored, 30 retained","<span class='t'>[watch]</span> probe /contact <span class='g'>200 · 212ms</span>","<span class='t'>[tls]</span> renewal not needed (52d)","<span class='t'>[gate]</span> r42 load test <span class='y'>LCP 1.9s</span>","<span class='t'>[gate]</span> r42 held for review"],
+ ["<span class='t'>[care]</span> C-119 draft page staged","<span class='t'>[care]</span> weekly patch review: 3 updates","<span class='t'>[care]</span> C-121 estimated 0.5h","<span class='t'>[report]</span> compiling October summary","<span class='t'>[care]</span> link sweep: 214 checked, 0 broken","<span class='t'>[care]</span> reply sent to owner on C-119","<span class='t'>[care]</span> search console: 2 new queries","<span class='t'>[care]</span> hours used 3.0 / 8.0"]];
+const body=document.getElementById('body'),panels=[...document.querySelectorAll('.panel')],progs=[...document.querySelectorAll('.prog')];
+let cur=0,playing=true,pinned=false,tick=0,li=[0,0,0];
+function show(i){cur=i;panels.forEach((p,k)=>p.hidden=k!==i);progs.forEach((p,k)=>p.classList.toggle('on',k===i));document.getElementById('crumb').textContent=names[i];}
+progs.forEach((p,i)=>{p.addEventListener('mouseenter',()=>{if(!pinned)show(i)});p.addEventListener('focus',()=>show(i));p.addEventListener('click',()=>{pinned=true;show(i)});});
+const pp=document.getElementById('pp');
+function setPlay(v){playing=v;body.classList.toggle('playing',v);body.classList.toggle('paused',!v);document.getElementById('pptxt').textContent=v?'Pause':'Play';
+ document.getElementById('livetxt').textContent=v?'demo running':'demo paused';
+ document.getElementById('ico').innerHTML=v?'<rect x="3" y="2" width="3.4" height="12" fill="currentColor"/><rect x="9.6" y="2" width="3.4" height="12" fill="currentColor"/>':'<path d="M4 2l10 6-10 6z" fill="currentColor"/>';
+ if(v)pinned=false;}
+pp.addEventListener('click',()=>setPlay(!playing));
+// spark
+const sp=document.getElementById('spark');for(let i=0;i<48;i++){const e=document.createElement('i');e.style.setProperty('--h',(40+Math.random()*55)+'%');sp.appendChild(e);}
+// loop
+setInterval(()=>{
+  const clock=new Date();document.getElementById('clock').textContent=clock.toTimeString().slice(0,8);
+  if(!playing)return;tick++;
+  // log
+  if(cur<3){const lg=document.querySelector('[data-log="'+cur+'"]');const d=document.createElement('div');d.innerHTML=logs[cur][li[cur]++%logs[cur].length];lg.appendChild(d);while(lg.children.length>8)lg.firstChild.remove();}
+  // progress
+  const mini=progs[cur].querySelector('.mini i');mini.style.width=Math.min(100,((tick%12)+1)/12*100)+'%';
+  const pb=document.querySelector('.panel[data-p="0"] .live-pb');if(cur===0)pb.style.setProperty('--w',(62+(tick%30))+'%');
+  const bars=sp.children;const b=bars[Math.floor(Math.random()*bars.length)];b.style.setProperty('--h',(40+Math.random()*55)+'%');
+  if(!pinned&&tick%12===0)show((cur+1)%3);
+},900);
+document.getElementById('f').addEventListener('submit',e=>{e.preventDefault();document.getElementById('ack').textContent='Run queued: #'+Math.floor(1000+Math.random()*9000)+'. A named lead replies within one business day.';e.target.reset();});
+</script>
+</body>
+</html>

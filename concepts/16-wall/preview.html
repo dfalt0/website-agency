@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wall — your website, on the board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e13; --panel:#10161d; --panel-hi:#151d26; --line:#233040; --line-soft:#182230;
+  --text:#d5dde6; --dim:#7b8b9d; --faint:#4a596a;
+  --ok:#3fcf8e; --warn:#ffb020; --bad:#ff4d4d; --info:#5aa9ff;
+  --display:"Barlow Condensed","Arial Narrow",Impact,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:var(--mono);font-size:12px;line-height:1.45}
+body{min-height:100vh;display:flex;flex-direction:column}
+a{color:inherit;text-decoration:none}
+/* top bar */
+.bar{display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;border-bottom:1px solid var(--line);background:#0c1117;position:sticky;top:0;z-index:5}
+.bar>*{padding:8px 14px;display:flex;align-items:center;gap:14px}
+.brand{font-family:var(--display);font-size:22px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-right:1px solid var(--line)}
+.brand b{color:var(--ok)}
+.bar nav{gap:0;padding:0}
+.bar nav a{padding:0 16px;height:100%;display:flex;align-items:center;color:var(--dim);border-right:1px solid var(--line-soft);text-transform:uppercase;letter-spacing:.1em;font-size:11px}
+.bar nav a:hover,.bar nav a.on{background:var(--panel-hi);color:var(--text)}
+.clock{border-left:1px solid var(--line);color:var(--dim);font-variant-numeric:tabular-nums}
+.clock strong{color:var(--text);font-weight:500}
+/* status ribbon */
+.ribbon{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr 1fr;border-bottom:1px solid var(--line)}
+.ribbon>div{padding:14px 16px;border-right:1px solid var(--line);background:var(--panel)}
+.ribbon>div:last-child{border-right:0}
+.ribbon .k{color:var(--dim);text-transform:uppercase;letter-spacing:.12em;font-size:10px}
+.ribbon .v{font-family:var(--display);font-size:44px;line-height:1;font-weight:600;margin-top:4px}
+.ribbon .v small{font-size:18px;color:var(--dim);font-family:var(--mono);font-weight:400;margin-left:4px}
+.hero-cell{background:var(--ok)!important;color:#04150d}
+.hero-cell .k{color:#0a3a24}
+.hero-cell .v{font-size:56px}
+.hero-cell p{font-size:12px;margin-top:6px;max-width:34ch;font-weight:500}
+/* grid */
+.wall{flex:1;display:grid;gap:1px;background:var(--line);grid-template-columns:repeat(12,1fr);grid-auto-rows:minmax(0,auto)}
+.p{background:var(--panel);padding:0;min-width:0;display:flex;flex-direction:column}
+.p>h2{font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);padding:8px 12px;border-bottom:1px solid var(--line-soft);display:flex;justify-content:space-between;background:#0d131a}
+.p>h2 span{color:var(--faint)}
+.p .body{padding:12px;flex:1}
+.c-uptime{grid-column:span 7}
+.c-deploy{grid-column:span 5}
+.c-tickets{grid-column:span 5}
+.c-ssl{grid-column:span 3}
+.c-latency{grid-column:span 4}
+.c-plans{grid-column:span 8}
+.c-open{grid-column:span 4}
+/* uptime */
+.site{display:grid;grid-template-columns:150px 1fr 64px;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line-soft)}
+.site:last-child{border:0}
+.site .n{color:var(--text)}
+.site .n i{font-style:normal;display:block;color:var(--faint);font-size:10px}
+.cells{display:grid;grid-template-columns:repeat(90,1fr);gap:1px;height:20px}
+.cells s{background:var(--ok);opacity:.85;display:block}
+.cells s.w{background:var(--warn);opacity:1}
+.cells s.b{background:var(--bad);opacity:1}
+.site .pct{text-align:right;color:var(--ok);font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:14px;color:var(--faint);font-size:10px;margin-top:8px}
+.legend i{display:inline-block;width:8px;height:8px;margin-right:5px;vertical-align:-1px}
+/* log */
+.log{font-size:11px;max-height:300px;overflow:hidden}
+.log div{display:grid;grid-template-columns:62px 52px 1fr;gap:8px;padding:3px 0;border-bottom:1px solid var(--line-soft)}
+.log time{color:var(--faint)}
+.tag{font-weight:600}
+.tag.ok{color:var(--ok)}.tag.warn{color:var(--warn)}.tag.info{color:var(--info)}.tag.bad{color:var(--bad)}
+.log div.new{background:#16241d;animation:flash 1.6s ease-out forwards}
+@keyframes flash{to{background:transparent}}
+/* tickets */
+table{width:100%;border-collapse:collapse}
+th{font-weight:500;text-align:left;color:var(--faint);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:0 6px 6px 0}
+td{padding:6px 6px 6px 0;border-top:1px solid var(--line-soft);vertical-align:top}
+td.id{color:var(--info)}
+.pill{padding:1px 6px;border:1px solid currentColor;font-size:10px;text-transform:uppercase;letter-spacing:.08em}
+.pill.ok{color:var(--ok)}.pill.warn{color:var(--warn)}.pill.info{color:var(--info)}
+.sla{font-variant-numeric:tabular-nums;color:var(--dim)}
+/* ssl */
+.ssl{display:grid;grid-template-columns:1fr 38px;gap:4px 8px;align-items:center;margin-bottom:9px}
+.ssl .meter{grid-column:1/-1;height:4px;background:var(--line-soft)}
+.ssl .meter i{display:block;height:100%;background:var(--ok)}
+.ssl .d{text-align:right;color:var(--text)}
+.ssl em{font-style:normal;color:var(--faint)}
+/* latency */
+.bigline{font-family:var(--display);font-size:64px;line-height:.9;font-weight:600}
+.bigline small{font-family:var(--mono);font-size:12px;color:var(--dim);font-weight:400;margin-left:6px}
+svg.spark{width:100%;height:90px;margin-top:10px;display:block}
+.kv{display:grid;grid-template-columns:1fr auto;gap:2px 10px;margin-top:10px;color:var(--dim)}
+.kv b{color:var(--text);font-weight:500}
+/* plans (as rack rows) */
+.rack{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line-soft)}
+.unit{background:var(--panel);padding:14px;display:flex;flex-direction:column;gap:6px;position:relative}
+.unit:hover{background:var(--panel-hi)}
+.unit .u{color:var(--faint);font-size:10px;letter-spacing:.14em}
+.unit h3{font-family:var(--display);font-size:30px;line-height:1;text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.unit .pr{font-family:var(--display);font-size:42px;line-height:1;color:var(--warn);font-weight:600}
+.unit .pr small{font-family:var(--mono);color:var(--dim);font-size:11px;font-weight:400}
+.unit ul{list-style:none;color:var(--dim)}
+.unit li:before{content:"▪ ";color:var(--ok)}
+.led{position:absolute;top:14px;right:14px;width:8px;height:8px;background:var(--ok)}
+.led.blink{animation:b 1.4s steps(2) infinite}
+@keyframes b{50%{opacity:.2}}
+/* open ticket */
+.form{display:flex;flex-direction:column;gap:8px}
+.form label{display:block;color:var(--faint);font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px}
+.form .in{border:1px solid var(--line);background:#0a0f14;padding:7px 8px;color:var(--text)}
+.btn{display:block;background:var(--warn);color:#1a1000;font-weight:600;text-transform:uppercase;letter-spacing:.12em;padding:12px;text-align:center;font-size:12px;border:0;font-family:var(--mono)}
+.btn:hover{background:#ffc552}
+footer{border-top:1px solid var(--line);padding:8px 14px;color:var(--faint);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;background:#0c1117}
+@media (max-width:1000px){
+  .ribbon{grid-template-columns:1fr 1fr}.hero-cell{grid-column:1/-1}
+  .wall>*{grid-column:1/-1!important}
+  .bar{grid-template-columns:1fr auto}.bar nav{display:none}
+  .rack{grid-template-columns:1fr}
+  .site{grid-template-columns:100px 1fr 54px}
+}
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="brand" href="#">Wall<b>/</b>ops</a>
+  <nav><a class="on" href="#">Board</a><a href="#uptime">Uptime</a><a href="#plans">Plans</a><a href="#open">Open ticket</a></nav>
+  <div class="clock"><span>UTC <strong id="clk">00:00:00</strong></span></div>
+</header>
+
+<section class="ribbon">
+  <div class="hero-cell">
+    <div class="k">Studio status</div>
+    <div class="v">Nominal</div>
+    <p>Custom websites, hosted and watched. This is what a launch day looks like for the next 365.</p>
+  </div>
+  <div><div class="k">Fleet uptime · 90d</div><div class="v">99.98<small>%</small></div></div>
+  <div><div class="k">Deploys · 30d</div><div class="v" id="dcount">214</div></div>
+  <div><div class="k">Median first reply</div><div class="v">38<small>min</small></div></div>
+  <div><div class="k">Certs expiring &lt;14d</div><div class="v">0</div></div>
+</section>
+
+<main class="wall">
+  <section class="p c-uptime" id="uptime">
+    <h2>01 / Uptime · 90 days <span>sample client fleet</span></h2>
+    <div class="body">
+      <div id="sites"></div>
+      <div class="legend"><span><i style="background:var(--ok)"></i>up</span><span><i style="background:var(--warn)"></i>degraded</span><span><i style="background:var(--bad)"></i>outage</span><span>← 90d ago · today →</span></div>
+    </div>
+  </section>
+
+  <section class="p c-deploy">
+    <h2>02 / Deploy feed <span>live</span></h2>
+    <div class="body log" id="log"></div>
+  </section>
+
+  <section class="p c-tickets">
+    <h2>03 / Care queue <span>4 open</span></h2>
+    <div class="body">
+      <table>
+        <thead><tr><th>ID</th><th>Request</th><th>State</th><th>SLA</th></tr></thead>
+        <tbody>
+          <tr><td class="id">CR-2291</td><td>Swap hero photo + new menu PDF</td><td><span class="pill info">in build</span></td><td class="sla">02:14</td></tr>
+          <tr><td class="id">CR-2290</td><td>Add booking form to /contact</td><td><span class="pill warn">review</span></td><td class="sla">05:40</td></tr>
+          <tr><td class="id">CR-2288</td><td>Redirect old /blog URLs</td><td><span class="pill ok">shipped</span></td><td class="sla">done</td></tr>
+          <tr><td class="id">CR-2285</td><td>Add team page, 6 profiles</td><td><span class="pill info">queued</span></td><td class="sla">23:00</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="p c-ssl">
+    <h2>04 / SSL <span>auto-renew</span></h2>
+    <div class="body">
+      <div class="ssl"><span>harborlaw.co<br><em>Let's Encrypt R11</em></span><span class="d">61d</span><div class="meter"><i style="width:68%"></i></div></div>
+      <div class="ssl"><span>fernandcole.com<br><em>Let's Encrypt R11</em></span><span class="d">44d</span><div class="meter"><i style="width:49%"></i></div></div>
+      <div class="ssl"><span>tidalphysio.ca<br><em>Let's Encrypt R10</em></span><span class="d">29d</span><div class="meter"><i style="width:32%;background:var(--warn)"></i></div></div>
+      <div class="ssl"><span>oakstreetdental.com<br><em>Let's Encrypt R11</em></span><span class="d">80d</span><div class="meter"><i style="width:89%"></i></div></div>
+      <div class="ssl"><span>kilnandco.shop<br><em>Let's Encrypt R11</em></span><span class="d">73d</span><div class="meter"><i style="width:81%"></i></div></div>
+    </div>
+  </section>
+
+  <section class="p c-latency">
+    <h2>05 / Edge latency <span>p50 · 24h</span></h2>
+    <div class="body">
+      <div class="bigline">142<small>ms to first byte</small></div>
+      <svg class="spark" viewBox="0 0 300 90" preserveAspectRatio="none">
+        <polyline fill="none" stroke="#5aa9ff" stroke-width="1.5" points="0,52 12,48 24,55 36,50 48,44 60,58 72,46 84,40 96,52 108,49 120,45 132,60 144,42 156,38 168,50 180,46 192,54 204,41 216,36 228,48 240,44 252,52 264,38 276,45 288,40 300,42"/>
+        <line x1="0" y1="70" x2="300" y2="70" stroke="#233040" stroke-dasharray="3 3"/>
+        <text x="2" y="82" fill="#4a596a" font-size="8" font-family="monospace">budget 400ms</text>
+      </svg>
+      <div class="kv"><span>Lighthouse perf (avg)</span><b>97</b><span>Core Web Vitals</span><b>pass</b><span>Backups, last verified</span><b>03:12 UTC</b></div>
+    </div>
+  </section>
+
+  <section class="p c-plans" id="plans">
+    <h2>06 / Service rack <span>what you get mounted</span></h2>
+    <div class="rack">
+      <div class="unit"><span class="led"></span><span class="u">U1 · BUILD</span><h3>Custom site</h3><div class="pr">$4,500<small> from, one-time</small></div><ul><li>Design + code, no templates</li><li>Content migration</li><li>You own the source</li></ul></div>
+      <div class="unit"><span class="led"></span><span class="u">U2 · HOST</span><h3>Hosting</h3><div class="pr">$49<small> /mo</small></div><ul><li>Edge CDN, SSL, daily backups</li><li>Uptime pager on us</li><li>Zero deploy fees</li></ul></div>
+      <div class="unit"><span class="led blink"></span><span class="u">U3 · CARE</span><h3>Care</h3><div class="pr">$199<small> /mo</small></div><ul><li>Up to 4 change requests</li><li>Patching and monitoring</li><li>Quarterly review call</li></ul></div>
+    </div>
+  </section>
+
+  <section class="p c-open" id="open">
+    <h2>07 / New project <span>intake</span></h2>
+    <div class="body form">
+      <div><label>Current site</label><div class="in">https://</div></div>
+      <div><label>What should it do</label><div class="in">Book appointments, show our work…</div></div>
+      <div><label>Launch by</label><div class="in">MM / YYYY</div></div>
+      <a class="btn" href="#">Open ticket →</a>
+      <p style="color:var(--faint);font-size:10px">A human replies with scope and a fixed price. Median 38 min, business hours.</p>
+    </div>
+  </section>
+</main>
+
+<footer><span>Wall — custom websites · hosting · care</span><span>Sample data shown for illustration</span><span>Status: all systems nominal</span></footer>
+
+<script>
+(function(){
+  var pad=function(n){return String(n).padStart(2,'0')};
+  var clk=document.getElementById('clk');
+  function tick(){var d=new Date();clk.textContent=pad(d.getUTCHours())+':'+pad(d.getUTCMinutes())+':'+pad(d.getUTCSeconds())}
+  tick();setInterval(tick,1000);
+
+  var seed=7;function rnd(){seed=(seed*16807)%2147483647;return seed/2147483647}
+  var sites=[['harborlaw.co','Law · custom build','100.00',[]],['fernandcole.com','Studio · portfolio','99.99',[61]],['tidalphysio.ca','Clinic · booking','99.97',[22,23]],['oakstreetdental.com','Dental · 14 pages','100.00',[]],['kilnandco.shop','Retail · catalog','99.94',[40,41,77]]];
+  var wrap=document.getElementById('sites');
+  sites.forEach(function(s){
+    var c='';for(var i=0;i<90;i++){var cls='';if(s[3].indexOf(i)>-1)cls=(i%2?'w':'b');c+='<s class="'+cls+'"></s>'}
+    wrap.insertAdjacentHTML('beforeend','<div class="site"><div class="n">'+s[0]+'<i>'+s[1]+'</i></div><div class="cells">'+c+'</div><div class="pct">'+s[2]+'%</div></div>');
+  });
+
+  var events=[['ok','DEPLOY','harborlaw.co  → v41 live (2m 08s)'],['info','BACKUP','oakstreetdental.com  snapshot verified'],['ok','DEPLOY','kilnandco.shop  → v87 live (1m 51s)'],['warn','WATCH','tidalphysio.ca  p95 +40ms, auto-scaled'],['ok','CERT','fernandcole.com  renewed, 90d'],['ok','DEPLOY','tidalphysio.ca  → v19 live (1m 33s)'],['info','CARE','CR-2291  moved to build']];
+  var log=document.getElementById('log');var n=0,dc=214;
+  function add(initial){
+    var e=events[n%events.length];n++;
+    var d=new Date(Date.now()-(initial?(7-n)*83000:0));
+    var row=document.createElement('div');if(!initial)row.className='new';
+    row.innerHTML='<time>'+pad(d.getUTCHours())+':'+pad(d.getUTCMinutes())+':'+pad(d.getUTCSeconds())+'</time><span class="tag '+e[0]+'">'+e[1]+'</span><span>'+e[2]+'</span>';
+    log.insertBefore(row,log.firstChild);
+    while(log.children.length>11)log.removeChild(log.lastChild);
+    if(!initial&&e[1]==='DEPLOY'){dc++;document.getElementById('dcount').textContent=dc}
+  }
+  for(var i=0;i<7;i++)add(true);
+  setInterval(function(){add(false)},4200);
+})();
+</script>
+</body>
+</html>

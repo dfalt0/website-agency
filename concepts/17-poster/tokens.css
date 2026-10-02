@@ -1,0 +1,9 @@
+:root {
+  --hi: #ffe600;
+  --ink: #0b0b0b;
+  --white: #ffffff;
+  --display: "Anton", Impact, "Arial Narrow Bold", sans-serif;
+  --sans: "Instrument Sans", Helvetica, Arial, sans-serif;
+  --rule: 2px;
+  --radius: 0;
+}

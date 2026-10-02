@@ -1,0 +1,20 @@
+/* Stage — blackout, velvet, brass, follow-spot */
+:root {
+  --black: #070608;
+  --pit: #0d0b0e;
+  --velvet: #5a0f1e;
+  --velvet-hi: #8a1d33;
+  --brass: #d9a441;
+  --spot: #ffe8b8;
+  --spot-rgb: 255, 232, 184;
+  --cue: #a89f93;
+  --playbill: #f3e9d2;
+
+  --font-display: "Bodoni Moda", "Didot", serif;
+  --font-body: "Jost", system-ui, sans-serif;
+  --font-dir: "Courier Prime", "Courier New", monospace;
+
+  --cone-angle: 54%;
+  --cone-alpha: 0.34;
+  --fade: 0.9s;
+}

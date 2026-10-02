@@ -1,0 +1,12 @@
+:root {
+  --soot: #1c1410;
+  --ash: #d9d2c5;
+  --copper: #b87333;
+  --ember: #e85d04;
+  --clay-body: #3d2b22;
+  --bone: #f0ebe3;
+  --font-heading: "Syne", system-ui, sans-serif;
+  --font-body: "Source Sans 3", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --radius: 0.35rem;
+}

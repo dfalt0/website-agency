@@ -34,18 +34,17 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: `${BRAND.name} — Custom AI Built With Engineers`,
+  title: `${BRAND.name} — Websites, Infrastructure & Growth`,
   description:
-    "AI consulting and custom app development for operating businesses. Discovery, MCPs, agent skills, and production software on modern stacks — built with engineers, not endless prompting.",
+    "Digital operations agency for businesses that want one team: websites and products, managed infrastructure, and growth creatives — handled end to end.",
   keywords: [
-    "AI consulting",
-    "custom AI apps",
-    "MCP development",
-    "agent skills",
-    "AI engineering",
-    "managed web services",
-    "Next.js",
-    "Convex",
+    "web agency",
+    "managed hosting",
+    "website development",
+    "digital operations",
+    "growth creatives",
+    "infrastructure management",
+    "Nodus",
   ],
 };
 

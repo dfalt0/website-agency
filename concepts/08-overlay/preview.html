@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Overlay — websites, hosting, care, surveyed</title>
+<style>
+:root{--n0:#040d11;--n1:#0a2128;--n2:#123b42;--line:#2f5c60;--ink:#dbe9e6;--mute:#84a3a1;--acc:#f2c94c;--sans:system-ui,"Inter","Segoe UI",sans-serif;--mono:ui-monospace,"JetBrains Mono",Consolas,monospace}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--n0);color:var(--ink);font:16px/1.6 var(--sans)}
+a{color:inherit}
+/* ---------- fixed scene ---------- */
+.scene{position:fixed;inset:0;z-index:0;overflow:hidden;background:linear-gradient(#030a0d 0%,#0a2229 52%,#1b4a4b 68%,#0a1b1f 69%)}
+.scene svg{position:absolute;inset:0;width:100%;height:100%;transform-origin:50% 75%;will-change:transform}
+.scene .grid{position:absolute;inset:0;background:
+ linear-gradient(rgba(130,200,190,.07) .5px,transparent .5px) 0 0/64px 64px,
+ linear-gradient(90deg,rgba(130,200,190,.07) .5px,transparent .5px) 0 0/64px 64px;
+ mask:linear-gradient(transparent 5%,#000 60%)}
+.scene .veil{position:absolute;inset:0;background:var(--n0);opacity:var(--veil,0);transition:opacity .2s}
+#pipe{stroke-dasharray:6 10;animation:flow 2.2s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-32}}
+.win{animation:tw 5s steps(1) infinite}.win:nth-child(3n){animation-delay:1.3s}.win:nth-child(4n){animation-delay:2.9s}
+@keyframes tw{50%{opacity:.35}}
+/* HUD */
+.hud{position:fixed;z-index:4;left:20px;top:18px;right:20px;display:flex;justify-content:space-between;font:11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);pointer-events:none}
+.hud b{color:var(--ink);font-weight:500}
+.hud a{pointer-events:auto;text-decoration:none;color:var(--acc)}
+.hud .r{text-align:right}
+.rule{position:fixed;z-index:4;left:20px;top:80px;bottom:80px;width:1px;background:var(--line)}
+.rule i{position:absolute;left:-3px;top:var(--y,0%);width:7px;height:7px;background:var(--acc);transition:top .15s}
+/* ---------- scroll overlays ---------- */
+main{position:relative;z-index:2}
+.st{min-height:130vh;padding:0 clamp(24px,6vw,100px);display:flex;align-items:flex-end;padding-bottom:16vh}
+.st:first-child{min-height:100vh;align-items:flex-end;padding-bottom:9vh}
+.st.r{justify-content:flex-end}
+.st.m{align-items:center}
+.ov{width:min(540px,100%);padding:26px 28px 28px;background:rgba(5,20,25,.62);backdrop-filter:blur(14px) saturate(1.1);border:.5px solid var(--line);opacity:0;transform:translateY(34px);transition:opacity .7s,transform .7s}
+.ov.in{opacity:1;transform:none}
+.q{font:300 clamp(30px,3.6vw,50px)/1.08 var(--sans);letter-spacing:-.025em;margin-bottom:16px}
+.q em{font-style:normal;color:var(--acc)}
+.tag{font:11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mute);display:flex;justify-content:space-between;margin-bottom:18px;padding-bottom:10px;border-bottom:.5px solid var(--line)}
+.ov p{color:#b5cbc8;margin-bottom:10px}
+.ov ul{list-style:none;margin-top:12px}
+.ov li{display:grid;grid-template-columns:70px 1fr;gap:10px;padding:8px 0;border-top:.5px solid var(--line);font-size:14px}
+.ov li span{font:11px var(--mono);color:var(--acc);padding-top:3px;letter-spacing:.08em}
+.nodes{display:grid;grid-template-columns:auto 1fr auto;gap:6px 16px;font:12px var(--mono);margin-top:10px}
+.nodes i{font-style:normal;color:var(--mute)}
+.nodes b{font-weight:400;color:#8fd8a5}
+/* ---------- fork ---------- */
+.fork{min-height:120vh;position:relative;display:grid;grid-template-columns:1fr 1fr;align-items:end;padding:0 0 12vh}
+.fork header{grid-column:1/-1;padding:0 clamp(24px,6vw,100px) 34px}
+.fork .q{max-width:20ch}
+.side{padding:30px clamp(24px,4vw,60px) 36px;background:rgba(5,20,25,.7);backdrop-filter:blur(14px);border-top:.5px solid var(--line);border-right:.5px solid var(--line);cursor:pointer;transition:background .3s;min-height:46vh;display:flex;flex-direction:column;gap:14px}
+.side + .side{border-right:0}
+.side:hover,.side.sel{background:rgba(14,48,52,.82)}
+.side h3{font:400 28px/1.1 var(--sans);letter-spacing:-.02em}
+.side .tag{margin-bottom:0}
+.side ul{list-style:none;color:#b5cbc8;font-size:14.5px}
+.side li{padding:6px 0 6px 18px;position:relative}
+.side li::before{content:"";position:absolute;left:0;top:15px;width:8px;border-top:1px solid var(--acc)}
+.side button{align-self:flex-start;margin-top:auto}
+button,.btn{background:var(--acc);color:#0a1b1f;border:0;padding:12px 20px;font:600 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:0}
+button:hover{background:#ffe08a}
+.formwrap{grid-column:1/-1;background:rgba(3,10,13,.9);backdrop-filter:blur(14px);border-top:.5px solid var(--line);padding:34px clamp(24px,6vw,100px) 40px;display:grid;grid-template-columns:1fr 1fr;gap:30px;opacity:.35;pointer-events:none;transition:opacity .4s}
+.formwrap.on{opacity:1;pointer-events:auto}
+.formwrap h4{font:300 28px/1.15 var(--sans);letter-spacing:-.02em}
+.formwrap p{color:var(--mute);margin-top:8px;font-size:14px}
+form{display:grid;gap:12px}
+input,textarea,select{background:transparent;border:0;border-bottom:.5px solid var(--mute);color:var(--ink);padding:8px 0;font:inherit;outline:0;border-radius:0}
+select option{background:#06161b}
+input:focus,textarea:focus{border-bottom-color:var(--acc)}
+textarea{min-height:60px}
+.ack{font:12px var(--mono);color:#8fd8a5;min-height:1.2em}
+footer{position:relative;z-index:2;background:#030a0d;padding:18px 20px;font:11px var(--mono);color:var(--mute);display:flex;justify-content:space-between;letter-spacing:.08em;text-transform:uppercase}
+@media (max-width:760px){.fork{grid-template-columns:1fr}.side{border-right:0}.formwrap{grid-template-columns:1fr}.rule{display:none}.hud .r{display:none}}
+@media (prefers-reduced-motion:reduce){#pipe,.win{animation:none}.ov{transition:none}}
+</style>
+</head>
+<body>
+<!-- continuous scene -->
+<div class="scene" aria-hidden="true">
+  <svg id="svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice">
+    <g id="far">
+      <path d="M-100 560 L120 470 L260 520 L430 430 L560 500 L760 410 L920 490 L1100 440 L1280 510 L1460 450 L1700 520 L1700 900 L-100 900Z" fill="#0f3038"/>
+      <path d="M-100 560 L120 470 L260 520 L430 430 L560 500 L760 410 L920 490 L1100 440 L1280 510 L1460 450 L1700 520" fill="none" stroke="#2e6a70" stroke-width=".8"/>
+    </g>
+    <g id="mid">
+      <path d="M-100 640 L180 590 L360 620 L620 560 L860 620 L1120 570 L1380 620 L1700 580 L1700 900 L-100 900Z" fill="#0b252b"/>
+      <!-- power towers + sagging lines -->
+      <g stroke="#7fc0b6" stroke-width="1.1" fill="none">
+        <path d="M300 612 L312 540 L324 612 M303 580 H321 M306 560 H318 M290 548 H334"/>
+        <path d="M760 612 L772 530 L784 612 M763 575 H781 M766 552 H778 M750 538 H794"/>
+        <path d="M1210 606 L1222 530 L1234 606 M1213 572 H1231 M1216 552 H1228 M1200 538 H1244"/>
+        <path d="M290 548 Q 520 600 750 538 M334 548 Q 560 604 794 538 M750 538 Q 980 596 1200 538 M794 538 Q 1020 600 1244 538" stroke-width=".7" opacity=".7"/>
+      </g>
+      <!-- data hall -->
+      <g transform="translate(980 590)">
+        <rect width="120" height="34" fill="#071a1f" stroke="#3f7e80" stroke-width=".8"/>
+        <g fill="#f2c94c"><rect class="win" x="8" y="10" width="6" height="3"/><rect class="win" x="22" y="10" width="6" height="3"/><rect class="win" x="36" y="10" width="6" height="3"/><rect class="win" x="50" y="10" width="6" height="3"/><rect class="win" x="64" y="10" width="6" height="3"/><rect class="win" x="78" y="10" width="6" height="3"/><rect class="win" x="92" y="10" width="6" height="3"/><rect class="win" x="8" y="20" width="6" height="3"/><rect class="win" x="36" y="20" width="6" height="3"/><rect class="win" x="64" y="20" width="6" height="3"/><rect class="win" x="92" y="20" width="6" height="3"/></g>
+        <path d="M130 8 V-30 M122 -22 H138 M125 -12 H135" stroke="#7fc0b6" stroke-width="1" fill="none"/>
+      </g>
+    </g>
+    <g id="near">
+      <path d="M-100 760 C 200 690, 520 700, 800 730 S 1300 690, 1700 730 L1700 900 L-100 900Z" fill="#071a1f"/>
+      <!-- contour lines -->
+      <g fill="none" stroke="#2f7f7e" stroke-width=".7" opacity=".55">
+        <ellipse cx="1180" cy="860" rx="90" ry="14"/><ellipse cx="1180" cy="860" rx="170" ry="26"/><ellipse cx="1180" cy="860" rx="260" ry="40"/><ellipse cx="1180" cy="860" rx="360" ry="56"/><ellipse cx="1180" cy="860" rx="470" ry="74"/><ellipse cx="1180" cy="860" rx="600" ry="96"/>
+        <ellipse cx="320" cy="880" rx="120" ry="18"/><ellipse cx="320" cy="880" rx="230" ry="36"/><ellipse cx="320" cy="880" rx="350" ry="56"/><ellipse cx="320" cy="880" rx="480" ry="78"/>
+      </g>
+      <path id="pipe" d="M-50 800 C 300 770, 600 800, 900 770 S 1400 790, 1700 760" fill="none" stroke="#f2c94c" stroke-width="1.2" opacity=".8"/>
+      <!-- survey marks -->
+      <g stroke="#f2c94c" stroke-width="1" fill="none"><path d="M240 790 h14 M247 783 v14"/><path d="M700 773 h14 M707 766 v14"/><path d="M1380 768 h14 M1387 761 v14"/></g>
+      <g fill="#f2c94c" font-family="monospace" font-size="10" letter-spacing="1"><text x="260" y="798">N-04</text><text x="720" y="781">N-11</text><text x="1400" y="776">N-19</text></g>
+    </g>
+  </svg>
+  <div class="grid"></div>
+  <div class="veil" id="veil"></div>
+</div>
+
+<div class="hud">
+  <div>Overlay <b>/ survey of one web presence</b><br><span id="cd">47.6021 N · 122.3302 W</span></div>
+  <div class="r"><a href="#fork">Skip to fork ↓</a><br>ALT <b id="alt">2400</b> m</div>
+</div>
+<div class="rule"><i id="mark"></i></div>
+
+<main>
+  <section class="st">
+    <div class="ov">
+      <div class="tag"><span>Layer 01 · intent</span><span>Custom · hosted · kept</span></div>
+      <h1 class="q">What should this site <em>prove?</em></h1>
+      <p>Before layout, before color: the one thing a stranger should believe within ten seconds. We build custom websites around that claim, host them on infrastructure we run, and keep them correct after launch.</p>
+    </div>
+  </section>
+
+  <section class="st r">
+    <div class="ov">
+      <div class="tag"><span>Layer 02 · build</span><span>Weeks 1–5</span></div>
+      <h2 class="q">Who writes <em>every line</em> of it?</h2>
+      <p>People you can name. No theme resale, no page-builder lock-in. You get the repo, the design files, and a staging link on day three.</p>
+      <ul>
+        <li><span>MAP</span>Pages, paths, and the job of each</li>
+        <li><span>DRAW</span>Two directions, one winner</li>
+        <li><span>CUT</span>Hand-built, tested on real devices</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="st m">
+    <div class="ov">
+      <div class="tag"><span>Layer 03 · host</span><span>Infrastructure</span></div>
+      <h2 class="q">Where does it <em>live,</em> and who gets paged?</h2>
+      <p>On our servers, with backups and a rollback ready. The same team that built it is the one answering at 2 a.m.</p>
+      <div class="nodes">
+        <i>EDGE</i><span>Global cache, TLS auto-renew</span><b>nominal</b>
+        <i>ORIGIN</i><span>Primary + warm standby</span><b>nominal</b>
+        <i>VAULT</i><span>Daily backup, 30 retained</span><b>03:00 UTC</b>
+        <i>WATCH</i><span>Uptime + form delivery probes</span><b>5 min</b>
+      </div>
+    </div>
+  </section>
+
+  <section class="st r">
+    <div class="ov">
+      <div class="tag"><span>Layer 04 · care</span><span>Monthly</span></div>
+      <h2 class="q">What changes after <em>launch?</em></h2>
+      <p>Everything outside your control: browsers, dependencies, search, your own business. A fixed monthly pass keeps the site accurate, patched, and measured, and your edits ship inside the plan.</p>
+    </div>
+  </section>
+
+  <section class="fork" id="fork">
+    <header>
+      <div class="tag" style="max-width:520px"><span>Layer 05 · fork</span><span>Choose a path</span></div>
+      <h2 class="q">Which of these <em>is you?</em></h2>
+    </header>
+    <div class="side" data-k="build" tabindex="0" role="button">
+      <div class="tag"><span>Path A</span><span>No site, or a bad one</span></div>
+      <h3>I need a site built.</h3>
+      <ul><li>Custom design and code</li><li>Hosted and cared for from day one</li><li>Fixed scope before we start</li></ul>
+      <button type="button">Start path A</button>
+    </div>
+    <div class="side" data-k="keep" tabindex="0" role="button">
+      <div class="tag"><span>Path B</span><span>Site exists</span></div>
+      <h3>I have a site that needs a keeper.</h3>
+      <ul><li>Audit, then migration to our hosting</li><li>Patching, backups, monitoring</li><li>Edits on retainer</li></ul>
+      <button type="button">Start path B</button>
+    </div>
+    <div class="formwrap" id="fw">
+      <div><h4 id="fh">Pick a path above.</h4><p id="fp">The form below adapts to your answer.</p></div>
+      <form id="f">
+        <input required placeholder="Name" aria-label="Name">
+        <input required type="email" placeholder="Email" aria-label="Email">
+        <input id="url" placeholder="Current site URL" aria-label="URL">
+        <textarea placeholder="What should the site prove?" aria-label="Message"></textarea>
+        <button>Send survey request</button>
+        <div class="ack" id="ack" role="status"></div>
+      </form>
+    </div>
+  </section>
+</main>
+<footer><span>Overlay</span><span>Custom websites · hosting · care</span></footer>
+
+<script>
+const svg=document.getElementById('svg'),far=document.getElementById('far'),mid=document.getElementById('mid'),near=document.getElementById('near');
+const veil=document.getElementById('veil'),alt=document.getElementById('alt'),cd=document.getElementById('cd'),mark=document.getElementById('mark');
+function upd(){
+  const max=document.documentElement.scrollHeight-innerHeight, p=Math.min(1,scrollY/max||0);
+  svg.style.transform='scale('+(1+p*.28)+')';
+  far.style.transform='translateY('+(p*-22)+'px)';
+  mid.style.transform='translateY('+(p*-10)+'px)';
+  near.style.transform='translateY('+(p*18)+'px)';
+  veil.style.setProperty('--veil',Math.max(0,(p-.72))*.9);
+  document.querySelector('.veil').style.opacity=Math.max(0,(p-.72))*.9;
+  alt.textContent=Math.round(2400-p*2150);
+  cd.textContent=(47.6021+p*.0312).toFixed(4)+' N · '+(122.3302-p*.0741).toFixed(4)+' W';
+  mark.style.setProperty('--y',(p*96)+'%');
+}
+addEventListener('scroll',upd,{passive:true});upd();
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.25});
+document.querySelectorAll('.ov').forEach(o=>io.observe(o));
+const copy={build:['A new site, built and kept.','Tell us what it must prove and who must believe it. We’ll scope the build, hosting, and care as one plan.',''],
+ keep:['Hand us the keys.','Share the URL. We audit what you have, move it to our hosting, and put it on a care cycle.','']};
+document.querySelectorAll('.side').forEach(s=>{const go=()=>{document.querySelectorAll('.side').forEach(x=>x.classList.remove('sel'));s.classList.add('sel');
+  const c=copy[s.dataset.k];document.getElementById('fh').textContent=c[0];document.getElementById('fp').textContent=c[1];
+  document.getElementById('fw').classList.add('on');document.getElementById('url').required=s.dataset.k==='keep';
+  document.getElementById('fw').scrollIntoView({behavior:'smooth',block:'end'});};
+  s.addEventListener('click',go);s.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});});
+document.getElementById('f').addEventListener('submit',e=>{e.preventDefault();document.getElementById('ack').textContent='Received. A named lead will reply within one business day.';e.target.reset();});
+</script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rail — an essay on keeping a website</title>
+<style>
+:root{--bg:#fdfdfc;--rail:#f0f2f3;--ink:#171a1e;--mute:#66707a;--hair:#d9dee2;--acc:#c01f5a;--serif:"Source Serif 4","Iowan Old Style",Georgia,serif;--sans:system-ui,"Inter","Segoe UI",sans-serif;--mono:ui-monospace,"JetBrains Mono",Consolas,monospace}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:40px}
+body{background:var(--bg);color:var(--ink);font:18px/1.7 var(--serif);display:grid;grid-template-columns:300px 1fr;min-height:100vh}
+/* rail */
+.rail{position:sticky;top:0;height:100vh;background:var(--rail);border-right:.5px solid var(--hair);padding:30px 28px;display:flex;flex-direction:column;font-family:var(--sans)}
+.rail .brand{font:700 14px var(--sans);letter-spacing:.2em;text-transform:uppercase}
+.rail .brand small{display:block;font:400 12px var(--sans);letter-spacing:0;text-transform:none;color:var(--mute);margin-top:6px;line-height:1.4}
+.toc{list-style:none;margin:48px 0 0;padding:0;position:relative}
+.toc::before{content:"";position:absolute;left:5px;top:10px;bottom:10px;width:1px;background:var(--hair)}
+.toc li{position:relative}
+.toc a{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;padding:12px 0 12px 0;text-decoration:none;color:var(--mute);font-size:15px;transition:color .2s}
+.toc a::before{content:"";width:11px;height:11px;background:var(--rail);border:1px solid var(--mute);margin-top:6px;position:relative;z-index:1;transition:.2s}
+.toc a small{grid-column:2;font:11px var(--mono);letter-spacing:.06em;color:var(--mute);margin-top:-6px}
+.toc a:hover{color:var(--ink)}
+.toc a.on{color:var(--ink);font-weight:600}
+.toc a.on::before{background:var(--acc);border-color:var(--acc)}
+.toc a.done::before{background:var(--ink);border-color:var(--ink)}
+.prog{margin-top:auto;font:11px var(--mono);color:var(--mute);letter-spacing:.06em}
+.prog i{display:block;height:2px;background:var(--hair);margin:8px 0}
+.prog i b{display:block;height:100%;width:0;background:var(--acc)}
+/* essay */
+.essay{padding:72px clamp(28px,6vw,96px) 120px;max-width:980px}
+.essay > header{max-width:700px;margin-bottom:76px}
+.kicker{font:12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc)}
+h1{font:500 clamp(40px,5vw,64px)/1.04 var(--serif);letter-spacing:-.03em;margin:14px 0 22px}
+.by{font:13px var(--sans);color:var(--mute);border-top:.5px solid var(--hair);padding-top:12px;display:flex;gap:18px}
+section{max-width:700px;margin-bottom:96px}
+h2{font:500 clamp(30px,3.4vw,42px)/1.1 var(--serif);letter-spacing:-.025em;margin:6px 0 24px}
+h2 span{display:block;font:12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:10px}
+p{margin-bottom:1.1em}
+.lede{font-size:22px;line-height:1.5}
+a.fn{font:11px var(--sans);color:var(--acc);text-decoration:none;vertical-align:super}
+mark{background:none;box-shadow:inset 0 -.45em 0 #f6d3e0}
+/* figures */
+figure{margin:40px -80px 40px 0;max-width:860px;border-top:2px solid var(--ink);padding-top:12px;font-family:var(--sans)}
+figcaption{font:12px/1.5 var(--mono);color:var(--mute);margin-top:12px;max-width:70ch}
+figcaption b{color:var(--ink);font-weight:500}
+.f1{display:grid;gap:6px}
+.f1 div{display:grid;grid-template-columns:120px 1fr 54px;align-items:center;gap:12px;font:12px var(--mono)}
+.f1 i{display:block;height:14px;background:var(--hair);position:relative}
+.f1 i b{position:absolute;top:0;bottom:0;background:var(--ink);left:var(--s);width:var(--w);transition:background .2s}
+.f1 div:hover i b{background:var(--acc)}
+.f1 em{font-style:normal;color:var(--mute);text-align:right}
+.f2{display:flex;align-items:stretch;gap:0;font:12px var(--mono);overflow-x:auto}
+.f2 div{flex:1;min-width:104px;border:.5px solid var(--ink);padding:12px 10px;margin-left:-.5px;position:relative;background:var(--bg)}
+.f2 div::after{content:"";position:absolute;right:-7px;top:50%;width:13px;height:13px;background:var(--bg);border-top:.5px solid var(--ink);border-right:.5px solid var(--ink);transform:translateY(-50%) rotate(45deg);z-index:1}
+.f2 div:last-child::after{display:none}
+.f2 b{display:block;font-weight:500;color:var(--ink);margin-bottom:4px}
+.f2 span{color:var(--mute)}
+.f2 .hot{background:var(--ink);color:#fff}
+.f2 .hot b{color:#fff}.f2 .hot span{color:#b4bcc3}.f2 .hot::after{background:var(--ink)}
+.f3{display:grid;grid-template-columns:repeat(12,1fr);gap:6px}
+.f3 div{font:11px var(--mono);color:var(--mute)}
+.f3 i{display:block;aspect-ratio:1;border:.5px solid var(--ink);margin-bottom:4px;position:relative}
+.f3 i::after{content:"";position:absolute;inset:25%;background:var(--ink)}
+.f3 .m i::after{background:var(--acc);inset:12%}
+.f3 div:hover i{background:var(--hair)}
+.f4 form{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px}
+label{display:grid;gap:4px;font:11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.full{grid-column:1/-1}
+input,select,textarea{border:0;border-bottom:1px solid var(--ink);background:transparent;font:18px var(--serif);padding:8px 0;color:var(--ink);outline:0;border-radius:0;text-transform:none;letter-spacing:0}
+input:focus,select:focus,textarea:focus{border-bottom-color:var(--acc);background:#f9edf2}
+textarea{min-height:90px}
+button{justify-self:start;background:var(--acc);color:#fff;border:0;padding:13px 22px;font:600 13px var(--sans);letter-spacing:.04em;cursor:pointer;border-radius:0}
+button:hover{background:#9f1749}
+.ack{font:12px var(--mono);color:var(--acc);align-self:center}
+.notes{max-width:700px;border-top:.5px solid var(--hair);padding-top:14px;font:13px/1.6 var(--sans);color:var(--mute)}
+.notes ol{padding-left:20px}
+@media (max-width:900px){body{grid-template-columns:1fr}.rail{position:sticky;height:auto;flex-direction:row;align-items:center;padding:10px 16px;z-index:5;border-right:0;border-bottom:.5px solid var(--hair)}.rail .brand small,.prog,.toc a small{display:none}.toc{margin:0 0 0 auto;display:flex;gap:14px}.toc::before{display:none}.toc a{padding:4px 0}.toc a::before{display:none}.toc a.on{color:var(--acc)}figure{margin-right:0}.f3{grid-template-columns:repeat(6,1fr)}.f4 form{grid-template-columns:1fr}.essay{padding-top:36px}}
+</style>
+</head>
+<body>
+<aside class="rail" aria-label="Contents">
+  <div class="brand">Rail<small>Custom websites, hosted and kept — an essay</small></div>
+  <ol class="toc" id="toc">
+    <li><a href="#build" class="on">Build<small>part 1 · 4 min</small></a></li>
+    <li><a href="#host">Host<small>part 2 · 3 min</small></a></li>
+    <li><a href="#care">Care<small>part 3 · 3 min</small></a></li>
+    <li><a href="#contact">Contact<small>reply within a day</small></a></li>
+  </ol>
+  <div class="prog"><span id="pct">0% read</span><i><b id="bar"></b></i>Notes: <a href="#notes" style="color:inherit">end</a></div>
+</aside>
+
+<main class="essay">
+  <header>
+    <div class="kicker">An essay on web presence</div>
+    <h1>A website is not a thing you finish. It’s a thing you keep.</h1>
+    <p class="lede">We build custom sites, host them ourselves, and stay with them. Here is how that works, in the order it happens.</p>
+    <div class="by"><span>By the studio</span><span>Custom websites · hosting · care</span></div>
+  </header>
+
+  <section id="build">
+    <h2><span>Part one</span>Build</h2>
+    <p>Most websites are assembled. A template is picked, content is poured in, and someone says it is done. The result looks like everyone else’s because it began from everyone else’s. We start somewhere else: with the sentence the site has to make true.<a class="fn" href="#notes">1</a></p>
+    <p>That sentence decides the structure. The structure decides the pages. Only then do we <mark>draw anything,</mark> and when we do, we draw two directions, not twelve, so you can see an opinion.</p>
+    <figure>
+      <div class="f1" role="img" aria-label="Build timeline across five weeks">
+        <div><span>Brief + map</span><i><b style="--s:0%;--w:20%"></b></i><em>wk 1</em></div>
+        <div><span>Design</span><i><b style="--s:14%;--w:30%"></b></i><em>wk 1–3</em></div>
+        <div><span>Code</span><i><b style="--s:40%;--w:44%"></b></i><em>wk 3–5</em></div>
+        <div><span>Checks</span><i><b style="--s:78%;--w:14%"></b></i><em>wk 5</em></div>
+        <div><span>Launch</span><i><b style="--s:92%;--w:8%"></b></i><em>wk 5</em></div>
+      </div>
+      <figcaption><b>Fig. 1</b> A typical build. Stages overlap; the staging link is open from the first week.</figcaption>
+    </figure>
+    <p>The code is written by hand and kept small. You get the repository and the design files at launch, whether or not you stay with us afterward.<a class="fn" href="#notes">2</a></p>
+  </section>
+
+  <section id="host">
+    <h2><span>Part two</span>Host</h2>
+    <p>A site can be perfect and still fail on a Tuesday because its host did not notice something. So we host the sites we build. The same people who wrote the code watch it run, and the same people can fix it.</p>
+    <figure>
+      <div class="f2" role="img" aria-label="Release path from commit to visitor">
+        <div><b>Commit</b><span>your change</span></div>
+        <div><b>Staging</b><span>preview link</span></div>
+        <div class="hot"><b>Gate</b><span>speed, security, visual diff</span></div>
+        <div><b>Origin</b><span>live + standby</span></div>
+        <div><b>Edge</b><span>cache + TLS</span></div>
+        <div><b>Visitor</b><span>&lt; 1s</span></div>
+      </div>
+      <figcaption><b>Fig. 2</b> Nothing reaches a visitor without passing the gate. If it fails, the previous revision keeps serving.</figcaption>
+    </figure>
+    <p>Backups are nightly and kept for thirty days. Certificates renew themselves. A probe submits your contact form every five minutes, because a site that is up but cannot take an inquiry is not up.</p>
+  </section>
+
+  <section id="care">
+    <h2><span>Part three</span>Care</h2>
+    <p>Browsers update. Libraries age. Your business changes its hours, its prices, its people. The site that was right in March is wrong by October without anyone touching it.</p>
+    <p>Care is the answer: a monthly pass that measures, compares, and corrects, plus a plain request line for edits. <mark>You write an email; we ship the change.</mark></p>
+    <figure>
+      <div class="f3" role="img" aria-label="Twelve months of care passes">
+        <div><i></i>J</div><div><i></i>F</div><div><i></i>M</div><div><i></i>A</div><div class="m"><i></i>M</div><div><i></i>J</div>
+        <div><i></i>J</div><div><i></i>A</div><div><i></i>S</div><div><i></i>O</div><div><i></i>N</div><div><i></i>D</div>
+      </div>
+      <figcaption><b>Fig. 3</b> Twelve monthly passes. The highlighted one found a drifted contact form and fixed it that week.</figcaption>
+    </figure>
+    <p>Small drift is fixed inside the plan. If something larger is needed, you will hear the cost before we begin.<a class="fn" href="#notes">3</a></p>
+  </section>
+
+  <section id="contact">
+    <h2><span>Part four</span>Contact</h2>
+    <p>If this is how you want your site run, tell us about it. We reply within a business day.</p>
+    <figure class="f4">
+      <form id="f">
+        <label>Name<input required></label>
+        <label>Email<input type="email" required></label>
+        <label class="full">Your current site, if any<input placeholder="https://"></label>
+        <label class="full">What do you need?<select><option>A new custom site, hosted and cared for</option><option>To move my existing site to your hosting</option><option>Care for a site you did not build</option></select></label>
+        <label class="full">Anything we should know<textarea></textarea></label>
+        <button>Send</button><span class="ack" id="ack" role="status"></span>
+      </form>
+      <figcaption><b>Fig. 4</b> The reply form. It is the only form on the site.</figcaption>
+    </figure>
+  </section>
+
+  <div class="notes" id="notes"><ol>
+    <li>The sentence is usually one line. Examples: “We are the dentist who explains everything.” “Ordering here takes one minute.”</li>
+    <li>Handover includes design files, source code, and a plain-text runbook. Leaving is always possible.</li>
+    <li>Plan hours are agreed in writing before work starts. Figures in this concept are illustrative.</li>
+  </ol></div>
+</main>
+
+<script>
+const links=[...document.querySelectorAll('#toc a')],secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+function upd(){
+  const y=scrollY+innerHeight*.35;let cur=0;secs.forEach((s,i)=>{if(s.offsetTop<=y)cur=i});
+  links.forEach((a,i)=>{a.classList.toggle('on',i===cur);a.classList.toggle('done',i<cur)});
+  const max=document.documentElement.scrollHeight-innerHeight,p=Math.min(1,scrollY/max||0);
+  document.getElementById('bar').style.width=(p*100)+'%';document.getElementById('pct').textContent=Math.round(p*100)+'% read';
+}
+addEventListener('scroll',upd,{passive:true});upd();
+document.getElementById('f').addEventListener('submit',e=>{e.preventDefault();document.getElementById('ack').textContent='Sent. We reply within one business day.';e.target.reset();});
+</script>
+</body>
+</html>

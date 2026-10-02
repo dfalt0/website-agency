@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Directory — Custom websites, hosting &amp; care, A–Z</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Libre+Franklin:wght@400;500;600;900&display=swap" rel="stylesheet">
+<style>
+@import url("tokens.css");
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:9.5rem}
+body{background:var(--paper);color:var(--ink);font:400 1rem/1.5 var(--font-sans)}
+.mast{background:var(--yellow);border-bottom:3px solid var(--rule);position:sticky;top:0;z-index:20}
+.mast .row1{display:flex;justify-content:space-between;align-items:baseline;padding:.7rem clamp(1rem,3vw,2.5rem) 0;gap:1rem}
+.mast h1{font:900 clamp(1.8rem,5vw,3.4rem)/.9 var(--font-sans);letter-spacing:-.045em;text-transform:uppercase}
+.mast .ed{font:500 .72rem var(--font-mono);text-transform:uppercase;letter-spacing:.08em;text-align:right}
+.mast .row2{display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;padding:.6rem clamp(1rem,3vw,2.5rem) .8rem}
+.search{flex:1 1 20rem;position:relative}
+.search input{width:100%;font:600 1.15rem var(--font-sans);background:var(--paper);border:2px solid var(--rule);padding:.6rem .9rem .6rem 2.6rem;border-radius:0;outline:none}
+.search input:focus{box-shadow:4px 4px 0 var(--rule)}
+.search::before{content:"⌕";position:absolute;left:.8rem;top:50%;transform:translateY(-52%);font-size:1.4rem}
+.search kbd{position:absolute;right:.7rem;top:50%;transform:translateY(-50%);font:500 .7rem var(--font-mono);border:1px solid var(--ink-soft);padding:0 .35rem;color:var(--ink-soft)}
+.cats{display:flex;gap:.3rem}
+.cats button{font:600 .78rem var(--font-mono);text-transform:uppercase;letter-spacing:.04em;background:none;border:2px solid var(--rule);padding:.45rem .7rem;cursor:pointer;color:var(--ink)}
+.cats button[aria-pressed=true]{background:var(--ink);color:var(--yellow)}
+.layout{display:grid;grid-template-columns:var(--rail-w) minmax(0,1fr);max-width:1100px;margin:0 auto;padding:0 clamp(.5rem,2vw,2rem)}
+.rail{position:sticky;top:8.6rem;align-self:start;display:flex;flex-direction:column;border-right:2px solid var(--rule);margin-right:1rem;padding-top:1rem;max-height:calc(100vh - 9rem)}
+.rail a{font:900 .9rem/1 var(--font-sans);text-align:center;color:var(--ink);text-decoration:none;padding:.22rem 0;flex:1;display:grid;place-items:center;max-height:1.8rem;transition:.12s}
+.rail a.off{color:#c8c6b6;pointer-events:none;text-decoration:line-through;font-weight:500}
+.rail a:hover,.rail a.on{background:var(--yellow)}
+.how{padding:1.6rem 0 1rem;max-width:44rem;font-size:1.08rem}
+.how b{background:var(--yellow);padding:0 .25rem}
+.how a{color:var(--ink);font-weight:600}
+.star{border:2px solid var(--rule);background:var(--yellow-soft);margin:1rem 0 2rem}
+.letter{display:grid;grid-template-columns:5.2rem 1fr;border-top:3px solid var(--rule);margin-top:1rem}
+.letter>h2{font:900 5.5rem/.8 var(--font-sans);letter-spacing:-.06em;padding-top:.9rem;position:sticky;top:9rem;align-self:start}
+.entry{border-bottom:.5px solid var(--hair)}
+.hd{display:flex;align-items:baseline;gap:.7rem;width:100%;background:none;border:0;text-align:left;padding:.75rem .4rem;font:inherit;color:inherit;cursor:pointer;position:relative;transition:background .15s}
+.hd:hover,.hd:focus-visible{background:var(--yellow-soft);outline:none}
+.hd .n{font:400 .72rem var(--font-mono);color:var(--ink-soft);flex:0 0 3.2rem}
+.hd .t{font:600 1.2rem var(--font-sans);letter-spacing:-.015em}
+.hd .s{display:none;font-size:.88rem;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:26rem}
+@media(min-width:1000px){.hd .s{display:block}}
+.hd .lead{flex:1;border-bottom:1.5px dotted var(--ink);transform:translateY(-.3em);min-width:1.5rem}
+.sq{font:600 .7rem var(--font-mono);width:1.35rem;height:1.35rem;display:inline-grid;place-items:center;color:#fff;flex:none}
+.sq.Build{background:var(--cat-build)}.sq.Host{background:var(--cat-host)}.sq.Care{background:var(--cat-care)}.sq.Terms{background:var(--cat-terms)}
+.pm{font:500 1.2rem var(--font-mono);width:1.2rem;text-align:center;flex:none}
+.pan{display:none;padding:.2rem .4rem 1.3rem 4.3rem;animation:open .18s ease-out}
+.entry.open .pan{display:block}.entry.open .hd{background:var(--yellow-soft)}
+@keyframes open{from{opacity:0;transform:translateY(-4px)}}
+.pan p{max-width:38rem;font-size:1.05rem}
+.pan .meta{display:flex;gap:1.6rem;flex-wrap:wrap;margin-top:.9rem;font:500 .78rem var(--font-mono);text-transform:uppercase;letter-spacing:.04em}
+.pan .meta b{background:var(--ink);color:var(--yellow);padding:.1rem .45rem}
+.pan .see a{color:var(--ink);font-weight:600;margin-right:.9rem;text-decoration-thickness:2px;text-decoration-color:var(--yellow);text-underline-offset:3px}
+.pan .see a:hover{background:var(--yellow)}
+.none{padding:3rem 0;font-size:1.2rem}
+footer{border-top:3px solid var(--rule);background:var(--yellow);padding:1.4rem clamp(1rem,3vw,2.5rem);margin-top:4rem;font:500 .78rem var(--font-mono);text-transform:uppercase;letter-spacing:.05em;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+@media(max-width:700px){.letter{grid-template-columns:1fr}.letter>h2{position:static;font-size:3.4rem;padding:.4rem 0 .2rem}.pan{padding-left:.4rem}.rail{display:none}.layout{grid-template-columns:1fr}.cats{width:100%;overflow:auto}.mast .ed{display:none}.search kbd{display:none}.hd .n{flex-basis:2.6rem}html{scroll-padding-top:11rem}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="mast">
+  <div class="row1"><h1>Directory</h1><div class="ed">Custom websites, hosting &amp; care<br>indexed A–Z · Edition 2027</div></div>
+  <div class="row2">
+    <label class="search"><input id="q" type="search" placeholder="Look something up — try “backups”, “price”, “leave”" autocomplete="off" aria-label="Search the directory"><kbd>/</kbd></label>
+    <div class="cats" id="cats" role="group" aria-label="Category"></div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="rail" id="rail" aria-label="Alphabet"></nav>
+  <main>
+    <p class="how">Know what you need? <b>Find it below.</b> Not sure? Start with <a href="#build" data-jump="build">Build</a>, <a href="#hosting" data-jump="hosting">Hosting</a>, or <a href="#care-plan" data-jump="care-plan">Care plan</a>. Every entry opens in place.</p>
+    <div class="star entry" id="start">
+      <button class="hd" aria-expanded="false"><span class="n">000</span><span class="t">★ Start a project</span><span class="lead"></span><span class="sq Terms" style="background:var(--ink);color:var(--yellow)">★</span><span class="pm">+</span></button>
+      <div class="pan"><p>Email <b><a href="mailto:hello@directory.example" style="color:inherit">hello@directory.example</a></b>. Tell us what the business does, what the current site is (if any), and your deadline. A person replies within two business days — with a time to talk, or an honest “not us.”</p>
+      <div class="meta"><span>Reply <b>2 business days</b></span><span>Intake <b>limited per quarter</b></span></div></div>
+    </div>
+    <div id="list"></div>
+  </main>
+</div>
+<footer><span>Directory · hello@directory.example</span><span id="count"></span></footer>
+
+<script>
+const E=[
+['accessibility-audit','Accessibility audit','Build','Checked against WCAG 2.2 AA before launch.','Keyboard paths, contrast, labels and screen-reader order are tested on the staging site and fixed before launch. You receive the checklist.',['staging','forms'],'Included in build'],
+['backups','Backups','Host','Daily, kept 35 days, restore on request.','Full copies of site and data are taken every day and held for 35 days in a second region. Restores are done by us, usually within an hour.',['hosting','export'],'Included in hosting'],
+['build','Build','Build','Fixed-scope custom website, 4–8 weeks.','Designed and coded for your business — no templates. Discovery, design, code, content migration, redirects and launch under one written scope. Source and content are yours.',['fixed-price-quote','staging','launch','ownership'],'from $6,500 · 40% deposit'],
+['care-plan','Care plan','Care','Patches, 3 edit hours, monthly report, a named person.','A calendar of maintenance and a human to ask. Includes hosting, security patches, three edit hours a month (rolling one month), and a one-page report.',['edits','reports','incident-response','security-patches'],'$249 / month'],
+['content-migration','Content migration','Build','Pages, posts and images from the old site.','We move what should move, rewrite what shouldn’t, and tell you which is which. Nothing is lost in the cutover.',['redirects','build'],'Included in build'],
+['domains-dns','Domains & DNS','Host','Registered in your name, managed by us.','You are the registrant of record. We run DNS, email routing and renewals, and we hand over credentials on request.',['tls-certificates','export'],'Included in hosting'],
+['edits','Edits','Care','Copy, image and layout changes, 3 hrs a month.','Send a request by email or text. Changes under ~30 minutes are made within one business day. Unused hours roll over once.',['care-plan'],'Included in care'],
+['export','Export','Terms','Complete copy of code, content and data in 5 business days.','If you leave, you get everything: repository, database dump, media, DNS records, and a note on how to run it elsewhere. No fee.',['zero-lock-in','notice'],'Free'],
+['fixed-price-quote','Fixed-price quote','Terms','Written scope and price before work starts.','One page, readable in five minutes. Changes become priced amendments that you approve first.',['build','pricing'],'No charge for the quote'],
+['forms','Forms','Build','Built, spam-filtered, and tested every week.','Contact, quote and booking forms are tested end to end on a schedule — because forms fail quietly.',['monitoring'],'Included'],
+['hosting','Hosting','Host','Edge cache, TLS, backups, status page.','Managed hosting on infrastructure we operate, close to your customers, with automatic certificates and a public status page.',['backups','uptime','status-page','tls-certificates'],'$79 / month'],
+['incident-response','Incident response','Care','Urgent breakage: 2 hours.','If something important stops working, a person is on it within two hours between 7 a.m. and 10 p.m. Eastern. Outside those hours, first thing.',['monitoring','care-plan'],'Included in care'],
+['launch','Launch','Build','Weekday morning, never a Friday.','DNS cut over with redirects tested and backups verified before we leave. Rollback plan is written down first.',['redirects','warranty'],'Included in build'],
+['monitoring','Monitoring','Host','Checked every 60 seconds from 3 regions.','Pages, forms, certificates and payment paths are tested continuously. An alert reaches a human in under ten minutes.',['uptime','status-page'],'Included in hosting'],
+['notice','Notice','Terms','30 days to leave. Month to month.','After the initial build, hosting and care are month-to-month. Give thirty days’ notice and we’ll prepare your export.',['export','zero-lock-in'],'—'],
+['ownership','Ownership','Terms','You own the code and the content.','The repository, assets and content are assigned to you at final payment. We keep nothing back.',['export'],'—'],
+['payments','Payments','Build','Stripe or Square, wired and tested.','Checkout, deposits and receipts built into the site and tested with real cards before launch.',['forms','monitoring'],'Included where scoped'],
+['performance-budget','Performance budget','Build','Pages under 1.5 s on mid-range phones.','We set a budget for weight and speed at the start and refuse to ship past it.',['hosting'],'Included in build'],
+['pricing','Pricing','Terms','Build from $6,500 · Host $79 · Care $249.','That’s the whole list. Build is a fixed quote; host and care are monthly. Care includes hosting.',['build','hosting','care-plan'],'See entries'],
+['redirects','Redirects','Build','Every old URL mapped.','Search traffic and bookmarks survive a redesign only if the old addresses lead somewhere sensible.',['launch','content-migration'],'Included in build'],
+['reports','Reports','Care','One page, first Monday of the month.','What changed, what we fixed, what we recommend next. Written by a person.',['care-plan'],'Included in care'],
+['security-patches','Security patches','Care','Applied on a schedule, not “when we get to it.”','Frameworks, plugins and server software are updated at least monthly, critical fixes within 48 hours.',['care-plan','backups'],'Included in care'],
+['staging','Staging','Build','A private link to click through.','You see the real site, working, before the public does. Bring a list of everything you hate.',['launch','accessibility-audit'],'Included in build'],
+['status-page','Status page','Host','Public, no login.','Anyone can see current uptime and incident history. Including you, at 6 a.m.',['monitoring','uptime'],'Included in hosting'],
+['tls-certificates','TLS certificates','Host','Issued and renewed automatically.','HTTPS everywhere, no expiry surprises.',['domains-dns'],'Included in hosting'],
+['uptime','Uptime','Host','99.95% target, measured from 3 regions.','Measured by us and published. If we miss it in a month, hosting that month is free.',['monitoring','status-page'],'Included in hosting'],
+['warranty','Warranty','Terms','30 days of post-launch fixes at no charge.','Anything we built that doesn’t work as scoped in the first 30 days is fixed free.',['launch'],'Free'],
+['zero-lock-in','Zero lock-in','Terms','Month-to-month; export is free.','We’d rather be chosen monthly than trapped annually.',['export','notice'],'—']
+].sort((a,b)=>a[1].localeCompare(b[1])).map((e,i)=>({id:e[0],term:e[1],cat:e[2],sum:e[3],det:e[4],see:e[5],price:e[6],n:String(i+1).padStart(3,'0')}));
+const byId=Object.fromEntries(E.map(e=>[e.id,e]));
+const list=document.getElementById('list'),rail=document.getElementById('rail'),q=document.getElementById('q'),cats=document.getElementById('cats');
+let cat='All';
+['All','Build','Host','Care','Terms'].forEach(c=>{const b=document.createElement('button');b.textContent=c;b.setAttribute('aria-pressed',c==='All');b.onclick=()=>{cat=c;[...cats.children].forEach(x=>x.setAttribute('aria-pressed',x===b));render()};cats.appendChild(b)});
+const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+function render(){const t=q.value.trim().toLowerCase();
+  const rows=E.filter(e=>(cat==='All'||e.cat===cat)&&(!t||(e.term+' '+e.sum+' '+e.det+' '+e.cat).toLowerCase().includes(t)));
+  const open=new Set([...list.querySelectorAll('.entry.open')].map(x=>x.id));
+  const g={};rows.forEach(e=>(g[e.term[0].toUpperCase()]??=[]).push(e));
+  list.innerHTML=Object.keys(g).sort().map(L=>`<section class="letter" id="L${L}"><h2 aria-hidden="true">${L}</h2><div>${g[L].map(e=>`
+   <div class="entry${open.has(e.id)?' open':''}" id="${e.id}"><button class="hd" aria-expanded="${open.has(e.id)}"><span class="n">${e.n}</span><span class="t">${e.term}</span><span class="s">${e.sum}</span><span class="lead"></span><span class="sq ${e.cat}" title="${e.cat}">${e.cat[0]}</span><span class="pm">${open.has(e.id)?'−':'+'}</span></button>
+   <div class="pan"><p><b>${e.sum}</b> ${e.det}</p><div class="meta"><span>Category <b>${e.cat}</b></span><span>Price <b>${e.price}</b></span></div>
+   ${e.see.length?`<p class="see" style="margin-top:.9rem;font-size:.95rem">See also → ${e.see.map(s=>`<a href="#${s}" data-jump="${s}">${byId[s].term}</a>`).join('')}</p>`:''}</div></div>`).join('')}</div></section>`).join('')||`<p class="none">No entries for “${q.value.replace(/</g,'')}”. <a href="#start" onclick="openEntry('start')">Ask us directly →</a></p>`;
+  rail.innerHTML=letters.map(L=>`<a href="#L${L}" class="${g[L]?'':'off'}">${L}</a>`).join('');
+  document.getElementById('count').textContent=rows.length+' of '+E.length+' entries';}
+function openEntry(id,scroll){const el=document.getElementById(id);if(!el)return;el.classList.add('open');const h=el.querySelector('.hd');h.setAttribute('aria-expanded','true');h.querySelector('.pm').textContent='−';if(scroll)el.scrollIntoView({block:'center'})}
+document.addEventListener('click',e=>{
+  const j=e.target.closest('[data-jump]');if(j){e.preventDefault();q.value='';cat='All';[...cats.children].forEach((x,i)=>x.setAttribute('aria-pressed',i===0));if(!document.getElementById(j.dataset.jump))render();openEntry(j.dataset.jump,true);history.replaceState(null,'','#'+j.dataset.jump);return}
+  const h=e.target.closest('.hd');if(h){const en=h.parentElement,o=!en.classList.contains('open');en.classList.toggle('open',o);h.setAttribute('aria-expanded',o);h.querySelector('.pm').textContent=o?'−':'+';if(en.id!=='start'&&o)history.replaceState(null,'','#'+en.id)}});
+q.addEventListener('input',render);
+addEventListener('keydown',e=>{if(e.key==='/'&&document.activeElement!==q){e.preventDefault();q.focus()}
+  if((e.key==='ArrowDown'||e.key==='ArrowUp')&&document.activeElement.classList.contains('hd')){const hs=[...document.querySelectorAll('.hd')],i=hs.indexOf(document.activeElement);const n=hs[i+(e.key==='ArrowDown'?1:-1)];if(n){e.preventDefault();n.focus()}}});
+/* rail active */
+addEventListener('scroll',()=>{let cur='';document.querySelectorAll('.letter').forEach(s=>{if(s.getBoundingClientRect().top<180)cur=s.id});rail.querySelectorAll('a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+cur))},{passive:true});
+render();const h=location.hash.slice(1);if(h&&byId[h])openEntry(h,true);
+</script>
+</body>
+</html>

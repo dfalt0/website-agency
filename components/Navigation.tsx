@@ -11,22 +11,21 @@ export default function Navigation({ navVariant }: { navVariant?: NavVariant } =
   const pathname = usePathname();
   const [hasScrolled, setHasScrolled] = useState(false);
 
-  const isDarkPage = pathname === "/transfer" || pathname === "/scan" || pathname === "/contact";
+  const isDarkPage =
+    pathname === "/transfer" || pathname === "/scan" || pathname === "/contact" || pathname === "/";
   const isLightPage = pathname !== "/" && !isDarkPage;
   const scrolled =
     navVariant === "dark"
       ? false
       : navVariant === "light"
         ? true
-        : isDarkPage
+        : isDarkPage && pathname !== "/"
           ? false
           : isLightPage || (pathname === "/" && hasScrolled);
-  const showGlass = hasScrolled || isDarkPage;
+  const showGlass = hasScrolled || (isDarkPage && pathname !== "/");
 
   useEffect(() => {
-    const handleScroll = () => {
-      setHasScrolled(window.scrollY > 10);
-    };
+    const handleScroll = () => setHasScrolled(window.scrollY > 10);
     handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -34,56 +33,49 @@ export default function Navigation({ navVariant }: { navVariant?: NavVariant } =
 
   const items: CardNavItem[] = [
     {
-      label: "AI Engineering",
-      href: "#ai-engineering",
+      label: "Services",
+      href: "/#services",
       bgColor: "#0C0F0C",
       textColor: "#E2E8E2",
       links: [
-        { label: "Consulting & custom AI", href: "/#ai-engineering", ariaLabel: "AI consulting" },
-        { label: "Custom MCPs", href: "/#ai-engineering", ariaLabel: "Custom MCPs" },
-        { label: "Modern stacks", href: "/#ai-engineering", ariaLabel: "Modern stacks" },
+        { label: "Websites & products", href: "/#services", ariaLabel: "Websites" },
+        { label: "Infrastructure", href: "/#services", ariaLabel: "Infrastructure" },
+        { label: "Growth creatives", href: "/#services", ariaLabel: "Growth" },
       ],
     },
     {
-      label: "Services",
-      href: "#services",
-      bgColor: "#080A08",
-      textColor: "#E2E8E2",
-      links: [
-        { label: "Managed hosting", href: "#services", ariaLabel: "Managed hosting" },
-        { label: "Cloud infrastructure", href: "#services", ariaLabel: "Cloud infrastructure" },
-        { label: "Security & monitoring", href: "#services", ariaLabel: "Security" },
-      ],
-    },
-    {
-      label: "Pricing",
-      href: "#pricing",
+      label: "Process",
+      href: "/#process",
       links: [],
     },
     {
-      label: "Resources",
-      href: "#resources",
-      bgColor: "#0C0F0C",
+      label: "Pricing",
+      href: "/#pricing",
+      links: [],
+    },
+    {
+      label: "Tools",
+      href: "/scan",
+      bgColor: "#080A08",
       textColor: "#E2E8E2",
       links: [
-        { label: "Stack & AI scan", href: "/scan", ariaLabel: "Stack and AI opportunity scan" },
-        { label: "Intake form", href: "/start", ariaLabel: "Start intake form" },
-        { label: "Discovery call", href: "/contact", ariaLabel: "Book discovery call" },
+        { label: "Stack scanner", href: "/scan", ariaLabel: "Stack scanner" },
+        { label: "Intake form", href: "/start", ariaLabel: "Intake" },
       ],
     },
   ];
 
   return (
     <CardNav
-      logo={BRAND.shortName}
+      logo={BRAND.name}
       items={items}
       scrolled={scrolled}
-      glass={showGlass}
+      glass={showGlass || hasScrolled}
       theme="dark"
       buttonBgColor={scrolled ? "var(--primary)" : "#E2E8E2"}
       buttonTextColor={scrolled ? "var(--primary-foreground)" : "var(--dark)"}
       ctaHref="/contact"
-      ctaLabel="Book discovery"
+      ctaLabel="Book a call"
     />
   );
 }

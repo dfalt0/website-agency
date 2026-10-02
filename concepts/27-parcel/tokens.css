@@ -1,0 +1,22 @@
+/* Parcel — survey sheet / zoning map tokens */
+:root {
+  --sheet: #efebdd;
+  --sheet-dim: #e4dfcc;
+  --grid: #cfc9b2;
+  --ink: #22303a;
+  --ink-soft: #5b6870;
+  --road: #fbf9f1;
+
+  --zone-plan: #e8bf5a;   /* R — planning */
+  --zone-build: #c4623a;  /* C — construction */
+  --zone-infra: #3f8f89;  /* I — infrastructure */
+  --zone-serve: #7ba35a;  /* S — service */
+  --reserved: #9aa4a8;
+
+  --font-label: "Archivo Narrow", "Arial Narrow", sans-serif;
+  --font-body: "Newsreader", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --line: 1px solid var(--ink);
+  --hair: 0.5px solid var(--ink);
+}

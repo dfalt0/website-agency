@@ -1,0 +1,38 @@
+/* Fork — two complete themes swapped by html[data-aud] */
+:root,
+[data-aud="ops"] {
+  --bg: #f1ede2;
+  --bg-alt: #e6e0cf;
+  --fg: #1d2a1f;
+  --fg-soft: #5a6556;
+  --accent: #2f6b3a;
+  --accent-ink: #f1ede2;
+  --hot: #e8a33d;
+  --rule: #1d2a1f;
+  --font-display: "Young Serif", Georgia, serif;
+  --font-body: "Public Sans", system-ui, sans-serif;
+  --display-weight: 400;
+  --display-tracking: -0.015em;
+  --radius: 2px;
+}
+
+[data-aud="founders"] {
+  --bg: #0b0c10;
+  --bg-alt: #14161d;
+  --fg: #edede8;
+  --fg-soft: #8e92a3;
+  --accent: #4256ff;
+  --accent-ink: #ffffff;
+  --hot: #d7ff3f;
+  --rule: #2a2d3a;
+  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-body: "DM Mono", ui-monospace, monospace;
+  --display-weight: 700;
+  --display-tracking: -0.045em;
+  --radius: 999px;
+}
+
+:root {
+  --font-mono: "DM Mono", ui-monospace, monospace;
+  --ease: cubic-bezier(0.65, 0, 0.35, 1);
+}

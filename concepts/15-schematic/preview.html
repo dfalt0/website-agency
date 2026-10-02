@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schematic — drawing set for a site, its hull, and its host</title>
+<style>
+:root{--bp:#0b3b6b;--bp2:#0a3260;--ln:#d6e9ff;--dim:#8fb6dd;--hi:#8fe3ff;--mono:ui-monospace,"JetBrains Mono","IBM Plex Mono",Consolas,monospace}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bp);color:var(--ln);font:13px/1.5 var(--mono);
+ background-image:linear-gradient(rgba(214,233,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(214,233,255,.05) 1px,transparent 1px),linear-gradient(rgba(214,233,255,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(214,233,255,.1) 1px,transparent 1px);
+ background-size:20px 20px,20px 20px,100px 100px,100px 100px;background-attachment:local}
+.sheet{position:relative;max-width:1400px;margin:0 auto;padding:44px 52px 34px}
+.sheet + .sheet{margin-top:0}
+.frame{position:absolute;inset:14px;border:1.5px solid var(--ln);pointer-events:none}
+.frame::before{content:"";position:absolute;inset:6px;border:.5px solid var(--dim)}
+.zx,.zy{position:absolute;font-size:10px;color:var(--dim);display:flex;pointer-events:none}
+.zx{left:14px;right:14px;top:16px;justify-content:space-around}
+.zy{top:14px;bottom:14px;left:17px;flex-direction:column;justify-content:space-around}
+.zx.b{top:auto;bottom:16px}.zy.r{left:auto;right:17px}
+h1,h2,h3{font-weight:500;letter-spacing:.02em}
+.top{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:end;border-bottom:.5px solid var(--dim);padding-bottom:14px;margin-bottom:10px}
+.top h1{font-size:clamp(22px,3vw,38px);line-height:1.1;text-transform:uppercase;letter-spacing:.04em;max-width:22ch}
+.top p{color:var(--dim);max-width:60ch;margin-top:10px;font-size:12.5px}
+.top nav{display:flex;gap:16px;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.top nav a{color:var(--dim);text-decoration:none;border:.5px solid var(--dim);padding:5px 9px}
+.top nav a:hover{color:var(--bp);background:var(--ln);border-color:var(--ln)}
+/* drawing */
+.dwg{width:100%;height:auto;display:block;margin:6px 0 4px}
+.dwg *{vector-effect:non-scaling-stroke}
+.l{stroke:var(--ln);stroke-width:1.4;fill:none}
+.t{stroke:var(--ln);stroke-width:.8;fill:none}
+.d{stroke:var(--dim);stroke-width:.8;fill:none}
+.c{stroke:var(--dim);stroke-width:.7;stroke-dasharray:14 4 2 4;fill:none}
+.h{stroke:var(--dim);stroke-width:.7;fill:none}
+.fillbp{fill:var(--bp)}
+.tx{fill:var(--ln);font:11px var(--mono);letter-spacing:.06em}
+.tx.s{fill:var(--dim);font-size:10px}
+.tx.b{font-size:13px;font-weight:500;letter-spacing:.12em}
+.draw{stroke-dasharray:1800;stroke-dashoffset:1800;animation:dr 2.4s ease forwards}
+@keyframes dr{to{stroke-dashoffset:0}}
+.part{transition:opacity .2s}
+.balloon circle{fill:var(--bp);stroke:var(--ln);stroke-width:1.2;transition:.2s;cursor:pointer}
+.balloon text{fill:var(--ln);font:600 12px var(--mono);text-anchor:middle;pointer-events:none}
+.dwg.f1 .p1,.dwg.f2 .p2,.dwg.f3 .p3{filter:none}
+.dwg[data-f="1"] .part.p2,.dwg[data-f="1"] .part.p3,.dwg[data-f="2"] .part.p1,.dwg[data-f="2"] .part.p3,.dwg[data-f="3"] .part.p1,.dwg[data-f="3"] .part.p2{opacity:.28}
+.dwg[data-f="1"] .b1 circle,.dwg[data-f="2"] .b2 circle,.dwg[data-f="3"] .b3 circle{fill:var(--hi)}
+.dwg[data-f="1"] .b1 text,.dwg[data-f="2"] .b2 text,.dwg[data-f="3"] .b3 text{fill:var(--bp)}
+/* lower row */
+.row{display:grid;grid-template-columns:1fr 440px;gap:26px;margin-top:8px;align-items:end}
+.notes{font-size:12px;color:#bcd7f0}
+.notes h3{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:6px;font-weight:400}
+.notes ol{padding-left:18px}
+.notes li{margin-bottom:3px}
+table{border-collapse:collapse;width:100%}
+.tb{border:1.5px solid var(--ln)}
+.tb td{border:.5px solid var(--ln);padding:5px 9px;font-size:11px;vertical-align:top}
+.tb td small{display:block;color:var(--dim);font-size:9px;letter-spacing:.12em;text-transform:uppercase}
+.tb .big{font-size:17px;letter-spacing:.06em;text-transform:uppercase}
+/* BOM */
+.bom{border:1.5px solid var(--ln);margin-top:14px}
+.bom th{background:rgba(214,233,255,.12);text-align:left;font-weight:500;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:7px 10px;border:.5px solid var(--ln)}
+.bom td{padding:9px 10px;border:.5px solid var(--dim);font-size:12.5px;vertical-align:top;transition:background .2s}
+.bom tr:hover td,.bom tr.on td{background:rgba(143,227,255,.14)}
+.bom td:first-child{text-align:center;width:50px;color:var(--hi)}
+.grid2{display:grid;grid-template-columns:1.5fr 1fr;gap:26px;margin-top:20px}
+.tol td:last-child{text-align:right;color:var(--hi)}
+.tol td{padding:8px 10px;border:.5px solid var(--dim)}
+h2.sh{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:400;color:var(--dim);margin:8px 0}
+/* form */
+form{display:grid;grid-template-columns:repeat(6,1fr);border:1.5px solid var(--ln);margin-top:10px}
+form label{border:.5px solid var(--ln);padding:6px 10px 8px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);display:grid;gap:3px;grid-column:span 2}
+form label.w3{grid-column:span 3}form label.w6{grid-column:span 6}form label.w4{grid-column:span 4}
+input,select,textarea{background:transparent;border:0;color:var(--ln);font:14px var(--mono);outline:0;padding:3px 0;border-radius:0;text-transform:none;letter-spacing:0}
+select option{background:var(--bp)}
+input:focus,select:focus,textarea:focus{background:rgba(143,227,255,.12)}
+textarea{min-height:64px;resize:vertical}
+form button{grid-column:span 2;background:var(--ln);color:var(--bp);border:0;padding:12px;font:600 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border-radius:0}
+form button:hover{background:var(--hi)}
+.ack{grid-column:span 4;border:.5px solid var(--ln);padding:12px 10px;font-size:11px;color:var(--hi);display:flex;align-items:center}
+@media (max-width:900px){.sheet{padding:44px 24px 34px}.row,.grid2,.top{grid-template-columns:1fr}.zx,.zy{display:none}form{grid-template-columns:1fr}form label,form label.w3,form label.w4,form label.w6,form button,.ack{grid-column:span 1}.dwg{min-width:900px}.dwgwrap{overflow-x:auto}}
+@media (prefers-reduced-motion:reduce){.draw{animation:none;stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+
+<!-- ============ SHEET 1 ============ -->
+<section class="sheet" id="s1">
+  <div class="frame"></div>
+  <div class="zx"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div>
+  <div class="zx b"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div>
+  <div class="zy"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+  <div class="zy r"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+
+  <div class="top">
+    <div>
+      <h1>Site, hull, host: general assembly</h1>
+      <p>Custom websites drawn to tolerance, mounted on infrastructure we operate, and inspected monthly. Hover a balloon to isolate a part.</p>
+    </div>
+    <nav><a href="#s1">Sheet 1</a><a href="#s2">Sheet 2</a><a href="#s3">Sheet 3</a></nav>
+  </div>
+
+  <div class="dwgwrap">
+  <svg class="dwg" id="dwg" data-f="0" viewBox="0 0 1200 560" role="img" aria-label="Three-view drawing: site elevation, hull section, host plan">
+    <defs>
+      <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 1 L10 5 L0 9 Z" fill="#8fb6dd"/></marker>
+      <pattern id="hatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="9" stroke="#8fb6dd" stroke-width=".9"/></pattern>
+    </defs>
+
+    <!-- VIEW 1 : SITE ELEVATION -->
+    <g class="part p1">
+      <text class="tx b" x="70" y="40">VIEW A — SITE · ELEVATION</text>
+      <rect class="l draw" x="70" y="70" width="400" height="340"/>
+      <line class="t" x1="70" y1="106" x2="470" y2="106"/>
+      <circle class="t" cx="86" cy="88" r="4"/><circle class="t" cx="100" cy="88" r="4"/><circle class="t" cx="114" cy="88" r="4"/>
+      <line class="t" x1="360" y1="88" x2="380" y2="88"/><line class="t" x1="392" y1="88" x2="412" y2="88"/><line class="t" x1="424" y1="88" x2="444" y2="88"/>
+      <rect class="t" x="94" y="130" width="352" height="110"/>
+      <line class="t" x1="94" y1="130" x2="446" y2="240"/><line class="t" x1="94" y1="240" x2="446" y2="130"/>
+      <rect class="t" x="94" y="262" width="168" height="112"/><rect class="t" x="278" y="262" width="168" height="112"/>
+      <line class="h" x1="106" y1="282" x2="190" y2="282"/><line class="h" x1="106" y1="298" x2="240" y2="298"/><line class="h" x1="106" y1="314" x2="220" y2="314"/>
+      <line class="h" x1="290" y1="282" x2="374" y2="282"/><line class="h" x1="290" y1="298" x2="424" y2="298"/>
+      <!-- dims -->
+      <line class="d" x1="70" y1="410" x2="70" y2="450"/><line class="d" x1="470" y1="410" x2="470" y2="450"/>
+      <line class="d" x1="72" y1="440" x2="468" y2="440" marker-start="url(#ar)" marker-end="url(#ar)"/>
+      <rect class="fillbp" x="228" y="431" width="84" height="18"/><text class="tx" x="270" y="444" text-anchor="middle">1440 PX</text>
+      <line class="d" x1="470" y1="70" x2="520" y2="70"/><line class="d" x1="470" y1="410" x2="520" y2="410"/>
+      <line class="d" x1="508" y1="72" x2="508" y2="408" marker-start="url(#ar)" marker-end="url(#ar)"/>
+      <text class="tx" x="518" y="244" transform="rotate(90 518 244)" text-anchor="middle">LCP ≤ 1.2 S</text>
+      <!-- section line A-A -->
+      <line class="c" x1="40" y1="330" x2="500" y2="330"/>
+      <text class="tx s" x="40" y="324">A</text><text class="tx s" x="486" y="324">A</text>
+      <!-- balloon 1 -->
+      <g class="balloon b1" data-k="1"><line class="t" x1="446" y1="130" x2="430" y2="480"/><circle cx="430" cy="500" r="16"/><text x="430" y="505">1</text></g>
+    </g>
+
+    <!-- VIEW 2 : HULL SECTION -->
+    <g class="part p2">
+      <text class="tx b" x="600" y="40">SECTION A-A — HULL</text>
+      <path class="l draw" d="M590 150 H870 L836 372 Q832 390 814 390 H646 Q628 390 624 372 Z"/>
+      <path d="M590 150 H870 L836 372 Q832 390 814 390 H646 Q628 390 624 372 Z" fill="url(#hatch)" opacity=".85"/>
+      <path class="fillbp l" d="M628 170 H832 L808 352 H652 Z"/>
+      <!-- ribs inside cavity -->
+      <line class="t" x1="680" y1="170" x2="676" y2="352"/><line class="t" x1="730" y1="170" x2="730" y2="352"/><line class="t" x1="780" y1="170" x2="784" y2="352"/>
+      <text class="tx s" x="680" y="250" transform="rotate(-90 680 250)" text-anchor="middle">CODE</text>
+      <text class="tx s" x="730" y="250" transform="rotate(-90 730 250)" text-anchor="middle">CONTENT</text>
+      <text class="tx s" x="780" y="250" transform="rotate(-90 780 250)" text-anchor="middle">CONFIG</text>
+      <!-- deck plate (the site rests on) -->
+      <rect class="l" x="580" y="130" width="300" height="20"/>
+      <line class="c" x1="730" y1="100" x2="730" y2="420"/>
+      <!-- dims -->
+      <line class="d" x1="590" y1="150" x2="560" y2="150"/><line class="d" x1="624" y1="372" x2="560" y2="372"/>
+      <line class="d" x1="568" y1="152" x2="568" y2="370" marker-start="url(#ar)" marker-end="url(#ar)"/>
+      <text class="tx" x="560" y="262" transform="rotate(-90 560 262)" text-anchor="middle">0 DEFECTS</text>
+      <line class="d" x1="590" y1="150" x2="590" y2="440"/><line class="d" x1="870" y1="150" x2="870" y2="440"/>
+      <line class="d" x1="592" y1="430" x2="868" y2="430" marker-start="url(#ar)" marker-end="url(#ar)"/>
+      <rect class="fillbp" x="682" y="421" width="96" height="18"/><text class="tx" x="730" y="434" text-anchor="middle">YOUR REPO</text>
+      <g class="balloon b2" data-k="2"><line class="t" x1="800" y1="300" x2="940" y2="470"/><circle cx="950" cy="486" r="16"/><text x="950" y="491">2</text></g>
+    </g>
+
+    <!-- VIEW 3 : HOST PLAN -->
+    <g class="part p3">
+      <text class="tx b" x="940" y="40">VIEW B — HOST · PLAN</text>
+      <rect class="l draw" x="940" y="130" width="230" height="230"/>
+      <circle class="t" cx="962" cy="152" r="7"/><circle class="t" cx="1148" cy="152" r="7"/><circle class="t" cx="962" cy="338" r="7"/><circle class="t" cx="1148" cy="338" r="7"/>
+      <circle class="l" cx="1055" cy="245" r="62"/><circle class="t" cx="1055" cy="245" r="40"/><circle class="t" cx="1055" cy="245" r="14"/>
+      <line class="c" x1="920" y1="245" x2="1190" y2="245"/><line class="c" x1="1055" y1="110" x2="1055" y2="380"/>
+      <line class="h" x1="1055" y1="245" x2="1100" y2="200"/>
+      <text class="tx s" x="1100" y="196">ORIGIN</text>
+      <text class="tx s" x="975" y="228">EDGE</text>
+      <text class="tx s" x="1000" y="318">VAULT</text>
+      <!-- dims -->
+      <line class="d" x1="940" y1="360" x2="940" y2="400"/><line class="d" x1="1170" y1="360" x2="1170" y2="400"/>
+      <line class="d" x1="942" y1="390" x2="1168" y2="390" marker-start="url(#ar)" marker-end="url(#ar)"/>
+      <rect class="fillbp" x="1010" y="381" width="90" height="18"/><text class="tx" x="1055" y="394" text-anchor="middle">99.9 %</text>
+      <line class="d" x1="1170" y1="130" x2="1192" y2="130"/>
+      <text class="tx s" x="1052" y="116" text-anchor="middle">Ø 3 REGIONS</text>
+      <g class="balloon b3" data-k="3"><line class="t" x1="1148" y1="338" x2="1090" y2="486"/><circle cx="1080" cy="500" r="16"/><text x="1080" y="505">3</text></g>
+    </g>
+  </svg>
+  </div>
+
+  <div class="row">
+    <div class="notes">
+      <h3>General notes</h3>
+      <ol>
+        <li>Site is drawn first, to a written brief, then cut in code. No stock templates.</li>
+        <li>Hull (code, content, config) is delivered to the owner at launch.</li>
+        <li>Host mounts on our infrastructure; backups nightly, rollback in minutes.</li>
+        <li>Interpret drawings per the care cycle on Sheet 2. Figures are illustrative.</li>
+      </ol>
+    </div>
+    <table class="tb">
+      <tr><td colspan="3"><small>Title</small><span class="big">Schematic — web assembly</span></td></tr>
+      <tr><td><small>Dwg no.</small>SCH-015-001</td><td><small>Rev</small>C</td><td><small>Scale</small>1:1</td></tr>
+      <tr><td><small>Drawn</small>Design</td><td><small>Checked</small>Engineering</td><td><small>Sheet</small>1 / 3</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ SHEET 2 ============ -->
+<section class="sheet" id="s2">
+  <div class="frame"></div>
+  <div class="zx"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div>
+  <div class="zy"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+  <div class="zx b"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div>
+  <div class="zy r"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+  <h2 class="sh" style="margin-top:20px">Sheet 2 — Bill of materials &amp; tolerances</h2>
+  <table class="bom" id="bom">
+    <thead><tr><th>Item</th><th>Part</th><th>Description</th><th>Spec</th><th>Qty</th></tr></thead>
+    <tbody>
+      <tr data-k="1"><td>1</td><td>SITE</td><td>Custom-designed pages, hand-coded; two design directions, two revision rounds.</td><td>3–5 weeks</td><td>1</td></tr>
+      <tr data-k="2"><td>2</td><td>HULL</td><td>Repository, content, config, design files; owned by the client.</td><td>Delivered at launch</td><td>1</td></tr>
+      <tr data-k="3"><td>3</td><td>HOST</td><td>Origin + standby, edge cache, TLS, nightly backup, rollback gate.</td><td>≥ 99.9 % monthly</td><td>1</td></tr>
+      <tr data-k="4"><td>4</td><td>CARE</td><td>Monthly inspection, patches, edits inside plan hours, one-page report.</td><td>Reply ≤ 1 business day</td><td>12 / yr</td></tr>
+    </tbody>
+  </table>
+  <div class="grid2">
+    <div>
+      <h2 class="sh">Tolerances</h2>
+      <table class="tol">
+        <tr><td>Largest contentful paint</td><td>≤ 1.2 s</td></tr>
+        <tr><td>Layout at 320 / 768 / 1440</td><td>0 breaks</td></tr>
+        <tr><td>Dependency age</td><td>≤ 30 days</td></tr>
+        <tr><td>Restore from backup</td><td>≤ 4 h</td></tr>
+        <tr><td>Broken links</td><td>0</td></tr>
+      </table>
+    </div>
+    <div class="notes">
+      <h3>Revision history</h3>
+      <ol><li>A — Brief approved, structure drawn.</li><li>B — Design chosen, build started.</li><li>C — Launch; care cycle begins.</li><li>D+ — Monthly entries, logged.</li></ol>
+    </div>
+  </div>
+  <div class="row" style="margin-top:20px"><div></div>
+    <table class="tb">
+      <tr><td colspan="3"><small>Title</small><span class="big">Bill of materials</span></td></tr>
+      <tr><td><small>Dwg no.</small>SCH-015-002</td><td><small>Rev</small>C</td><td><small>Sheet</small>2 / 3</td></tr>
+    </table></div>
+</section>
+
+<!-- ============ SHEET 3 ============ -->
+<section class="sheet" id="s3">
+  <div class="frame"></div>
+  <div class="zx"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div>
+  <div class="zy"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+  <div class="zx b"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div>
+  <div class="zy r"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+  <h2 class="sh" style="margin-top:20px">Sheet 3 — Change order request</h2>
+  <p style="max-width:62ch;color:#bcd7f0;margin:6px 0 10px">Submit a request to open a drawing for your site. We return a scoped proposal and a start date within one business day.</p>
+  <form id="f">
+    <label>Requested by<input required></label>
+    <label>Email<input type="email" required></label>
+    <label>Existing site<input placeholder="URL or none"></label>
+    <label class="w3">Assembly<select><option>SITE + HULL + HOST + CARE</option><option>HOST + CARE only</option><option>SITE only</option></select></label>
+    <label class="w3">Target date<input type="text" placeholder="e.g. Q1"></label>
+    <label class="w6">Description of change<textarea></textarea></label>
+    <button>Issue order</button><div class="ack" id="ack" role="status">STATUS: DRAFT — NOT ISSUED</div>
+  </form>
+  <div class="row" style="margin-top:20px"><div class="notes"><h3>Contact</h3>Replies from a named lead. No account managers.</div>
+    <table class="tb">
+      <tr><td colspan="3"><small>Title</small><span class="big">Change order</span></td></tr>
+      <tr><td><small>Dwg no.</small>SCH-015-003</td><td><small>Rev</small>C</td><td><small>Sheet</small>3 / 3</td></tr>
+    </table></div>
+</section>
+
+<script>
+const dwg=document.getElementById('dwg');
+document.querySelectorAll('.balloon').forEach(b=>{const k=b.dataset.k;
+ b.addEventListener('mouseenter',()=>{dwg.dataset.f=k;hl(k)});b.addEventListener('mouseleave',()=>{dwg.dataset.f=0;hl(0)});});
+function hl(k){document.querySelectorAll('#bom tr[data-k]').forEach(r=>r.classList.toggle('on',r.dataset.k==k))}
+document.querySelectorAll('#bom tr[data-k]').forEach(r=>{r.addEventListener('mouseenter',()=>{if(r.dataset.k<4)dwg.dataset.f=r.dataset.k});r.addEventListener('mouseleave',()=>dwg.dataset.f=0)});
+document.getElementById('f').addEventListener('submit',e=>{e.preventDefault();document.getElementById('ack').textContent='STATUS: ISSUED — ECO-'+Math.floor(1000+Math.random()*9000);e.target.reset();});
+</script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cutaway — a website in section</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&family=Overpass+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f2f7fa; --ink:#0b2545; --hatch:#8da9c4; --tint:#dfeaf3; --call:#ff5a1f; --call-bg:#ffe6da; --mute:#4c6482;
+  --sans:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif; --mono:"Overpass Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.4;
+  background-image:linear-gradient(#0b25450d 1px,transparent 1px),linear-gradient(90deg,#0b25450d 1px,transparent 1px);background-size:40px 40px}
+.top{display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid var(--ink);background:var(--paper)}
+.top>*{padding:12px 24px}
+.top .b{font-weight:800;font-size:19px;letter-spacing:-.03em;border-right:1.5px solid var(--ink)}
+.top nav{margin-right:auto;display:flex;gap:26px;font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em}
+.top nav a{color:var(--ink);text-decoration:none}.top nav a:hover{color:var(--call)}
+.top .cta{background:var(--ink);color:#fff;font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;text-decoration:none}
+.top .cta:hover{background:var(--call)}
+.sheet{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(360px,1fr);min-height:calc(100vh - 47px)}
+.draw{border-right:1.5px solid var(--ink);position:relative;padding:22px 28px 0}
+.ttl{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
+.ttl h1{font-weight:800;font-size:clamp(26px,3vw,42px);line-height:.98;letter-spacing:-.04em;max-width:16ch}
+.ttl .fig{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;text-align:right;color:var(--mute)}
+svg.sec{width:100%;height:auto;max-height:calc(100vh - 210px);display:block;margin-top:8px}
+svg text{font-family:var(--mono);font-size:11px;fill:var(--ink);letter-spacing:.04em}
+svg .lab{font-size:10px;fill:var(--mute);text-transform:uppercase}
+svg .body{fill:#fff;stroke:var(--ink);stroke-width:1.6;transition:fill .15s}
+svg .cut{fill:url(#h);stroke:var(--ink);stroke-width:1.2}
+svg .ln{fill:none;stroke:var(--ink);stroke-width:1.3}
+svg .th{fill:none;stroke:var(--hatch);stroke-width:1}
+svg .flow{fill:none;stroke:var(--call);stroke-width:1.5;stroke-dasharray:5 4;marker-end:url(#ar)}
+svg .lead{stroke:var(--call);stroke-width:1.2;fill:none}
+svg .dot{fill:var(--call)}
+svg .call circle{fill:var(--paper);stroke:var(--call);stroke-width:2;transition:fill .15s}
+svg .call text{font-weight:600;fill:var(--call);text-anchor:middle;font-size:14px;font-family:var(--sans)}
+svg .call{cursor:pointer}
+svg g.layer.on .body{fill:var(--call-bg)}
+svg g.layer.on .call circle{fill:var(--call)}
+svg g.layer.on .call text{fill:#fff}
+svg .care{fill:none;stroke:var(--ink);stroke-width:1.6}
+.tb{display:grid;grid-template-columns:repeat(4,1fr);border:1.5px solid var(--ink);margin:6px 0 22px;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;background:var(--paper)}
+.tb div{padding:6px 10px;border-right:1px solid var(--ink)}.tb div:last-child{border:0}
+.tb b{display:block;font-weight:600;font-size:12px;color:var(--ink)}
+.tb span{color:var(--mute)}
+/* legend */
+.key{padding:22px 28px 28px;display:flex;flex-direction:column}
+.key h2{font-family:var(--mono);font-weight:600;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);border-bottom:1.5px solid var(--ink);padding-bottom:8px}
+.key ol{list-style:none}
+.key li{display:grid;grid-template-columns:34px 1fr auto;gap:2px 14px;padding:14px 8px;border-bottom:1px solid var(--hatch);cursor:pointer;transition:background .15s}
+.key li:hover,.key li.on{background:var(--call-bg)}
+.key li i{width:26px;height:26px;border-radius:50%;border:2px solid var(--call);color:var(--call);display:grid;place-items:center;font-style:normal;font-weight:700;font-size:13px;grid-row:span 2}
+.key li.on i,.key li:hover i{background:var(--call);color:#fff}
+.key li h3{font-size:17px;font-weight:700;letter-spacing:-.02em}
+.key li .pr{font-family:var(--mono);font-size:12px;font-weight:600;text-align:right;white-space:nowrap}
+.key li p{grid-column:2/-1;color:#2d4466;font-size:14px;max-width:46ch}
+.key li .who{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.order{margin-top:auto;padding-top:22px}
+.order .box{border:1.5px solid var(--ink);padding:16px 18px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:#fff}
+.order strong{font-size:20px;font-weight:800;letter-spacing:-.03em;line-height:1.05}
+.order small{display:block;font-family:var(--mono);font-size:11px;color:var(--mute);margin-top:4px;font-weight:400;letter-spacing:.04em}
+.order a{background:var(--call);color:#fff;text-decoration:none;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.06em;padding:12px 16px;white-space:nowrap}
+.order a:hover{background:var(--ink)}
+@media (max-width:980px){.sheet{grid-template-columns:1fr}.draw{border-right:0;border-bottom:1.5px solid var(--ink)}.top nav{display:none}.tb{grid-template-columns:1fr 1fr}.tb div:nth-child(2){border-right:0}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="b">Cutaway</div>
+  <nav><a href="#key">Parts list</a><a href="#key">Hosting</a><a href="#key">Care</a></nav>
+  <a class="cta" href="#order">Request a survey</a>
+</header>
+
+<main class="sheet">
+  <section class="draw">
+    <div class="ttl">
+      <h1>A website, cut open from visitor to backup.</h1>
+      <div class="fig">Fig. 1<br>Section A–A<br>Not to scale</div>
+    </div>
+
+    <svg class="sec" viewBox="0 0 900 800" role="img" aria-label="Cross-section of a website stack: visitor, DNS, edge network, host, site, backups, with care wrapped around all layers">
+      <defs>
+        <pattern id="h" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="#f2f7fa"/><line x1="0" y1="0" x2="0" y2="8" stroke="#8da9c4" stroke-width="1.4"/></pattern>
+        <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ff5a1f"/></marker>
+      </defs>
+
+      <!-- elevation ruler -->
+      <g class="lab"><text x="130" y="22">REQUEST ↓</text></g>
+
+      <!-- 1 visitor -->
+      <g class="layer" data-n="1">
+        <rect class="body" x="150" y="34" width="500" height="82"/>
+        <rect class="ln" x="190" y="50" width="70" height="48" rx="3"/><path class="ln" d="M205 106h40"/><!-- laptop -->
+        <rect class="ln" x="285" y="46" width="26" height="52" rx="4"/><!-- phone -->
+        <text x="350" y="68">VISITOR</text><text class="lab" x="350" y="86">Phone or laptop, anywhere</text>
+        <g class="call"><path class="lead" d="M650 75H730"/><circle cx="752" cy="75" r="17"/><text x="752" y="80">1</text></g>
+      </g>
+      <path class="flow" d="M400 118V150"/>
+
+      <!-- 2 DNS -->
+      <g class="layer" data-n="2">
+        <rect class="body" x="150" y="152" width="500" height="68"/>
+        <rect class="cut" x="150" y="152" width="40" height="68"/>
+        <text x="206" y="178">DNS</text><text class="lab" x="206" y="196">yourname.com → our network</text>
+        <text class="lab" x="470" y="178">A  · CNAME · MX · TXT</text><text class="lab" x="470" y="196">records managed by us</text>
+        <g class="call"><path class="lead" d="M650 186H730"/><circle cx="752" cy="186" r="17"/><text x="752" y="191">2</text></g>
+      </g>
+      <path class="flow" d="M400 222V254"/>
+
+      <!-- 3 edge -->
+      <g class="layer" data-n="3">
+        <rect class="body" x="150" y="256" width="500" height="104"/>
+        <rect class="cut" x="150" y="256" width="40" height="104"/>
+        <text x="206" y="282">EDGE NETWORK</text><text class="lab" x="206" y="300">Copies near every visitor · SSL ends here</text>
+        <g class="ln"><circle cx="230" cy="338" r="9"/><circle cx="330" cy="326" r="9"/><circle cx="440" cy="340" r="9"/><circle cx="550" cy="324" r="9"/><circle cx="610" cy="340" r="9"/>
+          <path d="M239 336L321 328M339 327L431 338M449 338L541 326M559 326L601 338"/></g>
+        <g class="call"><path class="lead" d="M650 308H730"/><circle cx="752" cy="308" r="17"/><text x="752" y="313">3</text></g>
+      </g>
+      <path class="flow" d="M400 362V394"/>
+
+      <!-- 4 host -->
+      <g class="layer" data-n="4">
+        <rect class="body" x="150" y="396" width="500" height="140"/>
+        <rect class="cut" x="150" y="396" width="40" height="140"/>
+        <text x="206" y="422">HOST</text><text class="lab" x="206" y="440">Where the site runs · auto-deploys · pager on us</text>
+        <g class="ln"><rect x="206" y="456" width="200" height="16"/><rect x="206" y="476" width="200" height="16"/><rect x="206" y="496" width="200" height="16"/>
+          <circle cx="388" cy="464" r="3"/><circle cx="388" cy="484" r="3"/><circle cx="388" cy="504" r="3"/>
+          <path d="M440 468h150M440 488h110M440 508h130" /></g>
+        <text class="lab" x="440" y="456">99.98% · 12 mo</text>
+        <g class="call"><path class="lead" d="M650 466H730"/><circle cx="752" cy="466" r="17"/><text x="752" y="471">4</text></g>
+      </g>
+      <path class="flow" d="M400 538V570"/>
+
+      <!-- 5 site -->
+      <g class="layer" data-n="5">
+        <rect class="body" x="150" y="572" width="500" height="124"/>
+        <rect class="cut" x="150" y="572" width="40" height="124"/>
+        <text x="206" y="598">THE SITE · YOURS</text><text class="lab" x="206" y="616">Custom design, hand-written code, editor you can use</text>
+        <g class="ln"><rect x="206" y="632" width="110" height="50"/><rect x="326" y="632" width="110" height="50"/><rect x="446" y="632" width="110" height="50"/>
+          <path d="M214 646h60M214 656h80M334 646h60M334 656h80M454 646h60M454 656h80"/></g>
+        <text x="570" y="662" style="font-size:20px">{ }</text>
+        <g class="call"><path class="lead" d="M650 634H730"/><circle cx="752" cy="634" r="17"/><text x="752" y="639">5</text></g>
+      </g>
+      <path class="flow" d="M400 698V730"/>
+
+      <!-- 6 backups -->
+      <g class="layer" data-n="6">
+        <rect class="body" x="150" y="732" width="500" height="58"/>
+        <rect class="cut" x="150" y="732" width="40" height="58"/>
+        <text x="206" y="756">BACKUPS &amp; DATA</text><text class="lab" x="206" y="774">Nightly snapshots · restore tested monthly</text>
+        <g class="ln"><ellipse cx="500" cy="746" rx="22" ry="6"/><path d="M478 746v28a22 6 0 0 0 44 0v-28"/><ellipse cx="580" cy="746" rx="22" ry="6"/><path d="M558 746v28a22 6 0 0 0 44 0v-28"/></g>
+        <g class="call"><path class="lead" d="M650 761H730"/><circle cx="752" cy="761" r="17"/><text x="752" y="766">6</text></g>
+      </g>
+
+      <!-- 7 care wraps all layers -->
+      <g class="layer" data-n="7">
+        <path class="care" d="M126 152H104V790H126"/>
+        <path class="care" d="M96 152H84V790H96" style="stroke:var(--call)"/>
+        <path d="M104 152V790" stroke="#ff5a1f" stroke-width="0"/>
+        <text transform="translate(60 470) rotate(-90)" text-anchor="middle" style="font-weight:600">CARE · A PERSON WATCHES EVERY LAYER</text>
+        <g class="call"><path class="lead" d="M84 140V100H40"/><circle cx="26" cy="100" r="17"/><text x="26" y="105">7</text></g>
+        <rect class="body" x="0" y="0" width="0" height="0" style="opacity:0"/>
+      </g>
+    </svg>
+
+    <div class="tb">
+      <div><span>Drawing</span><b>CUT-001</b></div>
+      <div><span>Scale</span><b>1:1 YOUR SITE</b></div>
+      <div><span>Rev.</span><b>OCT 2026</b></div>
+      <div><span>Drawn by</span><b>CUTAWAY STUDIO</b></div>
+    </div>
+  </section>
+
+  <aside class="key" id="key">
+    <h2>Parts list · numbered to Fig. 1</h2>
+    <ol>
+      <li data-n="1"><i>1</i><h3>Your visitor</h3><span class="pr"></span><p>Anyone, on anything. First paint in under a second is the target we build to.</p></li>
+      <li data-n="2"><i>2</i><h3>DNS</h3><span class="pr">incl. in 4</span><p>We point your domain at our network, keep email working and manage every record.</p></li>
+      <li data-n="3"><i>3</i><h3>Edge network</h3><span class="pr">incl. in 4</span><p>A copy of your site in 30+ cities, with SSL renewed automatically.</p></li>
+      <li data-n="4"><i>4</i><h3>Host</h3><span class="pr">$49 / mo</span><p>Where the site runs. Deploys are automatic; if it falters, the pager rings at our desk, not yours.</p></li>
+      <li data-n="5"><i>5</i><h3>The site, built for you</h3><span class="pr">from $4,500</span><p>Custom design and hand-written code, with an editor you can use yourself. You own every file.</p></li>
+      <li data-n="6"><i>6</i><h3>Backups &amp; data</h3><span class="pr">incl. in 4</span><p>Nightly snapshots kept 30 days. We test a restore every month so we know it works.</p></li>
+      <li data-n="7"><i>7</i><h3>Care</h3><span class="pr">$199 / mo</span><p>Wraps layers 2–6. Four changes a month, every security patch, a quarterly review.</p></li>
+    </ol>
+    <div class="order" id="order">
+      <div class="box"><strong>Want your own section drawing?<small>Send the URL. We return a marked-up survey in a business day.</small></strong><a href="mailto:hello@cutaway.studio">Request a survey →</a></div>
+    </div>
+  </aside>
+</main>
+
+<script>
+(function(){
+  var items=[].slice.call(document.querySelectorAll('[data-n]'));
+  function on(n,v){items.forEach(function(e){if(e.dataset.n===n)e.classList.toggle('on',v)})}
+  items.forEach(function(e){
+    e.addEventListener('mouseenter',function(){on(e.dataset.n,true)});
+    e.addEventListener('mouseleave',function(){on(e.dataset.n,false)});
+  });
+})();
+</script>
+</body>
+</html>

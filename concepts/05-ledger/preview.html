@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ledger — Concept Preview</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --white:#f7f8f6; --ink:#1e2420; --rule:#c9cec8; --green:#2f6f4e; --blue:#3d5a6c; --sage:#eef2ef; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "IBM Plex Sans", system-ui, sans-serif; background: var(--white); color: var(--ink); }
+    h1,h2 { font-family: "Libre Baskerville", Georgia, serif; font-weight: 400; letter-spacing: -0.02em; }
+    .tag { position: fixed; top: 0.75rem; left: 0.75rem; z-index: 20; background: var(--green); color: #fff; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.35rem 0.55rem; }
+    .nav { display: flex; justify-content: space-between; align-items: center; padding: 1.1rem 2.5rem; border-bottom: 1px solid var(--rule); background: var(--white); }
+    .brand { font-family: "Libre Baskerville", serif; font-size: 1.25rem; }
+    .nav ul { display: flex; gap: 1.5rem; list-style: none; font-size: 0.88rem; color: var(--blue); }
+    .btn { display: inline-flex; padding: 0.65rem 1.05rem; font-size: 0.85rem; font-weight: 600; text-decoration: none; border-radius: 0.25rem; }
+    .btn-g { background: var(--green); color: #fff; }
+    .btn-o { border: 1px solid var(--rule); color: var(--ink); }
+    .hero { padding: 5rem 2.5rem 3.5rem; max-width: 780px; }
+    .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 1rem; }
+    .hero h1 { font-size: clamp(2.2rem, 4.5vw, 3.2rem); line-height: 1.2; margin-bottom: 1rem; }
+    .hero p { font-size: 1.05rem; line-height: 1.75; color: #4a524c; max-width: 34rem; margin-bottom: 1.75rem; }
+    .statement { margin: 0 2.5rem 3rem; border: 1px solid var(--rule); background: #fff; }
+    .statement header { display: flex; justify-content: space-between; padding: 0.85rem 1.25rem; background: var(--sage); border-bottom: 1px solid var(--rule); font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); }
+    .statement table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    .statement th, .statement td { text-align: left; padding: 0.95rem 1.25rem; border-bottom: 1px solid var(--rule); }
+    .statement th { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); font-weight: 500; }
+    .statement tr:last-child td { border-bottom: none; }
+    .statement td:first-child { font-family: "IBM Plex Mono", monospace; color: var(--green); width: 4rem; }
+    .accounts { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--rule); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+    .accounts article { background: var(--white); padding: 1.75rem 1.5rem; }
+    .accounts h3 { font-family: "IBM Plex Sans", sans-serif; font-weight: 600; font-size: 1.05rem; margin-bottom: 0.5rem; }
+    .accounts p { font-size: 0.92rem; line-height: 1.6; color: #4a524c; }
+    .close { padding: 4rem 2.5rem; text-align: center; }
+    .close h2 { font-size: 1.85rem; margin-bottom: 0.75rem; }
+    .close p { color: #4a524c; margin-bottom: 1.25rem; }
+    @media (max-width:800px){
+      .accounts { grid-template-columns: 1fr; }
+      .nav ul { display: none; }
+      .hero, .close { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .statement { margin-left: 1.25rem; margin-right: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="tag">Concept 05 · Ledger</div>
+  <header class="nav">
+    <div class="brand">Ledger</div>
+    <ul><li>Services</li><li>Process</li><li>Plans</li></ul>
+    <a class="btn btn-g" href="#">Open an account</a>
+  </header>
+  <section class="hero">
+    <p class="eyebrow">Custom websites · Hosting & care</p>
+    <h1>Your website, on the books.</h1>
+    <p>We design and build custom sites, host them under our care, and keep every change logged — so nothing drifts off the ledger.</p>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+      <a class="btn btn-g" href="#">Open an account</a>
+      <a class="btn btn-o" href="#">Review how we work</a>
+    </div>
+  </section>
+  <div class="statement">
+    <header><span>Statement of work</span><span>ACCT-PREVIEW</span></header>
+    <table>
+      <thead><tr><th>Entry</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>01</td><td>Discovery & scope</td></tr>
+        <tr><td>02</td><td>Design approval</td></tr>
+        <tr><td>03</td><td>Build & QA</td></tr>
+        <tr><td>04</td><td>Launch on our hosting</td></tr>
+        <tr><td>05</td><td>Monthly care entries</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <section class="accounts">
+    <article><h3>Design & build</h3><p>Scoped projects. Clear deliverables before work starts.</p></article>
+    <article><h3>Hosting</h3><p>Performance hosting, SSL, backups — a line on your monthly statement.</p></article>
+    <article><h3>Ongoing entries</h3><p>Updates and new pages within an agreed scope. No mystery retainers.</p></article>
+  </section>
+  <section class="close">
+    <h2>Ready to open an account?</h2>
+    <p>Share your goals. We’ll reply with a clear proposal.</p>
+    <a class="btn btn-g" href="#">Open an account</a>
+  </section>
+</body>
+</html>
