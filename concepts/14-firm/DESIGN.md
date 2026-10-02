@@ -1,46 +1,23 @@
 # Concept 14 — Firm
 
 ## Positioning
+Traditional brochure site with a **distinct page architecture** (not a recolor of a shared template).
 
-**What you are:** A traditionally structured website studio — familiar navigation, clear sections, restrained visuals.
+**Architecture:** Centered institutional lockup + two text columns, zero cards
+
+**Voice:** Classic firm.
 
 **Promise:** A firm website. Nothing more, nothing less.
 
-**Not:** Experimental layouts, bold art-direction spectacles, or “concept site” theatrics.
-
-**Ideal client:** Owners who want a professional site that feels normal and easy to use — not a portfolio piece for designers.
-
-## Voice & language
-
-Classic firm. Black, white, Playfair. Institutional restraint.
-
-**Sample lines:**
-- Hero: “A firm website. Nothing more, nothing less.”
-- Sub: “Classic structure, restrained design, and reliable hosting — for clients who want professionalism over spectacle.”
-- CTA: “Request a proposal”
+**Not:** Experimental scroll toys, identical card grids across concepts, or “same HTML different hex.”
 
 ## Visual system
+- `--bg`: `#fafafa`
+- `--ink`: `#111111`
+- `--mute`: `#666666`
+- `--line`: `#e0e0e0`
 
-| Token | Value | Role |
-|-------|-------|------|
-| Background | `#FAFAFA` | Page ground |
-| Ink | `#111111` | Primary text |
-| Mute | `#666666` | Secondary text |
-| Line | `#E0E0E0` | Borders |
-| Accent | `#111111` | Buttons / links |
-| Soft | `#F0F0F0` | Soft panels |
-| Card | `#FFFFFF` | Surfaces |
+**Type:** Playfair Display / Source Sans 3
 
-**Type:** Heading `"Playfair Display", Georgia, serif` · Body `"Source Sans 3", system-ui, sans-serif`
-
-## Layout architecture
-
-Traditional brochure site:
-1. Sticky top nav + primary CTA
-2. Centered/left hero with one headline, one sub, two CTAs
-3. Three service cards
-4. Numbered process steps
-5. Three pricing tiles
-6. Dark closing band + simple footer
-
-Shared business facts: Build from $4,500 · Hosting $49/mo · Care $199/mo.
+## Business facts
+Build from $4,500 · Hosting $49/mo · Care $199/mo

@@ -1,12 +1,8 @@
 :root {
-  --bg: #F6F4F1;
-  --ink: #1C1B19;
-  --mute: #6B6560;
-  --line: #DDD8D1;
-  --accent: #3D5A80;
-  --soft: #EFEBE6;
-  --card: #FFFCFA;
+  --paper: #f3efe8;
+  --ink: #1d1a16;
+  --navy: #2f4a6e;
+  --line: #cfc6ba;
   --font-heading: "Newsreader", Georgia, serif;
   --font-body: "Libre Franklin", system-ui, sans-serif;
-  --radius: 0.5rem;
 }

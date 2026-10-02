@@ -1,12 +1,8 @@
 :root {
-  --bg: #FFF8F2;
-  --ink: #2A211C;
-  --mute: #7A6A60;
-  --line: #E8D9CC;
-  --accent: #C45C26;
-  --soft: #FFF1E6;
-  --card: #FFFFFF;
+  --bg: #fff8f2;
+  --ink: #2a211c;
+  --clay: #c45c26;
+  --band: #3b2f28;
   --font-heading: "Fraunces", Georgia, serif;
   --font-body: "Nunito Sans", system-ui, sans-serif;
-  --radius: 0.5rem;
 }

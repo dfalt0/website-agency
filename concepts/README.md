@@ -3,7 +3,7 @@
 Alternate brand + website directions for a company that builds custom websites and hosts them.
 
 - **01–05** — original studio metaphors (Harbor → Ledger).
-- **06–15** — **traditional brochure sites**. Familiar nav → hero → services → process → pricing → CTA. Calmer, simpler, for people who don’t want bold experimental design.
+- **06–15** — **traditional sites** with *different* familiar architectures (letterhead, FAQ-first, job board, booking form, civic bureau, etc.) — calmer than 16–45, not recolors of one template.
 - **16–45** — experimental layout architectures (former 06–35). Thematic cues from YC Fall 2026 / Winter 2027 / Summer 2027 only. Structural lessons studied from reference sites — **not** copied.
 
 | Folder | Codename | Layout architecture |
@@ -13,16 +13,16 @@ Alternate brand + website directions for a company that builds custom websites a
 | `03-signal` | Signal | Classic studio |
 | `04-kiln` | Kiln | Classic studio |
 | `05-ledger` | Ledger | Classic studio |
-| `06-atelier` | Atelier | Traditional brochure |
-| `07-practice` | Practice | Traditional brochure |
-| `08-storefront` | Storefront | Traditional brochure |
-| `09-bureau` | Bureau | Traditional brochure |
-| `10-partner` | Partner | Traditional brochure |
-| `11-commons` | Commons | Traditional brochure |
-| `12-workshop` | Workshop | Traditional brochure |
-| `13-clinic` | Clinic | Traditional brochure |
-| `14-firm` | Firm | Traditional brochure |
-| `15-cornerstone` | Cornerstone | Traditional brochure |
+| `06-atelier` | Atelier | Side rail + split hero + fee ledger |
+| `07-practice` | Practice | Letterhead document + fee table |
+| `08-storefront` | Storefront | Awning sign + info windows + chalk board |
+| `09-bureau` | Bureau | Civic main/aside + intake DL |
+| `10-partner` | Partner | Essay opening + year timeline |
+| `11-commons` | Commons | FAQ-first details page |
+| `12-workshop` | Workshop | Job board table first |
+| `13-clinic` | Clinic | Booking form + care comparison |
+| `14-firm` | Firm | Centered institutional lockup |
+| `15-cornerstone` | Cornerstone | Phone bar + banner + form |
 | `16-specimen` | Specimen | Split macro essay + morphing CSS specimen |
 | `17-briefing` | Briefing | Operator briefing doc |
 | `18-overlay` | Overlay | Fixed scene + scroll overlays |

@@ -1,12 +1,8 @@
 :root {
-  --bg: #F5F7FA;
-  --ink: #1E293B;
-  --mute: #64748B;
-  --line: #CBD5E1;
-  --accent: #0F766E;
-  --soft: #E2E8F0;
-  --card: #FFFFFF;
+  --bg: #f5f7fa;
+  --ink: #1e293b;
+  --teal: #0f766e;
+  --line: #cbd5e1;
   --font-heading: "Literata", Georgia, serif;
   --font-body: "Outfit", system-ui, sans-serif;
-  --radius: 0.5rem;
 }

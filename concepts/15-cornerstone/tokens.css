@@ -1,12 +1,8 @@
 :root {
-  --bg: #F5F4F2;
-  --ink: #1F1C18;
-  --mute: #6A645C;
-  --line: #D8D3CB;
-  --accent: #5C4B3A;
-  --soft: #EBE8E2;
-  --card: #FFFEFC;
+  --bg: #f5f4f2;
+  --ink: #1f1c18;
+  --stone: #5c4b3a;
+  --banner: #3f3429;
   --font-heading: "Spectral", Georgia, serif;
   --font-body: "Manrope", system-ui, sans-serif;
-  --radius: 0.5rem;
 }

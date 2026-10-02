@@ -4,141 +4,144 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Atelier — Concept Preview</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #F6F4F1; --ink: #1C1B19; --mute: #6B6560; --line: #DDD8D1;
-      --accent: #3D5A80; --soft: #EFEBE6; --card: #FFFCFA;
+      --paper: #f3efe8; --ink: #1d1a16; --slate: #5a534b; --navy: #2f4a6e;
+      --panel: #dfe6ef; --line: #cfc6ba;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: "Libre Franklin", system-ui, sans-serif;
-      background:
-        radial-gradient(900px 420px at 12% -10%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 60%),
-        linear-gradient(180deg, var(--bg), color-mix(in srgb, var(--soft) 55%, var(--bg)));
-      color: var(--ink);
-      line-height: 1.55;
-    }
-    h1,h2,h3 { font-family: "Newsreader", Georgia, serif; font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; }
+    body { font-family: "Libre Franklin", system-ui, sans-serif; background: var(--paper); color: var(--ink); }
+    h1,h2,h3 { font-family: "Newsreader", Georgia, serif; font-weight: 600; letter-spacing: -0.02em; }
     a { color: inherit; text-decoration: none; }
-    .tag {
-      position: fixed; top: 0.75rem; left: 0.75rem; z-index: 30;
-      background: var(--accent); color: #fff; font-size: 0.65rem; letter-spacing: 0.1em;
-      text-transform: uppercase; padding: 0.35rem 0.55rem; border-radius: 0.25rem;
+    .tag { position: fixed; top: .75rem; left: .75rem; z-index: 40; background: var(--navy); color: #fff; font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; padding: .35rem .55rem; }
+
+    /* Split-shell: sticky brand rail + scrolling page */
+    .shell { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+    .rail {
+      border-right: 1px solid var(--line); padding: 2rem 1.25rem; position: sticky; top: 0; height: 100vh;
+      display: flex; flex-direction: column; gap: 2rem;
     }
-    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
-    .nav {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 1.1rem 0; border-bottom: 1px solid var(--line);
-      background: color-mix(in srgb, var(--bg) 88%, transparent);
-      backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 20;
+    .rail .brand { font-family: "Newsreader", serif; font-size: 1.6rem; }
+    .rail nav { display: flex; flex-direction: column; gap: .85rem; font-size: .92rem; color: var(--slate); }
+    .rail nav a:hover { color: var(--navy); }
+    .rail .phone { margin-top: auto; font-size: .8rem; color: var(--slate); line-height: 1.5; }
+
+    .page { min-width: 0; }
+    .split-hero { display: grid; grid-template-columns: 1.15fr .85fr; min-height: 78vh; border-bottom: 1px solid var(--line); }
+    .hero-copy { padding: 4.5rem 3rem 3rem; display: flex; flex-direction: column; justify-content: center; }
+    .hero-copy .kicker { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--navy); margin-bottom: 1rem; font-weight: 600; }
+    .hero-copy h1 { font-size: clamp(2.2rem, 4vw, 3.3rem); line-height: 1.12; max-width: 11ch; margin-bottom: 1.1rem; }
+    .hero-copy p { color: var(--slate); max-width: 34rem; line-height: 1.7; margin-bottom: 1.6rem; }
+    .hero-copy .cta { display: inline-block; background: var(--navy); color: #fff; padding: .75rem 1.15rem; font-size: .875rem; font-weight: 600; }
+    .hero-panel {
+      background:
+        linear-gradient(160deg, #2f4a6e 0%, #3d5f7a 42%, #8ea4b8 100%);
+      position: relative;
     }
-    .brand { font-family: "Newsreader", Georgia, serif; font-size: 1.35rem; }
-    .nav ul { display: flex; gap: 1.4rem; list-style: none; font-size: 0.9rem; color: var(--mute); }
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      padding: 0.7rem 1.1rem; border-radius: 0.4rem; font-size: 0.875rem; font-weight: 600;
-      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+    .hero-panel::after {
+      content: "Custom sites · Hosted with us";
+      position: absolute; left: 1.5rem; bottom: 1.5rem; color: rgba(255,255,255,.85);
+      font-size: .8rem; letter-spacing: .08em; text-transform: uppercase;
     }
-    .btn:hover { transform: translateY(-1px); }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-ghost { border: 1px solid var(--line); background: var(--card); color: var(--ink); }
-    .hero { padding: 4.5rem 0 3.25rem; }
-    .eyebrow {
-      font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--accent); margin-bottom: 0.9rem; font-weight: 600;
+
+    .rows { padding: 3rem; }
+    .rows h2 { font-size: 1.7rem; margin-bottom: .4rem; }
+    .rows .lede { color: var(--slate); margin-bottom: 1.5rem; }
+    .row {
+      display: grid; grid-template-columns: 7rem 1fr auto; gap: 1.25rem; align-items: baseline;
+      padding: 1.15rem 0; border-top: 1px solid var(--line);
     }
-    .hero h1 { font-size: clamp(2.1rem, 4.4vw, 3.15rem); max-width: 16ch; margin-bottom: 1rem; }
-    .hero p { font-size: 1.05rem; color: var(--mute); max-width: 38rem; margin-bottom: 1.6rem; }
-    .ctas { display: flex; gap: 0.7rem; flex-wrap: wrap; }
-    .section { padding: 3.25rem 0; border-top: 1px solid var(--line); }
-    .section h2 { font-size: 1.75rem; margin-bottom: 0.55rem; }
-    .lede { color: var(--mute); max-width: 34rem; margin-bottom: 1.75rem; }
-    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-    .card, .plan {
-      background: var(--card); border: 1px solid var(--line); border-radius: 0.5rem; padding: 1.35rem 1.25rem;
-      transition: border-color 160ms ease, transform 160ms ease;
+    .row:last-child { border-bottom: 1px solid var(--line); }
+    .row .lab { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--navy); font-weight: 600; }
+    .row h3 { font-size: 1.2rem; margin-bottom: .25rem; }
+    .row p { color: var(--slate); font-size: .95rem; line-height: 1.55; max-width: 38rem; }
+    .row .fee { font-size: .9rem; color: var(--ink); white-space: nowrap; }
+
+    .note {
+      margin: 0 3rem 3rem; padding: 1.25rem 1.4rem; background: var(--panel); border-left: 3px solid var(--navy);
+      color: var(--slate); line-height: 1.6;
     }
-    .card:hover, .plan:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); transform: translateY(-2px); }
-    .card h3, .plan-name { font-size: 1.15rem; margin-bottom: 0.45rem; }
-    .card p, .plan p { font-size: 0.95rem; color: var(--mute); }
-    .steps { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.85rem; }
-    .steps li {
-      background: var(--card); border: 1px solid var(--line); border-radius: 0.5rem;
-      padding: 1.1rem 1rem; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.95rem;
-    }
-    .n {
-      font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--accent); font-weight: 700;
-    }
-    .plan-price { font-size: 1.35rem; font-family: "Newsreader", Georgia, serif; margin-bottom: 0.35rem; }
-    .close {
-      margin: 1rem 0 3rem; padding: 2.75rem 1.75rem; text-align: center;
-      background: var(--ink); color: #f5f5f5; border-radius: 0.75rem;
-    }
-    .close h2 { font-size: 1.85rem; margin-bottom: 0.6rem; color: #fff; }
-    .close p { color: rgba(255,255,255,0.72); margin-bottom: 1.25rem; }
-    .close .btn-primary { background: #fff; color: var(--ink); }
+    .note strong { color: var(--ink); }
+
     footer {
-      border-top: 1px solid var(--line); padding: 1.5rem 0 2.5rem;
+      border-top: 1px solid var(--line); padding: 1.5rem 3rem 2.5rem;
       display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
-      color: var(--mute); font-size: 0.85rem;
+      color: var(--slate); font-size: .85rem;
     }
-    @media (max-width: 860px) {
-      .grid, .steps { grid-template-columns: 1fr; }
-      .nav ul { display: none; }
-      .hero { padding-top: 3.25rem; }
+
+    @media (max-width: 900px) {
+      .shell { grid-template-columns: 1fr; }
+      .rail { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); flex-direction: row; flex-wrap: wrap; align-items: center; }
+      .rail nav { flex-direction: row; flex-wrap: wrap; }
+      .rail .phone { margin-top: 0; width: 100%; }
+      .split-hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-panel { min-height: 220px; }
+      .hero-copy, .rows, footer, .note { padding-left: 1.25rem; padding-right: 1.25rem; margin-left: 0; margin-right: 0; }
+      .row { grid-template-columns: 1fr; gap: .35rem; }
     }
   </style>
 </head>
 <body>
   <div class="tag">Concept 06 · Atelier</div>
-  <div class="wrap">
-    <header class="nav">
+  <div class="shell">
+    <aside class="rail">
       <div class="brand">Atelier</div>
-      <ul><li><a href="#">Work</a></li><li><a href="#">Services</a></li><li><a href="#">Process</a></li></ul>
-      <a class="btn btn-primary" href="#">Book a consult</a>
-    </header>
+      <nav>
+        <a href="#">Work</a>
+        <a href="#">Services</a>
+        <a href="#">Fees</a>
+        <a href="#">Contact</a>
+      </nav>
+      <div class="phone">Mon–Thu · replies within 1 day<br />studio@atelier.example</div>
+    </aside>
+    <main class="page">
+      <section class="split-hero">
+        <div class="hero-copy">
+          <p class="kicker">A quiet studio for proper websites</p>
+          <h1>Built calmly. Kept in house.</h1>
+          <p>We design and build custom sites, host them ourselves, and handle ordinary upkeep — without pitching you a “brand world” you didn’t ask for.</p>
+          <a class="cta" href="#">Book a consult</a>
+        </div>
+        <div class="hero-panel" aria-hidden="true"></div>
+      </section>
 
-    <section class="hero">
-      <p class="eyebrow">Custom websites · Hosting & care</p>
-      <h1>A calm place to get a proper website.</h1>
-      <p>We design and build custom sites, host them for you, and keep them updated — without the noise of trendy agency theatrics.</p>
-      <div class="ctas">
-        <a class="btn btn-primary" href="#">Book a consult</a>
-        <a class="btn btn-ghost" href="#">See how we work</a>
-      </div>
-    </section>
+      <section class="rows">
+        <h2>What you hire us for</h2>
+        <p class="lede">Three lines of work. Listed plainly.</p>
+        <div class="row">
+          <div class="lab">01 · Build</div>
+          <div>
+            <h3>Custom design &amp; development</h3>
+            <p>A site structured around your services, written in language your customers already use.</p>
+          </div>
+          <div class="fee">from $4,500</div>
+        </div>
+        <div class="row">
+          <div class="lab">02 · Host</div>
+          <div>
+            <h3>Hosting on our infrastructure</h3>
+            <p>Domain help, SSL, backups, and routine performance checks.</p>
+          </div>
+          <div class="fee">$49/mo</div>
+        </div>
+        <div class="row">
+          <div class="lab">03 · Care</div>
+          <div>
+            <h3>Updates after launch</h3>
+            <p>Content edits, small features, and a person to email when something feels off.</p>
+          </div>
+          <div class="fee">$199/mo</div>
+        </div>
+      </section>
 
-    <section class="section">
-      <h2>What we handle</h2>
-      <p class="lede">Build, hosting, and care — under one roof, in a familiar layout you don’t have to decode.</p>
-      <div class="grid"><article class="card"><h3>Design</h3><p>Clear layouts, readable type, and pages that match how you actually talk about your work.</p></article><article class="card"><h3>Hosting</h3><p>Your site lives on hosting we manage — SSL, backups, and sensible performance.</p></article><article class="card"><h3>Care</h3><p>Small fixes, content updates, and someone to email when something feels off.</p></article></div>
-    </section>
+      <p class="note"><strong>Fit:</strong> Best for owners who want a dependable site and a calm working relationship — not a redesign every quarter.</p>
 
-    <section class="section">
-      <h2>How it works</h2>
-      <p class="lede">A short, predictable path from first conversation to a live site.</p>
-      <ol class="steps"><li><span class="n">01</span><span>Tell us what you need</span></li><li><span class="n">02</span><span>Approve a simple plan</span></li><li><span class="n">03</span><span>We build and launch</span></li><li><span class="n">04</span><span>We stay on for care</span></li></ol>
-    </section>
-
-    <section class="section">
-      <h2>Simple pricing</h2>
-      <p class="lede">Same business facts as the other concepts — presented without theatrics.</p>
-      <div class="grid"><article class="plan"><div class="plan-name">Build</div><div class="plan-price">From $4,500</div><p>One-time custom site</p></article><article class="plan"><div class="plan-name">Hosting</div><div class="plan-price">$49/mo</div><p>Domain, SSL, backups</p></article><article class="plan"><div class="plan-name">Care</div><div class="plan-price">$199/mo</div><p>Updates & light support</p></article></div>
-    </section>
-
-    <section class="close">
-      <h2>Prefer straightforward over spectacular?</h2>
-      <p>Send a short note about your business. We’ll reply with a clear next step.</p>
-      <a class="btn btn-primary" href="#">Book a consult</a>
-    </section>
-
-    <footer>
-      <div>Atelier · custom websites, hosting &amp; care</div>
-      <div>Traditional concept · after Ledger</div>
-    </footer>
+      <footer>
+        <span>Atelier · custom websites, hosting &amp; care</span>
+        <span>Traditional concept · split rail + service ledger</span>
+      </footer>
+    </main>
   </div>
 </body>
 </html>

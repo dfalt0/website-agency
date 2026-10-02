@@ -1,12 +1,8 @@
 :root {
-  --bg: #F7F8F5;
-  --ink: #1A2E1F;
-  --mute: #5E6B61;
-  --line: #D4D9D2;
-  --accent: #2F5D3A;
-  --soft: #E8EEE9;
-  --card: #FFFFFF;
+  --bg: #f7f8f5;
+  --ink: #1a2e1f;
+  --green: #2f5d3a;
+  --line: #d4d9d2;
   --font-heading: "Lora", Georgia, serif;
   --font-body: "Inter", system-ui, sans-serif;
-  --radius: 0.5rem;
 }
