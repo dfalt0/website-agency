@@ -174,7 +174,7 @@ export function CardNav({
             </Link>
             <Link
               href={ctaHref}
-              className="inline-flex h-11 items-center justify-center rounded-lg px-6 text-base font-semibold transition-all hover:opacity-90"
+              className="inline-flex h-11 min-h-11 items-center justify-center rounded-xl px-5 text-[13px] font-medium leading-5 transition-[opacity,transform] duration-200 hover:opacity-90 active:scale-[0.98]"
               style={{
                 backgroundColor: buttonBgColor,
                 color: buttonTextColor,
@@ -255,8 +255,8 @@ export function CardNav({
                 </Link>
                 <Link
                   href={ctaHref}
-                  className="block w-full rounded-lg py-3.5 text-center text-lg font-semibold text-primary-foreground"
-                  style={{ backgroundColor: buttonBgColor }}
+                  className="inline-flex h-11 w-full items-center justify-center rounded-lg text-sm font-medium leading-none text-primary-foreground transition-[opacity,transform] duration-200 hover:opacity-90 active:scale-[0.98]"
+                  style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
                   onClick={() => setMobileOpen(false)}
                 >
                   {ctaLabel}

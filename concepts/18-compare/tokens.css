@@ -1,0 +1,13 @@
+:root {
+  --page: #e8ebef;
+  --ink: #0a1830;
+  --navy: #0a1f44;
+  --navy-2: #102a5c;
+  --lime: #c6f432;
+  --mute: #5b6a82;
+  --rule: #cdd3dc;
+  --template-blue: #2f6fb5;
+  --sans: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --mono: "DM Mono", ui-monospace, Consolas, monospace;
+  --radius: 0;
+}

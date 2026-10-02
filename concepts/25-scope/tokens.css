@@ -1,0 +1,15 @@
+:root {
+  --paper: #f3f5f4;
+  --ink: #0f1a17;
+  --rule: #cfd8d4;
+  --teal: #00a88f;
+  --teal-d: #007f6d;
+  --disp: #0c1412;
+  --disp-2: #16231f;
+  --mute: #5d6e68;
+  --amber: #ffc02e;
+  --sans: "Sora", "Segoe UI", system-ui, sans-serif;
+  --mono: "Martian Mono", ui-monospace, Consolas, monospace;
+  --radius: 0;
+  --border: 1.5px solid var(--ink);
+}

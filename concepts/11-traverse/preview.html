@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Traverse — a route from brief to a site that stays up</title>
+<style>
+:root{--k:#0d0d0c;--y:#ffd60a;--w:#f1f1ec;--g:#2a2a27;--g2:#8b8b84;--sans:"Archivo","Helvetica Neue",Arial,sans-serif;--mono:ui-monospace,"JetBrains Mono",Consolas,monospace}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;overflow:hidden;background:var(--k)}
+body{font:16px/1.55 var(--sans);color:var(--w)}
+.track{display:flex;height:100vh;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;scrollbar-width:none;scroll-behavior:smooth}
+.track::-webkit-scrollbar{display:none}
+.p{flex:0 0 auto;height:100vh;scroll-snap-align:start;position:relative;padding:92px 56px 96px;overflow:hidden}
+.mono{font:11px var(--mono);letter-spacing:.1em;text-transform:uppercase}
+/* fixed chrome */
+.brand{position:fixed;z-index:10;left:28px;top:22px;font:800 14px var(--sans);letter-spacing:.18em;text-transform:uppercase;mix-blend-mode:difference;color:#fff}
+.km{position:fixed;z-index:10;right:28px;top:22px;font:11px var(--mono);letter-spacing:.1em;text-transform:uppercase;mix-blend-mode:difference;color:#fff}
+.route{position:fixed;z-index:10;left:28px;right:28px;bottom:26px;height:34px}
+.route .line{position:absolute;left:0;right:0;top:6px;border-top:1px solid #fff;mix-blend-mode:difference}
+.route .fill{position:absolute;left:0;top:5px;height:3px;background:var(--y);width:0;mix-blend-mode:normal}
+.route button{position:absolute;top:0;transform:translateX(-50%);background:var(--k);border:1px solid var(--y);width:13px;height:13px;padding:0;cursor:pointer;border-radius:0}
+.route button.on{background:var(--y)}
+.route span{position:absolute;top:18px;transform:translateX(-50%);font:10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#fff;mix-blend-mode:difference;white-space:nowrap}
+.hint{position:fixed;right:28px;bottom:70px;z-index:10;font:11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--y);animation:nudge 1.6s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateX(8px)}}
+/* P1 depart */
+.p1{width:100vw;min-width:900px;background:var(--k);display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:end}
+.p1 h1{font:900 clamp(64px,11vw,176px)/.84 var(--sans);letter-spacing:-.05em;text-transform:uppercase}
+.p1 h1 span{display:block}
+.p1 h1 .o{color:transparent;-webkit-text-stroke:1.5px var(--y)}
+.p1 h1 .y{color:var(--y)}
+.sheet{border-top:2px solid var(--y);padding-top:14px}
+.sheet p{color:#c9c9c2;max-width:36ch;margin-bottom:22px}
+.sheet table{width:100%;border-collapse:collapse;font:12px var(--mono)}
+.sheet td{padding:9px 0;border-bottom:.5px solid var(--g)}
+.sheet td:first-child{color:var(--y);width:64px}
+.sheet td:last-child{text-align:right;color:var(--g2)}
+/* P2 build */
+.p2{width:115vw;min-width:1300px;background:var(--y);color:var(--k)}
+.big{position:absolute;font:900 clamp(240px,40vw,620px)/.7 var(--sans);letter-spacing:-.07em;color:#0d0d0c10;right:-2vw;bottom:-2vh;pointer-events:none}
+.p2 h2,.p3 h2,.p4 h2,.p5 h2{font:900 clamp(40px,5.4vw,84px)/.92 var(--sans);letter-spacing:-.045em;text-transform:uppercase;max-width:11ch}
+.p2 .lead{position:absolute;left:56px;top:92px;width:min(520px,40vw)}
+.p2 .lead p{margin-top:20px;font-size:18px;max-width:34ch}
+.steps{position:absolute;left:56px;right:56px;bottom:112px;height:48vh;border-top:2px solid var(--k)}
+.step{position:absolute;top:0;width:210px;border-left:2px solid var(--k);padding:12px 0 0 14px;transition:transform .3s}
+.step:hover{transform:translateY(-10px)}
+.step b{display:block;font:800 22px var(--sans);letter-spacing:-.02em;text-transform:uppercase}
+.step small{display:block;font:11px var(--mono);letter-spacing:.08em;margin:2px 0 8px}
+.step p{font-size:14.5px}
+.s1{left:0}.s2{left:22%;top:34px}.s3{left:44%;top:68px}.s4{left:66%;top:102px}.s5{left:84%;top:136px}
+/* P3 host */
+.p3{width:170vw;min-width:1900px;background:#161614}
+.p3 h2{color:var(--y)}
+.p3 .col{position:absolute;max-width:340px;font-size:15.5px;color:#cfcfc8}
+.p3 .col b{display:block;font:11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--y);margin-bottom:6px}
+.rail{position:absolute;left:0;right:0;top:54%;height:2px;background:var(--w)}
+.rail::before{content:"";position:absolute;left:0;right:0;top:-8px;height:18px;background:repeating-linear-gradient(90deg,var(--g2) 0 1px,transparent 1px 24px);opacity:.5}
+.node{position:absolute;top:calc(54% - 28px);width:150px;height:58px;border:1px solid var(--w);background:var(--k);font:11px/1.35 var(--mono);padding:8px 10px;letter-spacing:.04em;text-transform:uppercase;transition:.25s}
+.node:hover{background:var(--y);color:var(--k);border-color:var(--y)}
+.node em{font-style:normal;display:block;color:var(--g2)}
+.node:hover em{color:var(--k)}
+.node.hot{border-color:var(--y)}
+.tick{position:absolute;top:calc(54% + 14px);font:10px var(--mono);color:var(--g2);letter-spacing:.1em}
+/* P4 care */
+.p4{width:100vw;min-width:1000px;background:var(--w);color:var(--k);display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.p4 .loopwrap{display:grid;place-items:center}
+.loop{width:min(46vh,420px);aspect-ratio:1;border:2px solid var(--k);border-radius:50%;position:relative}
+.loop::before{content:"";position:absolute;inset:14%;border:1px dashed var(--k);border-radius:50%}
+.loop::after{content:"";position:absolute;inset:-2px;border-radius:50%;border:6px solid transparent;border-top-color:var(--y);animation:spin 9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loop i{position:absolute;font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;font-style:normal;background:var(--w);padding:2px 8px}
+.loop i:nth-child(1){left:50%;top:-10px;transform:translateX(-50%)}
+.loop i:nth-child(2){right:-18px;top:50%;transform:translateY(-50%)}
+.loop i:nth-child(3){left:50%;bottom:-10px;transform:translateX(-50%)}
+.loop i:nth-child(4){left:-18px;top:50%;transform:translateY(-50%)}
+.loop strong{position:absolute;inset:0;display:grid;place-items:center;font:900 54px var(--sans);letter-spacing:-.05em;text-align:center;line-height:.9}
+.p4 .txt p{margin:18px 0;font-size:18px;max-width:34ch}
+.p4 ul{list-style:none;border-top:2px solid var(--k);max-width:420px}
+.p4 li{display:flex;justify-content:space-between;padding:10px 0;border-bottom:.5px solid var(--k);font:13px var(--mono)}
+/* P5 arrive */
+.p5{width:100vw;min-width:1000px;background:var(--y);color:var(--k);display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:end;overflow-y:auto}
+.p5 h2{font-size:clamp(56px,9vw,140px);max-width:none}
+form{display:grid;gap:14px;background:var(--k);color:var(--w);padding:26px;max-width:520px}
+label{display:grid;gap:4px;font:11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--g2)}
+input,select,textarea{background:transparent;border:0;border-bottom:1px solid var(--g2);color:var(--w);font:16px var(--sans);padding:8px 0;border-radius:0;outline:0;text-transform:none;letter-spacing:0}
+select option{background:#111}
+input:focus,select:focus,textarea:focus{border-bottom-color:var(--y)}
+textarea{min-height:64px}
+form button{background:var(--y);color:var(--k);border:0;padding:14px 20px;font:800 14px var(--sans);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;justify-self:start}
+form button:hover{background:#fff}
+.ack{font:12px var(--mono);color:var(--y);min-height:1.2em}
+@media (max-width:760px){.p{padding:80px 22px 96px}.p1,.p4,.p5{display:block;min-width:100vw}.p1 .sheet{margin-top:30px}.p2,.p3{min-width:1500px}.p4 .loopwrap{display:none}.hint{display:none}}
+@media (prefers-reduced-motion:reduce){.hint,.loop::after{animation:none}.track{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="brand">Traverse</div>
+<div class="km"><span id="km">KM 000</span> / 100</div>
+
+<div class="track" id="track">
+  <section class="p p1" id="s0">
+    <h1><span>A site</span><span class="o">is a</span><span class="y">route.</span></h1>
+    <div class="sheet">
+      <p>We build custom websites, host them on our own servers, and stay with them after launch. Scroll sideways. Each stop is one stage of the route.</p>
+      <table>
+        <tr><td>KM 00</td><td>Brief</td><td>day 1</td></tr>
+        <tr><td>KM 20</td><td>Build</td><td>wk 1–5</td></tr>
+        <tr><td>KM 45</td><td>Host</td><td>always on</td></tr>
+        <tr><td>KM 72</td><td>Care</td><td>monthly</td></tr>
+        <tr><td>KM 100</td><td>Arrive</td><td>talk to us</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="p p2" id="s1">
+    <div class="big">01</div>
+    <div class="lead"><h2>Built by hand.</h2><p>No templates, no theme resale. A designer and a developer on your project from the first call to the last commit.</p></div>
+    <div class="steps">
+      <div class="step s1"><small>Day 1</small><b>Brief</b><p>Goals, audience, what the site must prove.</p></div>
+      <div class="step s2"><small>Week 1</small><b>Map</b><p>Pages and paths agreed before any pixels.</p></div>
+      <div class="step s3"><small>Week 2</small><b>Draw</b><p>Two directions, one chosen, two rounds.</p></div>
+      <div class="step s4"><small>Weeks 3–4</small><b>Cut</b><p>Code on a staging link you can open daily.</p></div>
+      <div class="step s5"><small>Week 5</small><b>Prove</b><p>Checklist, device tests, launch.</p></div>
+    </div>
+  </section>
+
+  <section class="p p3" id="s2">
+    <h2 style="position:absolute;left:56px;top:92px">Hosted<br>by the same hands.</h2>
+    <div class="col" style="left:56px;top:calc(54% + 70px)"><b>Origin</b>Your site runs on infrastructure we operate. Not resold from a faceless vendor.</div>
+    <div class="col" style="left:1020px;top:130px"><b>Gate</b>Every release passes speed, security, and visual checks before it reaches your domain.</div>
+    <div class="col" style="left:1520px;top:calc(54% + 70px)"><b>Rollback</b>If anything misbehaves, the previous revision is back in under two minutes.</div>
+    <div class="rail"></div>
+    <div class="node" style="left:360px">Build<em>staging</em></div>
+    <div class="node hot" style="left:620px">Gate<em>checks run</em></div>
+    <div class="node" style="left:880px">Origin<em>primary + standby</em></div>
+    <div class="node" style="left:1140px">Edge<em>cache + TLS</em></div>
+    <div class="node hot" style="left:1400px">Vault<em>daily backups</em></div>
+    <div class="node" style="left:1660px">You<em>visitors</em></div>
+    <div class="tick" style="left:360px">0 ms</div><div class="tick" style="left:880px">origin</div><div class="tick" style="left:1660px">&lt; 1 s</div>
+  </section>
+
+  <section class="p p4" id="s3">
+    <div class="loopwrap"><div class="loop"><i>Measure</i><i>Compare</i><i>Correct</i><i>Report</i><strong>EVERY<br>MONTH</strong></div></div>
+    <div class="txt">
+      <h2>Kept<br>correct.</h2>
+      <p>Launch is not the finish. Browsers change, software ages, your business moves. A monthly loop keeps the site accurate.</p>
+      <ul><li><span>Patches + security</span><span>weekly</span></li><li><span>Edits and new pages</span><span>in plan</span></li><li><span>Uptime + form probes</span><span>5 min</span></li><li><span>One-page report</span><span>monthly</span></li></ul>
+    </div>
+  </section>
+
+  <section class="p p5" id="s4">
+    <h2>Arrive.</h2>
+    <form id="f">
+      <label>Name<input required></label>
+      <label>Email<input required type="email"></label>
+      <label>Where are you on the route?<select><option>No site yet</option><option>Site exists, needs rebuild</option><option>Site is fine, needs a keeper</option></select></label>
+      <label>Anything else<textarea></textarea></label>
+      <button>Start the route</button><div class="ack" id="ack" role="status"></div>
+    </form>
+  </section>
+</div>
+
+<div class="hint" id="hint">Scroll →</div>
+<nav class="route" id="route" aria-label="Route"><div class="line"></div><div class="fill" id="fill"></div></nav>
+
+<script>
+const t=document.getElementById('track'),panels=[...document.querySelectorAll('.p')],labels=['Brief','Build','Host','Care','Arrive'];
+const route=document.getElementById('route'),fill=document.getElementById('fill');
+const btns=panels.map((p,i)=>{const pos=i/(panels.length-1)*100;const b=document.createElement('button');b.style.left=pos+'%';b.setAttribute('aria-label',labels[i]);
+ b.onclick=()=>t.scrollTo({left:p.offsetLeft,behavior:'smooth'});route.appendChild(b);
+ const s=document.createElement('span');s.style.left=pos+'%';s.textContent=labels[i];route.appendChild(s);return b;});
+t.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){e.preventDefault();t.style.scrollBehavior='auto';t.scrollLeft+=e.deltaY;}},{passive:false});
+t.addEventListener('mouseleave',()=>t.style.scrollBehavior='');
+addEventListener('keydown',e=>{const i=btns.filter(b=>b.classList.contains('on')).length-1;
+ if(e.key==='ArrowRight'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){t.style.scrollBehavior='smooth';t.scrollTo({left:panels[Math.min(i+1,4)].offsetLeft})}
+ if(e.key==='ArrowLeft'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){t.style.scrollBehavior='smooth';t.scrollTo({left:panels[Math.max(i-1,0)].offsetLeft})}});
+function upd(){const max=t.scrollWidth-t.clientWidth,p=t.scrollLeft/max||0;
+ fill.style.width=(p*100)+'%';document.getElementById('km').textContent='KM '+String(Math.round(p*100)).padStart(3,'0');
+ let cur=0;panels.forEach((pn,i)=>{if(t.scrollLeft+innerWidth*.4>=pn.offsetLeft)cur=i});
+ btns.forEach((b,i)=>b.classList.toggle('on',i<=cur));
+ document.getElementById('hint').style.opacity=p>.02?0:1;}
+t.addEventListener('scroll',upd,{passive:true});upd();
+document.getElementById('f').addEventListener('submit',e=>{e.preventDefault();document.getElementById('ack').textContent='Logged. We reply within one business day.';e.target.reset();});
+</script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scope — estimate your website in 30 seconds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Martian+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f3f5f4; --ink:#0f1a17; --rule:#cfd8d4; --teal:#00a88f; --teal-d:#007f6d; --disp:#0c1412; --disp-2:#16231f; --mute:#5d6e68; --amber:#ffc02e;
+  --sans:"Sora","Segoe UI",system-ui,sans-serif; --mono:"Martian Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.45}
+.top{display:flex;justify-content:space-between;align-items:center;padding:16px 36px;border-bottom:1px solid var(--rule)}
+.top b{font-weight:700;letter-spacing:-.03em;font-size:20px}
+.top b i{font-style:normal;color:var(--teal)}
+.top span{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--mute)}
+.wrap{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);min-height:calc(100vh - 54px)}
+/* form */
+.form{padding:34px 36px 40px 36px;border-right:1px solid var(--rule)}
+.form h1{font-size:clamp(34px,4.6vw,64px);line-height:.98;letter-spacing:-.045em;font-weight:700;max-width:13ch}
+.form h1 em{font-style:normal;color:var(--teal)}
+.form .sub{color:var(--mute);margin:12px 0 26px;max-width:46ch}
+.q{display:grid;grid-template-columns:44px 1fr;gap:0 10px;padding:18px 0;border-top:1px solid var(--rule)}
+.q>.n{font-family:var(--mono);font-size:12px;color:var(--teal-d);padding-top:4px}
+.q h2{font-size:17px;font-weight:600;letter-spacing:-.02em;margin-bottom:10px}
+.q h2 small{font-weight:400;font-size:13px;color:var(--mute);margin-left:8px;font-family:var(--mono)}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);border:1.5px solid var(--ink)}
+.seg label{position:relative;cursor:pointer}
+.seg input{position:absolute;opacity:0;inset:0}
+.seg span{display:block;padding:11px 8px;text-align:center;font-weight:500;font-size:14px;border-right:1px solid var(--ink);height:100%}
+.seg label:last-child span{border:0}
+.seg input:checked+span{background:var(--ink);color:#fff}
+.seg input:focus-visible+span{outline:3px solid var(--teal);outline-offset:-3px}
+.seg span small{display:block;font-family:var(--mono);font-size:10px;font-weight:400;opacity:.65;margin-top:2px}
+.seg label:hover input:not(:checked)+span{background:#e3ebe8}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:30px;background:transparent}
+input[type=range]::-webkit-slider-runnable-track{height:2px;background:var(--ink)}
+input[type=range]::-moz-range-track{height:2px;background:var(--ink)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;background:var(--teal);border:2px solid var(--ink);margin-top:-10px;cursor:ew-resize}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;background:var(--teal);border:2px solid var(--ink);border-radius:0;cursor:ew-resize}
+.pages{display:flex;align-items:center;gap:18px}
+.pages output{font-family:var(--mono);font-size:30px;font-weight:500;min-width:2.2ch;text-align:right}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips label{cursor:pointer;position:relative}
+.chips input{position:absolute;opacity:0}
+.chips span{display:inline-block;padding:8px 13px;border:1.5px solid var(--ink);font-size:13.5px;font-weight:500;transition:background .12s}
+.chips input:checked+span{background:var(--teal);border-color:var(--teal);color:#fff}
+.chips input:focus-visible+span{outline:3px solid var(--ink);outline-offset:2px}
+.chips label:hover input:not(:checked)+span{background:#e3ebe8}
+.after{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--ink)}
+.after label{position:relative;cursor:pointer}
+.after input{position:absolute;opacity:0;inset:0}
+.after span{display:block;padding:12px 14px;font-weight:500}
+.after label:first-child span{border-right:1px solid var(--ink)}
+.after input:checked+span{background:var(--ink);color:#fff}
+.after span small{display:block;font-weight:400;font-size:12.5px;opacity:.7}
+/* readout */
+.read{background:var(--disp);color:#e5f1ed;padding:34px 34px 40px;display:flex;flex-direction:column;position:sticky;top:0;align-self:start;min-height:calc(100vh - 54px);max-height:100vh;overflow:auto}
+.read .k{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6e8b83}
+.read .big{font-family:var(--mono);font-size:clamp(34px,4.2vw,58px);font-weight:500;letter-spacing:-.04em;line-height:1.05;margin:8px 0 2px;color:var(--teal)}
+.read .big small{display:block;font-size:12px;color:#6e8b83;letter-spacing:.04em;margin-top:8px;font-weight:400}
+.shape{margin:20px 0 6px;display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.shape i{aspect-ratio:1;background:#1c2d28;transition:background .2s}
+.shape i.on{background:var(--teal)}
+.shape i.ft{background:var(--amber)}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid #243730;margin-top:18px}
+.stats div{padding:14px 0;border-right:1px solid #243730;padding-left:14px}
+.stats div:first-child{padding-left:0}
+.stats div:last-child{border:0}
+.stats b{display:block;font-family:var(--mono);font-size:22px;font-weight:500}
+.stats span{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#6e8b83}
+.legend{font-family:var(--mono);font-size:10.5px;color:#6e8b83;display:flex;gap:16px}
+.legend i{display:inline-block;width:8px;height:8px;margin-right:6px}
+.reveal{margin-top:20px;background:var(--teal);color:#00231d;border:0;font-family:var(--sans);font-weight:700;font-size:16px;padding:16px 18px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.reveal:hover{background:#12c3a8}
+.offer{max-height:0;opacity:0;overflow:hidden;transition:max-height .55s ease,opacity .4s ease .1s}
+.offer.open{max-height:640px;opacity:1}
+.offer .in{padding-top:22px}
+.offer h3{font-size:22px;letter-spacing:-.03em;font-weight:700}
+.offer .l{display:grid;grid-template-columns:1fr auto;gap:2px 16px;padding:11px 0;border-bottom:1px solid #243730}
+.offer .l b{font-weight:600}
+.offer .l em{font-style:normal;font-family:var(--mono);font-size:14px;text-align:right}
+.offer .l small{grid-column:1/-1;color:#7f9a92;font-size:12.5px}
+.offer .tot{display:flex;justify-content:space-between;align-items:baseline;padding:14px 0 4px;font-family:var(--mono)}
+.offer .tot strong{font-size:24px;color:var(--teal);font-weight:500}
+.offer .cta{display:block;margin-top:14px;background:#e5f1ed;color:var(--disp);text-align:center;text-decoration:none;font-weight:700;padding:15px}
+.offer .cta:hover{background:#fff}
+.offer p.fine{font-size:12px;color:#6e8b83;margin-top:10px}
+.foot{padding:16px 36px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:11px;color:var(--mute);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+@media (max-width:960px){.wrap{grid-template-columns:1fr}.form{border-right:0;padding:26px 20px}.read{position:static;min-height:0;padding:26px 20px}.seg{grid-template-columns:1fr 1fr}.seg label:nth-child(2) span{border-right:0}.seg label:nth-child(-n+2) span{border-bottom:1px solid var(--ink)}.top,.foot{padding-left:20px;padding-right:20px}}
+</style>
+</head>
+<body>
+<header class="top"><b>Scope<i>.</i></b><span>FREE ESTIMATE · NO EMAIL NEEDED</span></header>
+
+<main class="wrap">
+  <form class="form" id="f" onsubmit="return false">
+    <h1>How big is your <em>website?</em></h1>
+    <p class="sub">Answer five quick questions. The shape of your project builds on the right, with a real price range, a timeline and what we'd run after launch.</p>
+
+    <div class="q"><span class="n">01</span><div><h2>What is it for?</h2>
+      <div class="seg" role="radiogroup">
+        <label><input type="radio" name="type" value="brochure" checked><span>Show who we are<small>brochure</small></span></label>
+        <label><input type="radio" name="type" value="service"><span>Take bookings<small>service</small></span></label>
+        <label><input type="radio" name="type" value="shop"><span>Sell things<small>shop</small></span></label>
+        <label><input type="radio" name="type" value="app"><span>Run a process<small>portal / app</small></span></label>
+      </div></div></div>
+
+    <div class="q"><span class="n">02</span><div><h2>How many pages? <small>roughly</small></h2>
+      <div class="pages"><input id="pg" type="range" min="3" max="40" value="8" aria-label="Number of pages"><output id="pgo">8</output></div></div></div>
+
+    <div class="q"><span class="n">03</span><div><h2>Anything extra? <small>tap all that apply</small></h2>
+      <div class="chips" id="ft">
+        <label><input type="checkbox" value="book"><span>Online booking</span></label>
+        <label><input type="checkbox" value="pay"><span>Take payments</span></label>
+        <label><input type="checkbox" value="login"><span>Customer logins</span></label>
+        <label><input type="checkbox" value="blog"><span>Blog or news</span></label>
+        <label><input type="checkbox" value="lang"><span>Two languages</span></label>
+        <label><input type="checkbox" value="move"><span>Move content from old site</span></label>
+      </div></div></div>
+
+    <div class="q"><span class="n">04</span><div><h2>How many visits a month?</h2>
+      <div class="seg" style="grid-template-columns:repeat(3,1fr)">
+        <label><input type="radio" name="traffic" value="s" checked><span>Under 10k</span></label>
+        <label><input type="radio" name="traffic" value="m"><span>10k – 100k</span></label>
+        <label><input type="radio" name="traffic" value="l"><span>100k – 1M</span></label>
+      </div></div></div>
+
+    <div class="q"><span class="n">05</span><div><h2>After launch?</h2>
+      <div class="after">
+        <label><input type="radio" name="care" value="own"><span>I'll handle it<small>hosting only</small></span></label>
+        <label><input type="radio" name="care" value="keep" checked><span>Keep it current for me<small>hosting + care</small></span></label>
+      </div></div></div>
+  </form>
+
+  <aside class="read" aria-live="polite">
+    <span class="k">Project shape</span>
+    <div class="big"><span id="range">$4,500</span><small id="weeks">about 3 weeks to launch</small></div>
+    <div class="shape" id="shape"></div>
+    <div class="legend"><span><i style="background:var(--teal)"></i>pages</span><span><i style="background:var(--amber)"></i>extras</span></div>
+    <div class="stats">
+      <div><b id="sp">8</b><span>Pages</span></div>
+      <div><b id="sf">0</b><span>Extras</span></div>
+      <div><b id="sh">$49</b><span>Host / mo</span></div>
+    </div>
+    <button class="reveal" id="rv" type="button"><span>Show me the offer</span><span>→</span></button>
+
+    <div class="offer" id="of"><div class="in">
+      <h3>Your offer</h3>
+      <div class="l"><b>Build</b><em id="ob">—</em><small>Custom design and code. Fixed price, written scope. You own the source.</small></div>
+      <div class="l"><b>Host</b><em id="oh">—</em><small id="ohd">Edge network, SSL, nightly backups, uptime monitoring.</small></div>
+      <div class="l"><b>Care</b><em id="oc">—</em><small id="ocd">Four changes a month, security patches, quarterly review.</small></div>
+      <div class="tot"><span>Year one, estimated</span><strong id="oy">—</strong></div>
+      <a class="cta" href="mailto:hello@scope.studio">Send this shape to the studio →</a>
+      <p class="fine">We reply within one business day with a fixed quote. Ranges run up to 15% above the low figure until we've seen your content.</p>
+    </div></div>
+  </aside>
+</main>
+<footer class="foot"><span>Scope — custom websites · hosting · care</span><span>Estimate only. Taxes extra. USD.</span></footer>
+
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var f=$('f'),pg=$('pg'),shape=$('shape');
+  var base={brochure:4500,service:7500,shop:12500,app:16000},baseW={brochure:3,service:5,shop:7,app:10},
+      ftCost={book:1800,pay:3200,login:3500,blog:900,lang:1500,move:600},
+      host={s:49,m:129,l:299};
+  var fmt=function(n){return '$'+n.toLocaleString('en-US')};
+  var r100=function(n){return Math.round(n/100)*100};
+  for(var i=0;i<40;i++)shape.appendChild(document.createElement('i'));
+  var cells=[].slice.call(shape.children);
+  var shown=false,last={};
+  function val(n){var e=f.querySelector('input[name='+n+']:checked');return e?e.value:null}
+  function calc(){
+    var t=val('type'),pages=+pg.value,tr=val('traffic'),care=val('care');
+    var fts=[].slice.call(f.querySelectorAll('#ft input:checked')).map(function(e){return e.value});
+    // shop already includes payments
+    if(t==='shop')fts=fts.filter(function(x){return x!=='pay'});
+    var price=base[t]+Math.max(0,pages-8)*250;
+    fts.forEach(function(x){price+=ftCost[x]});
+    var lo=r100(price),hi=r100(price*1.15);
+    var wk=Math.round(baseW[t]+Math.max(0,pages-8)/8+fts.length*.6);
+    var heavy=pages>20||fts.length>=4||t==='app';
+    var careP=care==='own'?0:(heavy?549:199);
+    var hostP=host[tr];if(t==='app'&&hostP<129)hostP=129;
+    return {t:t,pages:pages,fts:fts.length,lo:lo,hi:hi,price:price,wk:wk,careP:careP,hostP:hostP,care:care,heavy:heavy};
+  }
+  function paint(){
+    var c=calc();
+    $('pgo').textContent=c.pages;
+    $('range').textContent=fmt(c.lo)+' – '+fmt(c.hi).replace('$','');
+    $('weeks').textContent='about '+c.wk+' weeks to launch';
+    $('sp').textContent=c.pages;$('sf').textContent=c.fts;$('sh').textContent=fmt(c.hostP);
+    cells.forEach(function(el,i){
+      el.className=i<Math.min(c.pages,40)&&i<c.pages?'on':'';
+    });
+    // extras overwrite last N empty-or-filled cells from the end
+    for(var k=0;k<c.fts;k++){cells[39-k].className='ft'}
+    $('ob').textContent=fmt(c.lo)+' – '+fmt(c.hi);
+    $('oh').textContent=fmt(c.hostP)+' / mo';
+    $('ohd').textContent=c.hostP>=299?'Up to 1M visits, staging site, 90-day backups, priority response.':(c.hostP>=129?'Up to 1M visits, staging copy, 90-day backups.':'Edge network, SSL, nightly backups, uptime monitoring.');
+    $('oc').textContent=c.careP?fmt(c.careP)+' / mo':'Not selected';
+    $('ocd').textContent=c.careP?(c.heavy?'Twelve changes a month, a new landing page monthly, a monthly call.':'Four changes a month, security patches, quarterly review.'):'You edit it yourself. We still patch the servers.';
+    var yr=Math.round((c.lo+c.hi)/2/100)*100+(c.hostP+c.careP)*12;
+    $('oy').textContent=fmt(yr);
+  }
+  f.addEventListener('input',paint);f.addEventListener('change',paint);
+  $('rv').addEventListener('click',function(){
+    var o=$('of');shown=!shown;o.classList.toggle('open',shown);
+    this.firstChild.textContent=shown?'Hide the offer':'Show me the offer';
+    this.lastChild.textContent=shown?'↑':'→';
+    if(shown)setTimeout(function(){o.scrollIntoView({behavior:'smooth',block:'nearest'})},300);
+  });
+  paint();
+})();
+</script>
+</body>
+</html>

@@ -1,13 +1,13 @@
 /**
- * Transfer / lead flow types — qualify intent, stack, path, and contact on step 3.
+ * Transfer / lead flow — qualify goals for websites, infra, and growth.
  */
 
 export type TransferIntent =
-  | "ai_discovery"
-  | "custom_ai_app"
-  | "workflow_automation"
-  | "mcp_skills"
-  | "managed_hosting";
+  | "new_website"
+  | "redesign"
+  | "managed_hosting"
+  | "growth_creatives"
+  | "full_ops";
 
 export type TransferServiceType =
   | "website"
@@ -38,29 +38,26 @@ export interface TransferState {
   contact: ContactInfo;
 }
 
-export const INTENT_OPTIONS: Record<
-  TransferIntent,
-  { label: string; short: string }
-> = {
-  ai_discovery: {
-    label: "Explore AI for my business",
-    short: "I know AI matters but don't know where to start. I want a roadmap grounded in how we actually operate.",
+export const INTENT_OPTIONS: Record<TransferIntent, { label: string; short: string }> = {
+  new_website: {
+    label: "Build a new website or product",
+    short: "From scratch or a serious rebuild — design, engineering, and launch.",
   },
-  custom_ai_app: {
-    label: "Build a custom AI app or internal tool",
-    short: "A real product — dashboards, portals, operator tools — not a chatbot wrapper.",
-  },
-  workflow_automation: {
-    label: "Automate a specific workflow",
-    short: "One painful process end-to-end: quoting, intake, support routing, reporting, etc.",
-  },
-  mcp_skills: {
-    label: "Custom MCPs or agent skills",
-    short: "Wire our CRM, ERP, or internal APIs into Cursor, Claude, or our own agent stack.",
+  redesign: {
+    label: "Refresh an existing site",
+    short: "It works, but it looks dated or converts poorly. We redesign and re-platform if needed.",
   },
   managed_hosting: {
-    label: "Managed hosting & web services",
-    short: "Keep my site or store running — maintenance, security, migrations, ongoing engineering.",
+    label: "Managed hosting & infrastructure",
+    short: "Keep the site live, secure, and updated without hiring an in-house ops person.",
+  },
+  growth_creatives: {
+    label: "Growth content & ad creatives",
+    short: "Landing pages, campaign visuals, and copy that match the product we build or run.",
+  },
+  full_ops: {
+    label: "Full digital ops partnership",
+    short: "Site + infra + ongoing creatives under one retainer. Start-to-finish ownership.",
   },
 };
 
@@ -78,54 +75,48 @@ export const SERVICE_OPTIONS: Record<
   },
   vercel: {
     label: "Vercel project",
-    short: "Frontend or fullstack app hosted on Vercel. We'll manage deploys and config.",
+    short: "Frontend or fullstack app hosted on Vercel.",
   },
   wix: {
     label: "Wix site",
-    short: "Site on Wix. We can manage it as-is or plan a move to a more flexible stack.",
+    short: "Site on Wix — manage as-is or plan a move.",
   },
   squarespace: {
     label: "Squarespace site",
-    short: "Site on Squarespace. We manage design and content or help you migrate.",
+    short: "Site on Squarespace — design, content, or migration.",
   },
   shopify: {
     label: "Shopify store",
-    short: "E‑commerce on Shopify. We handle theme, apps, and operations.",
+    short: "Ecommerce on Shopify — theme, apps, and ops.",
   },
   wordpress: {
     label: "WordPress site",
-    short: "WordPress or WooCommerce. We handle hosting, plugins, and updates.",
+    short: "WordPress or WooCommerce — hosting, plugins, updates.",
   },
   other: {
     label: "Something else",
-    short: "AWS, custom stack, internal tools, or a mix. Tell us in the next step.",
+    short: "AWS, custom stack, or a mix. Tell us next.",
   },
 };
 
 export const PATH_OPTIONS: Record<TransferPath, { label: string; short: string; badge?: string }> = {
   discover: {
-    label: "Discovery & roadmap",
-    short: "A focused session to map operations, prioritize use cases, and recommend what to build first.",
+    label: "Discovery call first",
+    short: "Map goals, stack, and budget — then propose a clear engagement.",
   },
   build: {
-    label: "Scoped build with engineers",
-    short: "We prototype and ship a defined product — custom app, MCP, automation, or integration.",
+    label: "Scoped project build",
+    short: "Fixed-scope website, redesign, or migration with a clear deliverable.",
   },
   stay: {
     label: "Manage what we have",
-    short: "Keep your current platform. We join as your engineering team — no migration required.",
+    short: "Keep your current platform. We join as your ops and engineering team.",
   },
   migrate: {
-    label: "Migrate to our stack",
-    short: "Move to modern hosting and infrastructure for better performance and control.",
-    badge: "Paid tiers",
+    label: "Migrate to a modern stack",
+    short: "Move off a limiting builder onto hosting we can own and scale.",
+    badge: "Project + retainer",
   },
 };
 
-export const TEAM_SIZE_OPTIONS = [
-  "1–10",
-  "11–50",
-  "51–200",
-  "201–500",
-  "500+",
-] as const;
+export const TEAM_SIZE_OPTIONS = ["1–10", "11–50", "51–200", "201–500", "500+"] as const;

@@ -5,114 +5,84 @@ import Link from "next/link";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import TrueFocus from "@/components/ui/TrueFocus";
+import BlurText from "@/components/ui/BlurText";
 
 const plans = [
   {
-    name: "Starter",
-    price: "$99",
-    period: "per month",
-    description: "Managed hosting for small businesses and blogs",
+    name: "Care",
+    price: "$149",
+    period: "/mo",
+    description: "Keep an existing site healthy while we plan what’s next.",
     features: [
-      "Up to 5,000 visitors/month",
-      "Custom domain & SSL",
+      "Managed hosting & SSL",
       "Weekly updates & backups",
-      "Email support (24hr response)",
-      "Basic SEO optimization",
-      "Content updates (2 hrs/month)",
+      "Uptime monitoring",
+      "Email support",
+      "2 hrs content / fixes monthly",
     ],
-    cta: { label: "Start intake", href: "/start", variant: "secondary" as const },
+    cta: { label: "Start intake", href: "/start" },
     highlighted: false,
   },
   {
-    name: "Professional",
-    price: "$199",
-    period: "per month",
-    description: "Growing businesses with custom integration needs",
+    name: "Operate",
+    price: "$349",
+    period: "/mo",
+    description: "Full ownership of site + infra with room for growth work.",
     features: [
-      "Up to 25,000 visitors/month",
-      "Everything in Starter",
-      "Daily backups & monitoring",
-      "Priority support (4hr response)",
-      "Advanced SEO & analytics",
-      "Content updates (5 hrs/month)",
-      "Custom integrations",
-      "Performance optimization",
+      "Everything in Care",
+      "Priority support",
+      "Performance & SEO basics",
+      "8 hrs engineering monthly",
+      "Campaign landing pages",
+      "Ad creative starter pack",
     ],
-    cta: { label: "Start intake", href: "/start", variant: "default" as const },
+    cta: { label: "Book discovery", href: "/contact" },
     highlighted: true,
-    badge: "Most Popular",
+    badge: "Most chosen",
   },
   {
-    name: "Enterprise",
-    price: "$299+",
-    period: "per month",
-    description: "High-traffic sites, agencies, and ongoing engineering",
+    name: "Partner",
+    price: "Custom",
+    period: "",
+    description: "Dedicated engineering + growth for businesses that need more.",
     features: [
-      "Unlimited visitors",
-      "Everything in Professional",
+      "Everything in Operate",
       "Dedicated engineer",
-      "24/7 support (1hr response)",
-      "White-label options",
-      "Unlimited content updates",
-      "Custom development",
-      "SLA guarantee",
+      "Custom product builds",
+      "Infra & migration projects",
+      "Ongoing creative production",
+      "SLA & roadmap reviews",
     ],
-    cta: { label: "Contact us", href: "/contact", variant: "secondary" as const },
+    cta: { label: "Talk to us", href: "/contact" },
     highlighted: false,
   },
 ];
 
-const consultingBanner = {
-  title: "AI consulting & custom builds",
-  price: "Project-based",
-  description:
-    "Discovery, scoped prototypes, custom MCPs, agent skills, and production AI apps — priced per engagement, not per seat.",
-  features: [
-    "Operations discovery & AI roadmap",
-    "Custom apps on Next.js, Convex, Python, and more",
-    "Company MCPs wired to your systems",
-    "Agent skills tailored to your workflows",
-    "Optional ongoing engineering retainer",
-  ],
-  cta: { label: "Book discovery call", href: "/contact" },
-};
-
-const DEFAULT_HIGHLIGHTED_INDEX = 1; // Professional
-
 export default function Pricing() {
-  const [highlightedIndex, setHighlightedIndex] = useState(DEFAULT_HIGHLIGHTED_INDEX);
+  const [highlightedIndex, setHighlightedIndex] = useState(1);
 
   return (
-    <section id="pricing" className="bg-background py-24 lg:py-32">
-      <div className="mx-auto max-w-[1200px] px-8 lg:px-16">
-        <div className="mb-16 text-center lg:mb-20">
-          <p className="mb-4 font-mono text-sm font-semibold uppercase tracking-wider text-primary">
-            [PRICING]
+    <section id="pricing" className="bg-surface-muted py-24 lg:py-32">
+      <div className="mx-auto max-w-[1200px] px-6 sm:px-8 lg:px-16">
+        <div className="mb-14 text-center lg:mb-16">
+          <p className="mb-4 font-mono text-xs font-medium uppercase tracking-[0.2em] text-primary">
+            [Pricing]
           </p>
-          <div className="mb-6 flex justify-center">
-            <TrueFocus
-              sentence="Simple,|transparent pricing"
-              separator="|"
-              manualMode={false}
-              blurAmount={5}
-              borderColor="var(--primary)"
-              glowColor="rgba(21, 128, 61, 0.5)"
-              animationDuration={0.5}
-              pauseBetweenAnimations={3}
-              className="text-center"
-              wordClassName="relative font-heading text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-[1.3] tracking-[-0.02em] text-foreground cursor-default"
-            />
-          </div>
-          <p className="mx-auto max-w-[700px] text-lg leading-[1.8] text-foreground/70">
-            Managed infrastructure when you need it — plus project-based AI engineering when you&apos;re ready to build
+          <BlurText
+            as="h2"
+            text="Clear retainers. Project work scoped separately."
+            className="font-heading mb-4 text-[clamp(1.85rem,4vw,3rem)] font-semibold leading-[1.2] tracking-[-0.02em] text-foreground"
+            delay={55}
+          />
+          <p className="mx-auto max-w-[560px] text-lg leading-[1.75] text-foreground-muted">
+            Builds and migrations are quoted as projects. These plans cover ongoing ownership after you’re live.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {plans.map((plan, index) => (
             <Card
-              key={index}
+              key={plan.name}
               role="button"
               tabIndex={0}
               onClick={() => setHighlightedIndex(index)}
@@ -122,15 +92,13 @@ export default function Pricing() {
                   setHighlightedIndex(index);
                 }
               }}
-              className={`relative flex cursor-pointer flex-col h-full border-2 transition-[border-color,box-shadow] duration-200 ease-out hover:shadow-card-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
-                highlightedIndex === index
-                  ? "border-primary shadow-card"
-                  : "border-border-subtle/60"
+              className={`relative flex h-full cursor-pointer flex-col border-2 transition-[border-color,box-shadow] duration-200 hover:shadow-card-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                highlightedIndex === index ? "border-primary shadow-card" : "border-border-subtle/60"
               }`}
             >
-              {plan.badge && index === DEFAULT_HIGHLIGHTED_INDEX && highlightedIndex === 1 && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 flex items-center justify-center">
-                  <Badge variant="default" className="text-sm leading-none px-3.5 py-2">
+              {plan.badge && highlightedIndex === index && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                  <Badge variant="default" className="px-3 py-1.5 text-xs">
                     {plan.badge}
                   </Badge>
                 </div>
@@ -139,16 +107,14 @@ export default function Pricing() {
                 <CardTitle className="text-2xl">{plan.name}</CardTitle>
                 <div className="mt-4">
                   <span className="font-heading text-4xl font-semibold text-foreground">{plan.price}</span>
-                  <span className="ml-2 text-foreground/70">{plan.period}</span>
+                  {plan.period ? <span className="ml-1 text-foreground/60">{plan.period}</span> : null}
                 </div>
-                <CardDescription className="mt-4 text-base">
-                  {plan.description}
-                </CardDescription>
+                <CardDescription className="mt-4 text-base">{plan.description}</CardDescription>
               </CardHeader>
-              <CardContent className="flex-1 flex flex-col">
-                <ul className="space-y-3 flex-1">
-                  {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-start gap-2">
+              <CardContent className="flex flex-1 flex-col">
+                <ul className="flex-1 space-y-3">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="flex items-start gap-2">
                       <span className="mt-1 text-primary">✓</span>
                       <span className="text-foreground/80">{feature}</span>
                     </li>
@@ -169,39 +135,13 @@ export default function Pricing() {
           ))}
         </div>
 
-        <Card className="mt-12 border-2 border-primary/30 bg-surface-muted">
-          <CardHeader className="text-center md:text-left">
-            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-              <div>
-                <Badge variant="default" className="mb-3">
-                  Consulting
-                </Badge>
-                <CardTitle className="text-2xl">{consultingBanner.title}</CardTitle>
-                <div className="mt-4">
-                  <span className="font-heading text-4xl font-semibold text-foreground">
-                    {consultingBanner.price}
-                  </span>
-                </div>
-                <CardDescription className="mt-4 max-w-xl text-base">
-                  {consultingBanner.description}
-                </CardDescription>
-              </div>
-              <Button variant="default" size="lg" className="shrink-0" asChild>
-                <Link href={consultingBanner.cta.href}>{consultingBanner.cta.label}</Link>
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {consultingBanner.features.map((feature) => (
-                <li key={feature} className="flex items-start gap-2">
-                  <span className="mt-1 text-primary">✓</span>
-                  <span className="text-foreground/80">{feature}</span>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+        <p className="mt-10 text-center text-sm text-foreground-muted">
+          New website or rebuild?{" "}
+          <Link href="/contact" className="font-medium text-primary underline-offset-4 hover:underline">
+            We’ll scope a fixed project first
+          </Link>
+          , then move you onto a retainer.
+        </p>
       </div>
     </section>
   );

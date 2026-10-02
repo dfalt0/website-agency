@@ -1,0 +1,15 @@
+:root {
+  --page: #f4f9fc;
+  --rule: #bcd6ec;
+  --margin: #e5484d;
+  --ink: #1b2540;
+  --pen: #1f4fd0;
+  --stamp: #d62839;
+  --hl: #e6ff5e;
+  --mute: #5c6b86;
+  --desk: #2a2f3a;
+  --body: "Libre Franklin", system-ui, sans-serif;
+  --typed: "Special Elite", "Courier New", monospace;
+  --hand: "Caveat", "Segoe Print", cursive;
+  --L: 32px; /* baseline grid — rules, line-height and table rows all derive from this */
+}

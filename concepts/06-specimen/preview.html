@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Specimen — custom websites, hosting, care</title>
+<style>
+@property --gap { syntax: "<length>"; inherits: true; initial-value: 0px; }
+@property --rx  { syntax: "<angle>";  inherits: true; initial-value: 0deg; }
+@property --rz  { syntax: "<angle>";  inherits: true; initial-value: 0deg; }
+@property --qx  { syntax: "<length>"; inherits: true; initial-value: 0px; }
+:root{
+  --bg:#0c0d0e; --panel:#121416; --plane:#16181a; --line:#2b2f32; --ink:#e7e8e5; --mute:#878c8f; --dim:#555a5d; --acc:#ff5a1f;
+  --mono: ui-monospace,"JetBrains Mono","SF Mono",Consolas,monospace;
+  --sans: "Inter",system-ui,"Segoe UI",Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--sans);display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
+a{color:inherit}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+
+/* ---------- LEFT SLAB ---------- */
+.slab{padding:0 clamp(24px,4.5vw,72px);border-right:.5px solid var(--line)}
+.top{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:18px 0;background:linear-gradient(var(--bg) 70%,transparent);}
+.top b{font-family:var(--mono);font-weight:600;letter-spacing:.14em;font-size:13px}
+.top nav{display:flex;gap:18px}
+.top nav a{text-decoration:none;font-family:var(--mono);font-size:11px;color:var(--mute);letter-spacing:.08em;text-transform:uppercase}
+.top nav a:hover,.top nav a.on{color:var(--acc)}
+.chapter{min-height:100vh;padding:10vh 0 12vh;border-bottom:.5px solid var(--line);display:flex;flex-direction:column;justify-content:center;gap:26px}
+.chapter:last-child{border-bottom:0}
+.chno{display:flex;gap:14px;align-items:baseline}
+.chno i{font-style:normal;color:var(--acc);font-family:var(--mono);font-size:12px}
+h1{font:600 clamp(44px,5.4vw,84px)/.95 var(--sans);letter-spacing:-.04em}
+h2{font:600 clamp(30px,3.2vw,46px)/1.02 var(--sans);letter-spacing:-.035em}
+h1 em,h2 em{font-style:normal;color:var(--acc)}
+.chapter p{max-width:46ch;color:#b4b8b8}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 22px;border-top:.5px solid var(--line);padding-top:16px;max-width:46ch}
+.meta dt{font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
+.meta dd{font-family:var(--mono);font-size:12px}
+
+/* checklist table */
+.insp{border:.5px solid var(--line);max-width:52ch;font-family:var(--mono);font-size:12px}
+.insp div{display:grid;grid-template-columns:34px 1fr auto;gap:8px;padding:9px 12px;border-bottom:.5px solid var(--line);align-items:center}
+.insp div:last-child{border:0}
+.insp b{color:var(--dim);font-weight:400}
+.ok{color:#c9d3cc}.ok::before{content:"PASS ";color:#7cc79a}
+.hold{color:var(--acc)}.hold::before{content:"HOLD ";}
+.insp div:hover{background:#15181a}
+
+/* revision stack diagram */
+.revs{position:relative;max-width:52ch;display:grid;gap:0;padding-left:34px}
+.revs::before{content:"";position:absolute;left:10px;top:12px;bottom:12px;border-left:.5px dashed var(--dim)}
+.rev{position:relative;display:grid;grid-template-columns:1fr auto;gap:12px;padding:14px 16px;margin-left:calc(var(--o)*16px);background:var(--panel);border:.5px solid var(--line);margin-bottom:-1px;transition:transform .25s,border-color .25s}
+.rev::before{content:"";position:absolute;left:calc(-24px - var(--o)*16px);top:50%;width:9px;height:9px;background:var(--bg);border:1px solid var(--dim)}
+.rev.live{border-color:var(--acc)}
+.rev.live::before{background:var(--acc);border-color:var(--acc)}
+.rev:hover{transform:translateX(8px)}
+.rev span{font-family:var(--mono);font-size:12px}
+.rev small{font-family:var(--mono);font-size:11px;color:var(--mute)}
+
+/* quarantine tray */
+.tray{max-width:52ch;border:.5px solid var(--line);background:var(--panel);padding:14px}
+.tray header{display:flex;justify-content:space-between;margin-bottom:12px}
+.cells{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.cell{aspect-ratio:1/1.1;border:.5px solid var(--line);background:repeating-linear-gradient(135deg,transparent 0 6px,#ffffff06 6px 7px),#0e1011;padding:8px;display:flex;flex-direction:column;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--mute);position:relative;transition:.25s}
+.cell:hover{border-color:var(--mute)}
+.cell.q{border-color:var(--acc);color:var(--acc);background:repeating-linear-gradient(135deg,transparent 0 6px,#ff5a1f18 6px 7px),#120b08}
+.cell.q::after{content:"";position:absolute;inset:-5px;border:.5px dashed var(--acc);pointer-events:none}
+.cell .d{width:100%;height:30%;background:linear-gradient(90deg,#2a2e30 40%,#1c1f21 40%);}
+.cell.q .d{background:var(--acc)}
+.tray footer{margin-top:12px;display:flex;justify-content:space-between}
+
+/* drift */
+.drift{max-width:52ch;width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px}
+.drift th{font-weight:400;text-align:left;color:var(--dim);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:8px 6px;border-bottom:.5px solid var(--line)}
+.drift td{padding:10px 6px;border-bottom:.5px solid var(--line)}
+.drift .bar{display:block;height:3px;background:#24282a;position:relative}
+.drift .bar i{position:absolute;top:-3px;width:1px;height:9px;background:var(--ink)}
+.drift .bar b{position:absolute;top:0;height:3px;background:#5d6366;left:35%;width:30%}
+.drift .bad .bar i{background:var(--acc)}
+
+/* form */
+form{display:grid;gap:18px;max-width:48ch}
+label{display:grid;gap:6px}
+input,select,textarea{background:transparent;border:0;border-bottom:.5px solid var(--mute);color:var(--ink);padding:8px 0;font:inherit;border-radius:0;outline:0}
+select option{background:#111}
+input:focus,select:focus,textarea:focus{border-bottom-color:var(--acc)}
+textarea{min-height:76px;resize:vertical}
+button{align-self:start;background:var(--acc);color:#0c0d0e;border:0;padding:14px 22px;font:600 13px var(--mono);letter-spacing:.1em;text-transform:uppercase;cursor:pointer;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%)}
+button:hover{background:#ff7a47}
+.ack{font-family:var(--mono);font-size:12px;color:var(--acc);min-height:1em}
+
+/* ---------- RIGHT PLANE ---------- */
+.plane{position:sticky;top:0;height:100vh;overflow:hidden;background:
+  radial-gradient(120% 80% at 50% 40%,#202326 0,#141618 55%,#0f1011 100%);}
+.plane::before{content:"";position:absolute;inset:0;background:
+  linear-gradient(var(--line) .5px,transparent .5px) 0 0/80px 80px,
+  linear-gradient(90deg,var(--line) .5px,transparent .5px) 0 0/80px 80px;opacity:.35;
+  mask:radial-gradient(circle at 50% 45%,#000 20%,transparent 75%)}
+.frame{position:absolute;inset:28px;pointer-events:none}
+.frame i{position:absolute;width:18px;height:18px;border:1px solid var(--mute)}
+.frame i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}
+.frame i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+.frame i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}
+.frame i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+.ruler-x,.ruler-y{position:absolute;opacity:.7}
+.ruler-x{left:60px;right:60px;top:52px;height:8px;background:repeating-linear-gradient(90deg,var(--mute) 0 1px,transparent 1px 10px);mask:linear-gradient(90deg,transparent,#000 15%,#000 85%,transparent)}
+.ruler-y{top:90px;bottom:90px;left:52px;width:8px;background:repeating-linear-gradient(180deg,var(--mute) 0 1px,transparent 1px 10px)}
+.stage{position:absolute;inset:0;display:grid;place-items:center;perspective:1400px}
+.stack{position:relative;width:min(34vw,420px);aspect-ratio:4/5;transform-style:preserve-3d;transform:rotateX(var(--rx)) rotateZ(var(--rz));transition:--gap .9s cubic-bezier(.2,.8,.2,1),--rx .9s cubic-bezier(.2,.8,.2,1),--rz .9s cubic-bezier(.2,.8,.2,1),--qx .9s cubic-bezier(.2,.8,.2,1)}
+.layer{position:absolute;inset:0;border:.5px solid #4a5053;transform:translateZ(calc(var(--i)*var(--gap)));background:linear-gradient(145deg,#2d3134,#1b1e20 55%,#25292b);box-shadow:0 30px 60px -30px #000}
+.layer.l3{transform:translateZ(calc(var(--i)*var(--gap))) translateX(var(--qx))}
+/* L1 base plate : mounting holes + datum */
+.l1{--i:0}
+.l1::before{content:"";position:absolute;inset:0;background:
+ radial-gradient(circle at 9% 7%,#0a0b0c 0 8px,#555 8px 9px,transparent 9px),
+ radial-gradient(circle at 91% 7%,#0a0b0c 0 8px,#555 8px 9px,transparent 9px),
+ radial-gradient(circle at 9% 93%,#0a0b0c 0 8px,#555 8px 9px,transparent 9px),
+ radial-gradient(circle at 91% 93%,#0a0b0c 0 8px,#555 8px 9px,transparent 9px)}
+/* L2 layout etch */
+.l2{--i:1;background:linear-gradient(145deg,#33383b,#202325)}
+.l2::before{content:"";position:absolute;left:12%;right:12%;top:14%;height:12%;background:#0e1011;border:.5px solid #555}
+.l2::after{content:"";position:absolute;left:12%;right:12%;top:32%;bottom:14%;background:
+  linear-gradient(#0e1011,#0e1011) 0 0/46% 62% no-repeat,
+  linear-gradient(#0e1011,#0e1011) 100% 0/46% 38% no-repeat,
+  linear-gradient(#0e1011,#0e1011) 100% 100%/46% 56% no-repeat,
+  linear-gradient(#0e1011,#0e1011) 0 100%/46% 30% no-repeat}
+/* L3 : the master reference window */
+.l3{--i:2;background:rgba(18,20,22,.55);backdrop-filter:blur(2px)}
+.l3::before{content:"";position:absolute;left:12%;top:14%;width:26%;height:12%;background:var(--acc)}
+.l3::after{content:"SAMPLE 0417";position:absolute;right:12%;bottom:6%;font:10px var(--mono);letter-spacing:.14em;color:var(--mute)}
+/* L4 : measurement film */
+.l4{--i:3;background:transparent;border-color:#6b7276;box-shadow:none}
+.l4::before{content:"";position:absolute;inset:6%;border:.5px dashed #6b7276}
+.l4::after{content:"";position:absolute;left:0;right:0;top:-2px;height:2px;background:var(--acc);animation:scan 4.5s linear infinite;opacity:0}
+[data-ch="3"] .l4::after{opacity:1}
+@keyframes scan{from{top:0}to{top:100%}}
+
+[data-ch="0"] .stack{--gap:0px;--rx:0deg;--rz:0deg}
+[data-ch="1"] .stack{--gap:70px;--rx:58deg;--rz:-34deg}
+[data-ch="2"] .stack{--gap:40px;--rx:58deg;--rz:-34deg;--qx:210px}
+[data-ch="3"] .stack{--gap:6px;--rx:12deg;--rz:-3deg}
+[data-ch="4"] .stack{--gap:0px;--rx:0deg;--rz:0deg}
+[data-ch="4"] .l3::before{background:#7cc79a}
+
+.readout{position:absolute;left:44px;right:44px;bottom:42px;display:flex;justify-content:space-between;align-items:flex-end;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--mute);text-transform:uppercase}
+.readout strong{display:block;color:var(--ink);font-size:20px;font-weight:500;letter-spacing:-.01em;text-transform:none;margin-top:4px}
+.callout{position:absolute;right:11%;top:22%;font:11px var(--mono);color:var(--acc);letter-spacing:.08em;text-transform:uppercase;transition:opacity .4s}
+.callout::before{content:"";display:block;width:70px;border-top:.5px solid var(--acc);margin-bottom:6px}
+
+@media (max-width:860px){
+  body{grid-template-columns:1fr}
+  .plane{order:-1;position:relative;height:46vh}
+  .stack{width:150px}
+  .chapter{min-height:auto;padding:8vh 0}
+  .slab{border:0}
+}
+@media (prefers-reduced-motion:reduce){.stack,.l4::after{transition:none;animation:none}}
+</style>
+</head>
+<body>
+<main class="slab" id="slab">
+  <div class="top">
+    <b>SPECIMEN</b>
+    <nav>
+      <a href="#c0" class="on">Sample</a><a href="#c1">Build</a><a href="#c2">Revisions</a><a href="#c3">Host</a><a href="#c4">Care</a><a href="#c5">Submit</a>
+    </nav>
+  </div>
+
+  <section class="chapter" id="c0" data-ch="0">
+    <div class="chno"><i>00</i><span class="mono">Custom websites · hosting · care</span></div>
+    <h1>Every site we ship is checked against a <em>master reference.</em></h1>
+    <p>We build your website by hand, hold it to a written standard, and host it ourselves. If a release drifts from the sample, it does not ship. If live drifts later, we pull it back.</p>
+    <dl class="meta">
+      <dt>Build</dt><dd>Custom design + code, no templates</dd>
+      <dt>Host</dt><dd>Our infrastructure, gated releases</dd>
+      <dt>Care</dt><dd>Monthly inspection + fixes</dd>
+      <dt>Scroll</dt><dd>Five chapters, one form</dd>
+    </dl>
+  </section>
+
+  <section class="chapter" id="c1" data-ch="1">
+    <div class="chno"><i>01</i><span class="mono">Build · inspection</span></div>
+    <h2>Defects are cheapest <em>before</em> they have a URL.</h2>
+    <p>Before launch we run your site through the same checklist every time. You see the sheet. Anything marked HOLD is fixed first, not footnoted.</p>
+    <div class="insp" role="table" aria-label="Pre-launch inspection sheet">
+      <div><b>01</b><span>Layout holds at 320 / 768 / 1440</span><span class="ok">&nbsp;</span></div>
+      <div><b>02</b><span>Forms deliver to a real inbox</span><span class="ok">&nbsp;</span></div>
+      <div><b>03</b><span>Every image under 180 KB</span><span class="ok">&nbsp;</span></div>
+      <div><b>04</b><span>Keyboard path reaches contact</span><span class="ok">&nbsp;</span></div>
+      <div><b>05</b><span>Copy matches approved sheet</span><span class="hold">&nbsp;</span></div>
+    </div>
+  </section>
+
+  <section class="chapter" id="c2" data-ch="1">
+    <div class="chno"><i>02</i><span class="mono">Revision stack</span></div>
+    <h2>Every change is a <em>revision</em>, never an overwrite.</h2>
+    <p>Edits stack. Live is always one named revision. Rolling back is a single step, not a weekend.</p>
+    <div class="revs">
+      <div class="rev live" style="--o:0"><span>REV D — Pricing page, new hours</span><small>LIVE · 2d</small></div>
+      <div class="rev" style="--o:1"><span>REV C — Contact form routing</span><small>ROLLBACK</small></div>
+      <div class="rev" style="--o:2"><span>REV B — Launch</span><small>ARCHIVED</small></div>
+      <div class="rev" style="--o:3"><span>REV A — Approved master reference</span><small>REFERENCE</small></div>
+    </div>
+  </section>
+
+  <section class="chapter" id="c3" data-ch="2">
+    <div class="chno"><i>03</i><span class="mono">Host · quarantine tray</span></div>
+    <h2>Failing releases wait in the <em>tray.</em></h2>
+    <p>New builds land in quarantine first. Speed, security headers, and visual diff run there. Only a clean pass reaches your domain; the rest stay held while the live revision keeps serving.</p>
+    <div class="tray">
+      <header><span class="mono">TRAY 01 · pre-release</span><span class="mono">1 HELD</span></header>
+      <div class="cells">
+        <div class="cell"><div class="d"></div><span>R-D · OK</span></div>
+        <div class="cell"><div class="d"></div><span>R-C · OK</span></div>
+        <div class="cell q"><div class="d"></div><span>R-E · HELD<br>LCP 3.4s</span></div>
+        <div class="cell"><div class="d"></div><span>—</span></div>
+        <div class="cell"><div class="d"></div><span>SSL · OK</span></div>
+        <div class="cell"><div class="d"></div><span>DNS · OK</span></div>
+        <div class="cell"><div class="d"></div><span>BKP · 03:00</span></div>
+        <div class="cell"><div class="d"></div><span>—</span></div>
+      </div>
+      <footer><span class="mono">live: REV D</span><span class="mono">release gate: closed</span></footer>
+    </div>
+  </section>
+
+  <section class="chapter" id="c4" data-ch="3">
+    <div class="chno"><i>04</i><span class="mono">Care · drift check</span></div>
+    <h2>We measure live against the sample, <em>monthly.</em></h2>
+    <p>Care is a recurring inspection: measure, compare, correct. Small drift gets fixed inside the plan. Large drift gets a quote before we touch it.</p>
+    <table class="drift">
+      <tr><th>Measure</th><th>Sample</th><th>Live</th><th>Tolerance</th></tr>
+      <tr><td>Load (LCP)</td><td>1.2s</td><td>1.3s</td><td><span class="bar"><b></b><i style="left:48%"></i></span></td></tr>
+      <tr><td>Uptime</td><td>99.9%</td><td>99.98%</td><td><span class="bar"><b></b><i style="left:55%"></i></span></td></tr>
+      <tr class="bad"><td>Broken links</td><td>0</td><td>2</td><td><span class="bar"><b></b><i style="left:82%"></i></span></td></tr>
+      <tr><td>Plugin / dep. age</td><td>&lt; 60d</td><td>41d</td><td><span class="bar"><b></b><i style="left:40%"></i></span></td></tr>
+    </table>
+  </section>
+
+  <section class="chapter" id="c5" data-ch="4">
+    <div class="chno"><i>05</i><span class="mono">Submit a sample request</span></div>
+    <h2>Send us the part. We’ll tell you what it takes.</h2>
+    <form id="f">
+      <label><span class="mono">Name</span><input required name="n" autocomplete="name"></label>
+      <label><span class="mono">Email</span><input required type="email" name="e" autocomplete="email"></label>
+      <label><span class="mono">Current site (or none)</span><input name="u" placeholder="https://"></label>
+      <label><span class="mono">Need</span>
+        <select name="k"><option>New custom site</option><option>Move &amp; host my site</option><option>Care for existing site</option></select></label>
+      <label><span class="mono">What must it get right?</span><textarea name="m"></textarea></label>
+      <button type="submit">Submit for inspection</button>
+      <p class="ack" id="ack" role="status"></p>
+    </form>
+  </section>
+</main>
+
+<aside class="plane" id="plane" data-ch="0" aria-hidden="true">
+  <div class="ruler-x"></div><div class="ruler-y"></div>
+  <div class="frame"><i></i><i></i><i></i><i></i></div>
+  <div class="stage">
+    <div class="stack">
+      <div class="layer l1"></div><div class="layer l2"></div><div class="layer l3"></div><div class="layer l4"></div>
+    </div>
+  </div>
+  <div class="callout" id="callout">Datum A</div>
+  <div class="readout">
+    <div>Chapter<strong id="rch">00 — Sample</strong></div>
+    <div style="text-align:right">Part<strong>SITE-0417 / datum</strong></div>
+  </div>
+</aside>
+
+<script>
+const names=["00 — Sample","01 — Inspection","02 — Revision stack","03 — Quarantine","04 — Drift check","05 — Submit"];
+const stateMap=[0,1,1,2,3,4];
+const calls=["Datum A","Rev spread","Layer separation","Held layer","Scan line","Accepted"];
+const plane=document.getElementById('plane'),rch=document.getElementById('rch'),call=document.getElementById('callout');
+const secs=[...document.querySelectorAll('.chapter')];
+const links=[...document.querySelectorAll('.top nav a')];
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){const i=secs.indexOf(e.target);
+  plane.dataset.ch=stateMap[i];rch.textContent=names[i];call.textContent=calls[i];
+  links.forEach((a,j)=>a.classList.toggle('on',j===i));}})},{threshold:.55});
+secs.forEach(s=>io.observe(s));
+document.getElementById('f').addEventListener('submit',e=>{e.preventDefault();document.getElementById('ack').textContent='Logged as SAMPLE-REQ-'+Math.floor(1000+Math.random()*9000)+'. We reply within one business day.';e.target.reset();});
+</script>
+</body>
+</html>

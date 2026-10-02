@@ -1,0 +1,13 @@
+:root {
+  --paper: #ffffff;
+  --ink: #151515;
+  --rule: #151515;
+  --hair: #d7d7d7;
+  --blue: #0a4da2;
+  --hl: #ffe100;
+  --grey: #f2f2f2;
+  --mute: #666666;
+  --cond: "Archivo Narrow", "Arial Narrow", Arial, sans-serif;
+  --mono: "Space Mono", ui-monospace, Consolas, monospace;
+  --radius: 0;
+}

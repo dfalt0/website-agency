@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compare — template vs. built for you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;600;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page:#e8ebef; --ink:#0a1830; --navy:#0a1f44; --navy-2:#102a5c; --lime:#c6f432; --mute:#5b6a82; --rule:#cdd3dc;
+  --sans:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif; --mono:"DM Mono",ui-monospace,Consolas,monospace;
+  --p:50%;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--page);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.4}
+a{color:inherit;text-decoration:none}
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 28px}
+.top .logo{font-weight:800;font-size:20px;letter-spacing:-.03em}
+.top .logo i{font-style:normal;background:var(--ink);color:var(--lime);padding:0 6px;margin-right:2px}
+.top nav{display:flex;gap:26px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.top nav a:hover{text-decoration:underline}
+.top .go{background:var(--ink);color:#fff;padding:9px 16px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.lede{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;padding:6px 28px 22px;align-items:end}
+.lede h1{font-weight:800;font-size:clamp(34px,5vw,72px);line-height:.95;letter-spacing:-.045em}
+.lede h1 em{font-style:normal;background:var(--lime);padding:0 .12em}
+.lede p{max-width:46ch;color:var(--mute);font-size:16px}
+.lede p b{color:var(--ink)}
+/* comparator */
+.cmp{margin:0 28px;position:relative;height:min(68vh,640px);min-height:500px;border:1px solid var(--ink);background:#fff;overflow:hidden;user-select:none;touch-action:pan-y;cursor:ew-resize}
+.cmp .layer{position:absolute;inset:0;overflow:hidden}
+.cmp .top-layer{clip-path:inset(0 0 0 var(--p))}
+/* browser chrome inside each layer */
+.chrome{height:30px;display:flex;align-items:center;gap:6px;padding:0 10px;font-family:var(--mono);font-size:11px}
+.chrome i{width:9px;height:9px;border-radius:50%;background:currentColor;opacity:.35}
+.chrome span{margin-left:10px;padding:2px 10px;border-radius:99px;background:rgba(127,127,127,.18);flex:0 1 260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* ===== A: template site ===== */
+.tpl{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#333}
+.tpl .chrome{background:#dcdcdc;color:#555}
+.tpl .nav{background:#2f6fb5;color:#fff;display:flex;justify-content:space-between;padding:10px 20px;font-size:13px}
+.tpl .nav div{display:flex;gap:16px}
+.tpl .slider{height:170px;background:linear-gradient(#bcc7d4,#a4b2c3);position:relative;text-align:center;padding-top:38px;color:#fff}
+.tpl .slider h2{font-size:28px;font-weight:700;text-shadow:1px 1px 2px #0006}
+.tpl .slider p{font-size:13px;margin:6px 0 12px}
+.tpl .slider .b{display:inline-block;background:#f39c12;color:#fff;padding:7px 18px;border-radius:3px;font-size:13px}
+.tpl .dots{position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:5px}
+.tpl .dots i{width:8px;height:8px;border-radius:50%;background:#fff8}
+.tpl .dots i:first-child{background:#fff}
+.tpl .three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:18px 20px}
+.tpl .three div{border:1px solid #ddd;padding:12px;text-align:center;font-size:12px}
+.tpl .three .img{height:60px;background:#e6e6e6;margin-bottom:8px;color:#aaa;line-height:60px;font-size:11px}
+.tpl .three h4{font-size:14px;margin-bottom:4px;color:#2f6fb5}
+.tpl .txt{padding:0 20px;font-size:12px;color:#777}
+.tpl .cookie{position:absolute;left:0;right:0;bottom:0;background:#222;color:#ddd;font-size:11px;padding:10px 16px;display:flex;justify-content:space-between;align-items:center}
+.tpl .cookie b{background:#2f6fb5;color:#fff;padding:4px 10px;font-weight:400}
+.tpl .chat{position:absolute;right:16px;bottom:56px;width:46px;height:46px;border-radius:50%;background:#2f6fb5;color:#fff;text-align:center;line-height:46px;font-size:11px}
+.tpl .pop{position:absolute;left:12%;top:44%;width:210px;background:#fff;border:1px solid #bbb;padding:12px;font-size:12px;box-shadow:2px 3px 8px #0003;text-align:center}
+.tpl .pop b{display:block;font-size:15px;margin-bottom:4px}
+.tpl .pop span{display:inline-block;margin-top:6px;background:#e74c3c;color:#fff;padding:5px 12px;font-size:11px}
+/* ===== B: custom + hosted ===== */
+.cus{background:var(--navy);color:#eaf0fb;font-family:var(--sans)}
+.cus .chrome{background:#07152f;color:#9fb3d6}
+.cus .nav{display:flex;justify-content:space-between;align-items:center;padding:16px 28px;font-size:13px;border-bottom:1px solid #ffffff1a}
+.cus .nav b{font-weight:800;font-size:17px;letter-spacing:-.03em}
+.cus .nav div{display:flex;gap:22px;color:#9fb3d6}
+.cus .nav .bk{background:var(--lime);color:var(--navy);padding:7px 14px;font-weight:600}
+.cus .hero{display:grid;grid-template-columns:1.2fr 1fr;gap:22px;padding:30px 28px 0}
+.cus .hero h2{font-size:clamp(30px,3.6vw,56px);font-weight:800;line-height:.95;letter-spacing:-.045em}
+.cus .hero h2 em{font-style:normal;color:var(--lime)}
+.cus .hero p{margin-top:14px;color:#9fb3d6;font-size:14px;max-width:40ch}
+.cus .hero .row{display:flex;gap:10px;margin-top:18px;font-family:var(--mono);font-size:12px}
+.cus .hero .row span{border:1px solid #ffffff33;padding:7px 12px}
+.cus .hero .row span:first-child{background:var(--lime);color:var(--navy);border-color:var(--lime);font-weight:500}
+.cus .photo{background:linear-gradient(160deg,#1b3d7a,#0f2a5a);min-height:230px;position:relative;border:1px solid #ffffff22}
+.cus .photo::after{content:"patient-first booking in 2 taps";position:absolute;left:12px;bottom:12px;font-family:var(--mono);font-size:11px;background:var(--lime);color:var(--navy);padding:4px 8px}
+.cus .photo i{position:absolute;display:block;border:1px solid #ffffff44}
+.cus .photo i:nth-child(1){left:12%;top:14%;width:34%;height:44%;background:#ffffff12}
+.cus .photo i:nth-child(2){right:12%;top:30%;width:30%;height:42%;background:var(--lime);border:0;opacity:.9}
+.cus .vitals{display:grid;grid-template-columns:repeat(4,1fr);margin:28px 28px 0;border-top:1px solid #ffffff22}
+.cus .vitals div{padding:12px 0;border-right:1px solid #ffffff22;padding-left:12px}
+.cus .vitals div:first-child{padding-left:0}
+.cus .vitals div:last-child{border:0}
+.cus .vitals b{display:block;font-size:26px;font-weight:800;letter-spacing:-.03em;color:var(--lime)}
+.cus .vitals span{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#9fb3d6}
+/* handle */
+.handle{position:absolute;top:0;bottom:0;left:var(--p);width:0;z-index:5;pointer-events:none}
+.handle::before{content:"";position:absolute;left:-1px;top:0;bottom:0;width:2px;background:var(--lime);box-shadow:0 0 0 1px var(--ink)}
+.knob{position:absolute;top:50%;left:0;transform:translate(-50%,-50%);width:54px;height:54px;background:var(--lime);border:2px solid var(--ink);display:grid;place-items:center;font-family:var(--mono);font-size:15px;color:var(--ink);font-weight:500;letter-spacing:-.1em}
+.tag{position:absolute;top:44px;z-index:4;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;padding:5px 10px;border:1px solid var(--ink);background:#fff;pointer-events:none}
+.tag.a{left:14px}
+.tag.b{right:14px;background:var(--lime)}
+.cmp input[type=range]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;z-index:6}
+/* readout */
+.read{display:grid;grid-template-columns:1fr 1fr;margin:0 28px;border:1px solid var(--ink);border-top:0}
+.read>div{padding:16px 18px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.read>div:first-child{border-right:1px solid var(--ink);background:#dfe3e9}
+.read>div:last-child{background:var(--lime)}
+.read h3{grid-column:1/-1;font-family:var(--mono);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em}
+.read b{display:block;font-size:30px;font-weight:800;letter-spacing:-.04em;line-height:1}
+.read span{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#3a4860}
+/* offer strip */
+.offer{display:grid;grid-template-columns:1fr 1fr 1fr 1.1fr;margin:26px 28px 40px;gap:0;border-top:2px solid var(--ink)}
+.offer>*{padding:16px 18px 6px 0}
+.offer h4{font-family:var(--mono);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--mute)}
+.offer .n{font-size:34px;font-weight:800;letter-spacing:-.04em;margin:4px 0 4px}
+.offer .n small{font-size:14px;font-weight:400;letter-spacing:0;color:var(--mute)}
+.offer p{font-size:13px;color:var(--mute);max-width:30ch}
+.offer .cta{background:var(--ink);color:#fff;padding:18px;display:flex;flex-direction:column;justify-content:space-between;margin-top:-2px}
+.offer .cta strong{font-size:22px;font-weight:800;letter-spacing:-.03em;line-height:1.05}
+.offer .cta span{color:var(--lime);font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin-top:14px}
+@media (max-width:900px){
+  .lede{grid-template-columns:1fr}.top nav{display:none}
+  .cus .hero{grid-template-columns:1fr}.cus .photo{display:none}
+  .read{grid-template-columns:1fr}.read>div:first-child{border-right:0;border-bottom:1px solid var(--ink)}
+  .offer{grid-template-columns:1fr 1fr}.tpl .pop{display:none}
+  .cus .vitals{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="#"><i>C</i>ompare</a>
+  <nav><a href="#">Work</a><a href="#offer">Pricing</a><a href="#">Hosting</a><a href="#">Care</a></nav>
+  <a class="go" href="#offer">Get a quote</a>
+</header>
+
+<section class="lede">
+  <h1>Same business.<br>Two websites. <em>Drag.</em></h1>
+  <p>Left: a template site, $12 a month on shared hosting. Right: the one we'd build and host for you. <b>Custom code, custom design, fast hosting, a person on call.</b></p>
+</section>
+
+<section class="cmp" id="cmp" aria-label="Before and after comparator">
+  <div class="layer tpl" aria-label="Template site">
+    <div class="chrome"><i></i><i></i><i></i><span>tidalphysio.wixsite.com/my-site-3</span></div>
+    <div class="nav"><b>TIDAL PHYSIO</b><div><span>Home</span><span>About Us</span><span>Services</span><span>Blog</span><span>Contact</span></div></div>
+    <div class="slider"><h2>Welcome To Our Website</h2><p>We are a team of dedicated professionals</p><span class="b">LEARN MORE</span><div class="dots"><i></i><i></i><i></i></div></div>
+    <div class="three">
+      <div><div class="img">IMAGE</div><h4>Our Mission</h4>Lorem ipsum dolor sit amet consectetur.</div>
+      <div><div class="img">IMAGE</div><h4>Our Services</h4>Lorem ipsum dolor sit amet consectetur.</div>
+      <div><div class="img">IMAGE</div><h4>Our Team</h4>Lorem ipsum dolor sit amet consectetur.</div>
+    </div>
+    <p class="txt">Copyright © 2019 · Powered by a page builder · 14 plugins active · Update available</p>
+    <div class="pop"><b>Subscribe!</b>Get 10% off your first visit<br><span>YES PLEASE</span></div>
+    <div class="chat">Chat</div>
+    <div class="cookie"><span>We use cookies to improve your experience.</span><b>Accept</b></div>
+  </div>
+
+  <div class="layer top-layer cus" aria-label="Custom site">
+    <div class="chrome"><i></i><i></i><i></i><span>tidalphysio.ca</span></div>
+    <div class="nav"><b>Tidal Physio</b><div><span>Treatments</span><span>Team</span><span>Prices</span><span>Find us</span></div><span class="bk">Book a visit</span></div>
+    <div class="hero">
+      <div>
+        <h2>Move well<br>again. <em>Book<br>in two taps.</em></h2>
+        <p>Vancouver physiotherapy for runners, desk workers and everyone recovering from something.</p>
+        <div class="row"><span>Book now</span><span>See treatments</span></div>
+      </div>
+      <div class="photo"><i></i><i></i></div>
+    </div>
+    <div class="vitals"><div><b>0.9s</b><span>Largest paint</span></div><div><b>100</b><span>Accessibility</span></div><div><b>+63%</b><span>Online bookings</span></div><div><b>99.99%</b><span>Uptime, 12 mo</span></div></div>
+  </div>
+
+  <span class="tag a">A · Template</span><span class="tag b">B · Custom + hosted</span>
+  <div class="handle"><div class="knob">‹›</div></div>
+  <input id="rng" type="range" min="4" max="96" step="0.1" value="50" aria-label="Drag to compare template site and custom site">
+</section>
+
+<section class="read" aria-label="Measured difference">
+  <div><h3>A · Template + shared host</h3>
+    <div><b>4.8s</b><span>Largest paint</span></div><div><b>14</b><span>Plugins</span></div><div><b>61</b><span>Accessibility</span></div><div><b>$12</b><span>Per month*</span></div></div>
+  <div><h3>B · Custom + our hosting + care</h3>
+    <div><b>0.9s</b><span>Largest paint</span></div><div><b>0</b><span>Plugins</span></div><div><b>100</b><span>Accessibility</span></div><div><b>$49</b><span>Per month</span></div></div>
+</section>
+
+<section class="offer" id="offer">
+  <div><h4>Build</h4><div class="n">$4,500<small> from</small></div><p>Custom design and code. You own the source.</p></div>
+  <div><h4>Host</h4><div class="n">$49<small> /mo</small></div><p>Edge network, SSL, backups, uptime monitoring.</p></div>
+  <div><h4>Care</h4><div class="n">$199<small> /mo</small></div><p>Four changes a month, patches, a quarterly review.</p></div>
+  <a class="cta" href="#"><strong>Show us your current site. We'll send the B version.</strong><span>Request a comparison →</span></a>
+</section>
+
+<script>
+(function(){
+  var cmp=document.getElementById('cmp'),r=document.getElementById('rng');
+  function set(v){cmp.style.setProperty('--p',v+'%')}
+  r.addEventListener('input',function(){set(r.value)});
+  set(r.value);
+  // gentle intro sweep so the affordance is obvious
+  var t=0,from=50,run=true;
+  function stop(){run=false}
+  ['pointerdown','keydown','touchstart'].forEach(function(e){r.addEventListener(e,stop,{once:true})});
+  var start=null;
+  function anim(ts){
+    if(!run)return;if(!start)start=ts;
+    var k=(ts-start)/2400;if(k>1){set(r.value);return}
+    var v=50+Math.sin(k*Math.PI*2)*22*(1-k);
+    r.value=v;set(v);requestAnimationFrame(anim);
+  }
+  setTimeout(function(){requestAnimationFrame(anim)},500);
+})();
+</script>
+</body>
+</html>

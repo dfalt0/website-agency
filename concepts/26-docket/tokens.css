@@ -1,0 +1,25 @@
+/* Docket — manila / legal-intake tokens */
+:root {
+  --desk: #23282d;
+  --desk-edge: #151a1e;
+  --manila: #e6d9b3;
+  --manila-deep: #d4c395;
+  --paper: #fbf8ee;
+  --ink: #1b2a41;
+  --ink-soft: #4a5568;
+  --rule: #b9ab80;
+  --stamp: #b3261e;
+  --stamp-ok: #2d6a4f;
+  --tab-brief: #e6d9b3;
+  --tab-build: #dfcfa0;
+  --tab-host: #d8c78f;
+  --tab-care: #d0be82;
+  --tab-terms: #c8b575;
+
+  --font-serif: "Libre Caslon Text", "Times New Roman", serif;
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-type: "Courier Prime", "Courier New", monospace;
+
+  --radius-tab: 10px;
+  --hairline: 1px solid var(--rule);
+}

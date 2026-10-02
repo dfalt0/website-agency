@@ -1,0 +1,15 @@
+:root {
+  --rail-bg: #fdfdfc;
+  --rail-rail: #f0f2f3;
+  --rail-ink: #171a1e;
+  --rail-mute: #66707a;
+  --rail-hair: #d9dee2;
+  --rail-accent: #c01f5a;      /* raspberry marker, used for position + highlights only */
+  --rail-accent-deep: #9f1749;
+  --rail-highlight: #f6d3e0;
+  --font-serif: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --rail-width: 300px;
+  --measure: 700px;
+}

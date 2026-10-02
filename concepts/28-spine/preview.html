@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spine — Custom websites, hosting, care</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300;1,9..144,500&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+@import url("tokens.css");
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--font-body);font-size:1.0625rem;line-height:1.6}
+.mast{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:.9rem var(--gutter);background:rgba(243,239,230,.85);backdrop-filter:blur(8px);border-bottom:.5px solid var(--line);font:500 .74rem var(--font-mono);letter-spacing:.08em;text-transform:uppercase}
+.mast b{font:600 1.15rem var(--font-display);letter-spacing:-.02em;text-transform:none}
+.mast a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--vermilion)}
+.opener{padding:clamp(3rem,9vw,7rem) var(--gutter) 3rem;max-width:68rem}
+.opener h1{font:300 clamp(2.6rem,7.4vw,6.2rem)/.98 var(--font-display);letter-spacing:-.035em;font-variation-settings:"opsz" 144}
+.opener h1 em{font-style:italic;font-weight:500;color:var(--vermilion)}
+.opener p{max-width:34rem;margin-top:1.6rem;color:var(--ink-soft);font-size:1.15rem}
+.here{display:inline-flex;align-items:center;gap:.6rem;margin-top:2.2rem;font:600 .75rem var(--font-mono);letter-spacing:.1em;text-transform:uppercase}
+.here i{width:11px;height:11px;border-radius:50%;background:var(--vermilion);box-shadow:0 0 0 0 rgba(232,69,44,.5);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 12px rgba(232,69,44,0)}100%{box-shadow:0 0 0 0 rgba(232,69,44,0)}}
+/* spine */
+.track{position:relative;padding:2rem 0 6rem;--p:0%}
+.track::before,.track::after{content:"";position:absolute;top:0;bottom:0;left:50%;width:var(--spine-w);transform:translateX(-50%)}
+.track::before{width:14px;background:repeating-linear-gradient(to bottom,var(--ink-soft) 0 1px,transparent 1px 24px);opacity:.4}
+.track::after{background:linear-gradient(to bottom,var(--vermilion) var(--p),var(--line) var(--p))}
+.node{display:grid;grid-template-columns:1fr 0 1fr;align-items:start;position:relative;padding:clamp(1.8rem,4.5vw,3.6rem) 0}
+.node>*{padding:0 clamp(1.8rem,5vw,4.5rem)}
+.time{font:600 clamp(1.4rem,3.2vw,2.5rem)/1 var(--font-mono);letter-spacing:-.04em;color:var(--ink)}
+.time small{display:block;font:400 .7rem var(--font-mono);letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;margin-top:.5rem}
+.txt h2{font:500 clamp(1.5rem,2.6vw,2.1rem)/1.1 var(--font-display);letter-spacing:-.02em;margin-bottom:.6rem}
+.txt p{max-width:30rem;color:#2c2b27}
+.txt b{color:var(--vermilion-deep);font-weight:600}
+.dot{position:absolute;left:50%;top:calc(clamp(1.8rem,4.5vw,3.6rem) + .35rem);width:var(--node-size);height:var(--node-size);border-radius:50%;background:var(--paper);border:2px solid var(--ink);transform:translateX(-50%);z-index:2;transition:.3s}
+.node>.dot{padding:0!important}
+.node.on .dot{background:var(--vermilion);border-color:var(--vermilion);box-shadow:0 0 0 6px rgba(232,69,44,.15)}
+.dot::after{content:"";position:absolute;top:50%;height:1px;width:clamp(1.2rem,4vw,3.6rem);background:var(--ink)}
+/* alternate */
+.node:nth-of-type(odd) .txt{grid-column:1;text-align:right}.node:nth-of-type(odd) .txt p{margin-left:auto}
+.node:nth-of-type(odd) .time{grid-column:3;grid-row:1}
+.node:nth-of-type(odd) .dot::after{right:100%}
+.node:nth-of-type(even) .txt{grid-column:3;grid-row:1}
+.node:nth-of-type(even) .time{grid-column:1;text-align:right;grid-row:1}
+.node:nth-of-type(even) .dot::after{left:100%}
+.node .txt{opacity:0;transition:opacity .6s,transform .6s}
+.node:nth-of-type(odd) .txt{transform:translateX(-16px)}.node:nth-of-type(even) .txt{transform:translateX(16px)}
+.node.on .txt{opacity:1;transform:none}
+/* phase divider */
+.phase{position:relative;height:9rem;display:grid;place-items:center;z-index:3}
+.phase span{font:300 italic clamp(3rem,8vw,6rem)/1 var(--font-display);letter-spacing:-.04em;background:var(--paper);padding:.2em .5em;color:transparent;-webkit-text-stroke:1px var(--ink)}
+.phase span em{font:600 .7rem var(--font-mono);font-style:normal;-webkit-text-stroke:0;color:var(--vermilion);display:block;letter-spacing:.2em;text-align:center}
+.end{padding:3rem var(--gutter) 6rem;display:grid;grid-template-columns:1fr 1fr;gap:var(--gutter);border-top:.5px solid var(--ink)}
+.end h2{font:300 clamp(2.2rem,5vw,4rem)/1 var(--font-display);letter-spacing:-.03em}
+.end a{display:inline-block;margin-top:1.6rem;background:var(--ink);color:var(--paper);padding:1rem 1.6rem;text-decoration:none;font:600 .8rem var(--font-mono);letter-spacing:.1em;text-transform:uppercase;transition:background .2s}
+.end a:hover{background:var(--vermilion)}
+.fees{font:400 .86rem/1.9 var(--font-mono);align-self:end}
+.fees div{display:flex;justify-content:space-between;border-bottom:.5px solid var(--line);padding:.2rem 0}
+@media(max-width:760px){
+ .track::before,.track::after{left:1.1rem}.track::before{display:none}
+ .node{grid-template-columns:0 1fr}.node>*{padding:0 0 0 3rem}
+ .node:nth-of-type(n) .txt{grid-column:2;grid-row:2;text-align:left;transform:none}.node:nth-of-type(n) .txt p{margin:0}
+ .node:nth-of-type(n) .time{grid-column:2;grid-row:1;text-align:left;margin-bottom:.8rem}
+ .node .dot{left:1.1rem}.node:nth-of-type(n) .dot::after{display:none}
+ .phase span{font-size:3rem}.phase{place-items:center start;padding-left:2.6rem}.end{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.node .txt{opacity:1!important;transform:none!important;transition:none}.here i{animation:none}}
+</style>
+</head>
+<body>
+<header class="mast"><b>Spine</b><span>Custom websites · hosting · care</span><a href="#end">Start a timeline</a></header>
+<section class="opener">
+  <h1>A website is not a launch. It's <em>three years</em> of Tuesdays.</h1>
+  <p>Most agencies sell you the first eight weeks. Spine builds the site, hosts it, and stays for the rest. Scroll down the whole length of it.</p>
+  <div class="here"><i></i>You are here — day 0</div>
+</section>
+
+<div class="track" id="track">
+  <article class="node"><div class="txt"><h2>The call</h2><p>Thirty minutes, no deck. You tell us what the business does, who buys, and what the current site is costing you. We tell you whether we're the right shop.</p></div><div class="time">DAY 00<small>Conversation</small></div><span class="dot"></span></article>
+  <article class="node"><div class="txt"><h2>The quote</h2><p>A fixed price, in writing, with a scope you can read in five minutes. Builds start at <b>$6,500</b>. Deposit is 40%.</p></div><div class="time">DAY 03<small>In writing</small></div><span class="dot"></span></article>
+  <article class="node"><div class="txt"><h2>First sight</h2><p>Full-size designs of the three pages that matter most. No mood boards, no "options A through F."</p></div><div class="time">WK 02<small>Design</small></div><span class="dot"></span></article>
+  <article class="node"><div class="txt"><h2>Staging</h2><p>A working version on a private URL. Click everything. Break it. Tell us what you hate while it's cheap to change.</p></div><div class="time">WK 05<small>Build</small></div><span class="dot"></span></article>
+  <article class="node"><div class="txt"><h2>Launch</h2><p>DNS cut over on a weekday morning, never a Friday. Redirects tested. Backups verified before we leave the room.</p></div><div class="time">WK 07<small>Go live</small></div><span class="dot"></span></article>
+
+  <div class="phase" aria-hidden="true"><span><em>PHASE 02</em>Host</span></div>
+
+  <article class="node"><div class="txt"><h2>First night on our servers</h2><p>Edge cache warm, TLS auto-renewing, uptime pinged from three regions. <b>$79 a month</b> — and you can read the status page without asking.</p></div><div class="time">DAY 08<small>Hosting</small></div><span class="dot"></span></article>
+  <article class="node"><div class="txt"><h2>The first report</h2><p>One page: what changed, what we fixed, what we'd do next. Delivered the first Monday of the month, every month.</p></div><div class="time">MO 01<small>Reporting</small></div><span class="dot"></span></article>
+
+  <div class="phase" aria-hidden="true"><span><em>PHASE 03</em>Care</span></div>
+
+  <article class="node"><div class="txt"><h2>The checkup</h2><p>Traffic, speed, broken links, and the form that quietly stopped working. Care is <b>$249 a month</b> and includes three edit hours.</p></div><div class="time">MO 06<small>Care</small></div><span class="dot"></span></article>
+  <article class="node"><div class="txt"><h2>The renewal that isn't</h2><p>Month-to-month. If you want to leave: thirty days' notice and a full export in five business days.</p></div><div class="time">YR 01<small>No lock-in</small></div><span class="dot"></span></article>
+  <article class="node"><div class="txt"><h2>The refresh</h2><p>Brand moved? Business changed? We rebuild a section, not the whole thing — the foundation was built to be changed.</p></div><div class="time">YR 03<small>Evolve</small></div><span class="dot"></span></article>
+</div>
+
+<section class="end" id="end">
+  <div><h2>Start your timeline.</h2><p style="margin-top:1rem;color:var(--ink-soft);max-width:28rem">Tell us about the business. If there's room on our calendar, you'll hear from a person within two business days.</p><a href="mailto:hello@spine.example">Open day 0 →</a></div>
+  <div class="fees"><div><span>Build</span><span>from $6,500</span></div><div><span>Host</span><span>$79 / mo</span></div><div><span>Care (incl. host)</span><span>$249 / mo</span></div><div><span>Notice to leave</span><span>30 days</span></div></div>
+</section>
+<script>
+const track=document.getElementById('track'),nodes=[...track.querySelectorAll('.node')];
+function prog(){const r=track.getBoundingClientRect(),vh=innerHeight;
+  const p=Math.min(1,Math.max(0,(vh*.55-r.top)/r.height));track.style.setProperty('--p',(p*100).toFixed(2)+'%');
+  nodes.forEach(n=>{const d=n.querySelector('.dot').getBoundingClientRect();n.classList.toggle('on',d.top<vh*.62)})}
+addEventListener('scroll',prog,{passive:true});addEventListener('resize',prog);prog();
+</script>
+</body>
+</html>

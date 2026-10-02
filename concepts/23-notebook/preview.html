@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Notebook — a website project, logged</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Libre+Franklin:wght@400;500;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page:#f4f9fc; --rule:#bcd6ec; --margin:#e5484d; --ink:#1b2540; --pen:#1f4fd0; --stamp:#d62839; --hl:#e6ff5e; --mute:#5c6b86; --desk:#2a2f3a;
+  --body:"Libre Franklin",system-ui,sans-serif; --typed:"Special Elite","Courier New",monospace; --hand:"Caveat","Segoe Print",cursive;
+  --L:32px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--desk);color:var(--ink);font-family:var(--body);font-size:16px;line-height:var(--L)}
+.page{max-width:1120px;margin:0 auto;min-height:100vh;background-color:var(--page);background-image:linear-gradient(var(--rule) 1px,transparent 1px);background-size:100% var(--L);background-position:0 calc(var(--L) * 2 - 1px);position:relative;display:grid;grid-template-columns:64px 250px 1fr 40px;box-shadow:0 0 0 1px #0004,0 0 80px #0009}
+/* red margin double line */
+.page::before{content:"";position:absolute;left:326px;top:0;bottom:0;width:4px;border-left:1px solid var(--margin);border-right:1px solid var(--margin);opacity:.7}
+.holes{position:relative}
+.holes i{position:absolute;left:20px;width:22px;height:22px;border-radius:50%;background:var(--desk);box-shadow:inset 0 2px 3px #000a}
+.holes i:nth-child(1){top:120px}.holes i:nth-child(2){top:50%}.holes i:nth-child(3){bottom:120px}
+.marg{padding:0 22px 0 4px;position:relative}
+.main{padding:0 0 calc(var(--L)*3) 34px}
+/* header block */
+.hd{padding-top:var(--L);display:grid;grid-template-columns:1fr auto;align-items:end}
+.hd h1{font-family:var(--typed);font-weight:400;font-size:32px;line-height:var(--L);letter-spacing:-.01em}
+.hd .no{font-family:var(--typed);font-size:12px;line-height:16px;text-align:right;color:var(--mute);padding-right:20px}
+.meta{font-family:var(--typed);font-size:13px;color:var(--mute)}
+.meta b{font-weight:400;color:var(--ink)}
+.date{display:inline-block;font-family:var(--typed);font-size:13px;border:2px solid var(--stamp);color:var(--stamp);padding:0 8px;line-height:24px;transform:rotate(-2deg);letter-spacing:.08em;text-transform:uppercase;opacity:.9}
+/* entries */
+.exp{padding-top:var(--L);position:relative}
+.exp h2{font-family:var(--typed);font-weight:400;font-size:19px;line-height:var(--L);display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.exp h2 .id{background:var(--ink);color:var(--page);padding:0 8px;line-height:24px;font-size:13px;letter-spacing:.08em}
+.exp .lbl{font-family:var(--typed);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);display:inline-block;width:92px}
+.exp p{margin:0;max-width:62ch}
+.hl{background:linear-gradient(transparent 12%,var(--hl) 12% 88%,transparent 88%)}
+table.obs{border-collapse:collapse;font-family:var(--typed);font-size:13.5px;margin:0;width:100%;max-width:560px}
+table.obs td,table.obs th{height:var(--L);line-height:var(--L);padding:0 12px 0 0;text-align:left;font-weight:400;border-bottom:1px solid var(--ink)}
+table.obs th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);border-bottom:2px solid var(--ink)}
+table.obs td.n{text-align:right;font-variant-numeric:tabular-nums;padding-right:0}
+table.obs td.good{color:#0b7a46}
+table.obs td.bad{color:var(--stamp)}
+.stamp{position:absolute;right:0;top:calc(var(--L) * 1);font-family:var(--typed);font-size:22px;letter-spacing:.14em;text-transform:uppercase;border:3px double var(--stamp);color:var(--stamp);padding:2px 14px;line-height:34px;transform:rotate(7deg);opacity:.88;mix-blend-mode:multiply}
+.stamp.fail{color:#7a7f8e;border-color:#7a7f8e}
+/* margin annotations */
+.note{position:absolute;width:210px;right:calc(100% + 44px);top:calc(var(--L) * 2);font-family:var(--hand);font-weight:500;font-size:22px;line-height:24px;color:var(--pen);transform:rotate(-2deg)}
+.note.r{transform:rotate(1.5deg)}
+.note::after{content:"→";position:absolute;right:-18px;top:0;font-family:var(--body);font-size:20px}
+.note b{display:block;font-weight:700;font-size:14px;font-family:var(--typed);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-bottom:4px}
+.dim{color:var(--mute)}
+/* protocol box */
+.proto{border:2px solid var(--ink);margin:var(--L) 0 0;max-width:620px;background:#ffffffb8}
+.proto h3{font-family:var(--typed);font-weight:400;font-size:12px;letter-spacing:.14em;text-transform:uppercase;border-bottom:2px solid var(--ink);padding:0 12px;line-height:var(--L);background:var(--ink);color:var(--page)}
+.proto .r{display:grid;grid-template-columns:70px 1fr auto;padding:0 12px;border-bottom:1px solid var(--rule);line-height:var(--L)}
+.proto .r:last-child{border-bottom:0}
+.proto .r b{font-family:var(--typed);font-weight:400}
+.proto .r em{font-style:normal;font-family:var(--typed);font-size:15px}
+/* sign-off */
+.sign{margin-top:var(--L);display:grid;grid-template-columns:1fr 1fr;gap:34px;max-width:620px}
+.sign div{border-top:1px solid var(--ink);font-family:var(--typed);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);line-height:var(--L)}
+.sign .w{font-family:var(--hand);font-size:28px;line-height:20px;text-transform:none;letter-spacing:0;color:var(--pen);border:0;position:relative;top:10px;margin-top:-10px}
+.go{display:inline-block;margin-top:var(--L);font-family:var(--typed);font-size:16px;text-decoration:none;color:var(--ink);background:var(--hl);padding:0 18px;line-height:40px;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink);transition:transform .12s,box-shadow .12s}
+.go:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.scrib{font-family:var(--hand);font-size:26px;color:var(--pen);display:inline-block;transform:rotate(-3deg);margin-left:14px}
+@media (max-width:860px){
+  .page{grid-template-columns:20px 1fr 12px}.page::before{display:none}.holes{display:none}
+  .marg{display:none}.note{position:static;display:block;width:auto;margin:0;transform:none;font-size:20px}.note::after{display:none}.main{padding-left:8px}
+  .stamp{position:static;display:inline-block;margin:0}
+  .hd{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="holes"><i></i><i></i><i></i></div>
+
+  <div class="marg"></div>
+
+  <main class="main">
+    <header class="hd">
+      <div><h1>Project log: your website</h1>
+        <div class="meta">Studio <b>Notebook</b> · Subject <b>a small business site, rebuilt</b> · Vol. 7</div></div>
+      <div class="no">Pg. 001<br><span class="date">Started 02 Oct</span></div>
+    </header>
+
+    <section class="exp">
+      <h2><span class="id">EXP-01</span> Baseline: the existing site <span class="stamp fail">Failed</span></h2>
+      <div class="note"><b>Aim</b>fewer surprises. nothing hand-wavy.</div>
+      <div class="note r" style="top:calc(var(--L) * 5)"><b>Why it matters</b>4.8s is where people leave. we measured.</div>
+      <p><span class="lbl">Hypothesis</span> The current site is costing you enquiries.</p>
+      <p><span class="lbl">Method</span> Load it on a mid-range phone, on mobile data.</p>
+      <table class="obs">
+        <tr><th>Observation</th><th class="n">Result</th></tr>
+        <tr><td>Largest content paint</td><td class="n bad">4.8 s</td></tr>
+        <tr><td>Plugins running</td><td class="n bad">14</td></tr>
+        <tr><td>Booking path</td><td class="n bad">phone number</td></tr>
+      </table>
+      <p><span class="lbl">Result</span> <span class="hl">Hypothesis confirmed.</span> Nothing here is the owner's fault.</p>
+    </section>
+
+    <section class="exp">
+      <h2><span class="id">EXP-02</span> Build: custom, from scratch <span class="stamp">Passed</span></h2>
+      <div class="note"><b>Note to self</b>they own the code. say it out loud on the call.</div>
+      <p><span class="lbl">Hypothesis</span> Hand-written code and a clear booking path fix both problems.</p>
+      <p><span class="lbl">Method</span> Design in the browser. Five weeks. Weekly review.</p>
+      <table class="obs">
+        <tr><th>Observation</th><th class="n">Result</th></tr>
+        <tr><td>Largest content paint</td><td class="n good">0.9 s</td></tr>
+        <tr><td>Plugins running</td><td class="n good">0</td></tr>
+        <tr><td>Online bookings</td><td class="n good">+63 %</td></tr>
+      </table>
+      <p><span class="lbl">Result</span> <span class="hl">Passed.</span> Client owns every file.</p>
+    </section>
+
+    <section class="exp">
+      <h2><span class="id">EXP-03</span> Hosting: does it stay up? <span class="stamp">Passed</span></h2>
+      <div class="note r"><b>Cost</b>$49 a month. less than the 14 plugins it replaced.</div>
+      <p><span class="lbl">Hypothesis</span> Fast on launch day is easy. Fast in month nine is the test.</p>
+      <p><span class="lbl">Method</span> Edge hosting, nightly backups, a pager that rings at our desk.</p>
+      <table class="obs">
+        <tr><th>Observation, 12 months</th><th class="n">Result</th></tr>
+        <tr><td>Uptime</td><td class="n good">99.98 %</td></tr>
+        <tr><td>Certificates lapsed</td><td class="n good">0</td></tr>
+        <tr><td>Backups verified</td><td class="n good">365 / 365</td></tr>
+      </table>
+      <p><span class="lbl">Result</span> <span class="hl">Passed.</span> Repeat monthly.</p>
+    </section>
+
+    <section class="exp">
+      <h2><span class="id">EXP-04</span> Care: can it keep changing? <span class="stamp">Ongoing</span></h2>
+      <div class="note"><b>Open question</b>can we reply under 40 min? so far, yes (38).</div>
+      <p><span class="lbl">Hypothesis</span> A site that cannot change goes stale again within a year.</p>
+      <p><span class="lbl">Method</span> Four change requests per month, handled by a named person.</p>
+      <table class="obs">
+        <tr><th>Observation, median</th><th class="n">Result</th></tr>
+        <tr><td>First reply</td><td class="n good">38 min</td></tr>
+        <tr><td>Request to live</td><td class="n good">1.4 days</td></tr>
+      </table>
+      <p><span class="lbl">Result</span> <span class="hl">Holding.</span> Review each quarter.</p>
+    </section>
+
+    <section class="exp">
+      <h2><span class="id">PROTOCOL</span> What the experiment costs</h2>
+      <div class="note r"><b>Reminder</b>no lock-in. files travel with the client.</div>
+      <div class="proto">
+        <h3>Standard protocol · fixed price · written scope</h3>
+        <div class="r"><b>BUILD</b><span>Custom site, one-time, from</span><em>$4,500</em></div>
+        <div class="r"><b>HOST</b><span>Per month, cancel any time</span><em>$49</em></div>
+        <div class="r"><b>CARE</b><span>Per month, four changes</span><em>$199</em></div>
+      </div>
+    </section>
+
+    <section class="exp">
+      <h2><span class="id">EXP-05</span> Yours <span class="scrib">← next page is blank</span></h2>
+      <p><span class="lbl">Hypothesis</span> Your business is next.</p>
+      <p><span class="lbl">Method</span> Send us the current URL. We'll write the baseline for you.</p>
+      <a class="go" href="mailto:hello@notebook.studio">Begin EXP-05 →</a>
+      <div class="sign"><div>Principal investigator<br><span class="w">M. Lowe</span></div><div>Witnessed by (you)</div></div>
+    </section>
+  </main>
+  <div></div>
+</div>
+</body>
+</html>

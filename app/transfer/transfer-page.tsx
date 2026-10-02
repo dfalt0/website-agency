@@ -15,29 +15,28 @@ import {
   type TransferState,
 } from "@/lib/transfer";
 import {
-  Brain,
-  Code2,
-  Workflow,
-  Plug,
-  Server,
   Globe,
   Cloud,
   Store,
   Layout,
   Box,
+  Server,
   ArrowRight,
   Check,
   Sparkles,
   Map,
   Hammer,
+  Megaphone,
+  Layers,
+  RefreshCw,
 } from "lucide-react";
 
 const INTENT_ICONS: Record<TransferIntent, React.ComponentType<{ className?: string }>> = {
-  ai_discovery: Brain,
-  custom_ai_app: Code2,
-  workflow_automation: Workflow,
-  mcp_skills: Plug,
+  new_website: Globe,
+  redesign: RefreshCw,
   managed_hosting: Server,
+  growth_creatives: Megaphone,
+  full_ops: Layers,
 };
 
 const SERVICE_ICONS: Record<TransferServiceType, React.ComponentType<{ className?: string }>> = {
@@ -242,14 +241,14 @@ function Step1Intents({
     >
       <p className="mb-2 font-mono text-xs uppercase tracking-wider text-emerald">[Step 1 of 4]</p>
       <h1 className="font-heading mb-2 text-[clamp(1.5rem,4vw,2.25rem)] font-semibold leading-snug tracking-wide text-[#E2E8E2]">
-        What brings you here?
+        What do you need help with?
       </h1>
       <p className="mb-6 text-[#E2E8E2]/70">
-        Select everything that applies — we&apos;ll tailor the next steps to your goals.
+        Select everything that applies — we&apos;ll tailor the next steps.
       </p>
 
       <div className="space-y-3">
-        {(Object.entries(INTENT_OPTIONS) as [TransferIntent, (typeof INTENT_OPTIONS)["ai_discovery"]][]).map(
+        {(Object.entries(INTENT_OPTIONS) as [TransferIntent, (typeof INTENT_OPTIONS)["new_website"]][]).map(
           ([key, opt]) => {
             const Icon = INTENT_ICONS[key];
             const isSelected = selectedIds.includes(key);
@@ -288,13 +287,14 @@ function Step1Intents({
 
       <div className="mt-10 flex flex-col items-end gap-2">
         <Button
-          variant={selectedIds.length > 0 ? "white-primary" : "secondary"}
-          size="lg"
+          variant={selectedIds.length > 0 ? "emerald" : "secondary"}
           onClick={onNext}
           disabled={selectedIds.length === 0}
-          className={`duration-300 ease-out transition-[background-color,border-color,color,box-shadow] ${
-            selectedIds.length > 0 ? "shadow-[0_0_10px_rgba(34,197,94,0.15)]" : "border-[#E2E8E2]/35 text-[#E2E8E2]/60 shadow-none"
-          }`}
+          className={
+            selectedIds.length > 0
+              ? undefined
+              : "border-[#E2E8E2]/35 text-[#E2E8E2]/55"
+          }
         >
           Continue
           <ArrowRight className="ml-2 h-4 w-4" />
@@ -321,7 +321,11 @@ function Step2Path({
   onBack: () => void;
   onNext: () => void;
 }) {
-  const hostingIntent = intents.includes("managed_hosting");
+  const hostingIntent =
+    intents.includes("managed_hosting") ||
+    intents.includes("full_ops") ||
+    intents.includes("new_website") ||
+    intents.includes("redesign");
 
   return (
     <motion.div
@@ -415,17 +419,14 @@ function Step2Path({
       </div>
 
       <div className="flex justify-between">
-        <Button variant="secondary" size="lg" onClick={onBack} className="border-dark-foreground/30 text-[#E2E8E2]">
+        <Button variant="secondary" onClick={onBack} className="border-[#E2E8E2]/30 text-[#E2E8E2]">
           Back
         </Button>
         <Button
-          variant={selectedPath ? "white-primary" : "secondary"}
-          size="lg"
+          variant={selectedPath ? "emerald" : "secondary"}
           onClick={onNext}
           disabled={!selectedPath}
-          className={`duration-300 ease-out transition-[background-color,border-color,color,box-shadow] ${
-            selectedPath ? "shadow-[0_0_10px_rgba(34,197,94,0.15)]" : "border-[#E2E8E2]/35 text-[#E2E8E2]/60 shadow-none"
-          }`}
+          className={selectedPath ? undefined : "border-[#E2E8E2]/35 text-[#E2E8E2]/55"}
         >
           Continue
           <ArrowRight className="ml-2 h-4 w-4" />
@@ -494,13 +495,13 @@ function Step4Summary({ state, onBack }: { state: TransferState; onBack: () => v
       </div>
 
       <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
-        <Button variant="secondary" size="lg" onClick={onBack} className="border-[#E2E8E2]/30 text-[#E2E8E2]">
+        <Button variant="secondary" onClick={onBack} className="border-[#E2E8E2]/30 text-[#E2E8E2]">
           Back
         </Button>
-        <Button variant="white-primary" size="lg" asChild className="shadow-[0_0_10px_rgba(34,197,94,0.15)]">
+        <Button variant="emerald" asChild>
           <Link href="/">
             Back to home
-            <ArrowRight className="ml-2 h-4 w-4" />
+            <ArrowRight />
           </Link>
         </Button>
       </div>

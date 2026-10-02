@@ -1,0 +1,14 @@
+:root {
+  --sponsor-bg: #f7f9fa;
+  --sponsor-paper: #ffffff;
+  --sponsor-ink: #0e2233;
+  --sponsor-mute: #5a6b7a;
+  --sponsor-rule: #c8d1d8;
+  --sponsor-accent: #1d4e89;   /* bond blue */
+  --sponsor-accent-deep: #123560;
+  --sponsor-tint: #e9eff5;
+  --font-serif: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --radius: 0;
+}

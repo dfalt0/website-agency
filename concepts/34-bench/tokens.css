@@ -1,0 +1,21 @@
+/* Bench — pegboard, beech top, hi-vis orange */
+:root {
+  --board: #38423d;
+  --board-hole: #1f2622;
+  --outline: rgba(232, 238, 233, 0.11);
+  --steel: #cfd6d2;
+  --steel-dark: #8c9792;
+  --beech: #b98b5a;
+  --beech-dark: #9d724a;
+  --hivis: #ff5a1f;
+  --hazard: #ffcf1f;
+  --plate: #d8dcd7;
+  --plate-ink: #1b201d;
+  --ink: #12150f;
+
+  --font-head: "Saira Condensed", "Arial Narrow", sans-serif;
+  --font-body: "Saira Semi Condensed", system-ui, sans-serif;
+  --font-mono: "Overpass Mono", ui-monospace, monospace;
+
+  --peg: 28px;
+}

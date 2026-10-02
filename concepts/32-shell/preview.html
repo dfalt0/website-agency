@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>shell — custom websites, hosted and cared for</title>
+<link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+@import url("tokens.css");
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font:400 var(--fs)/var(--lh) var(--font-mono);padding:10px;display:flex}
+.win{flex:1;display:grid;grid-template-rows:auto 1fr auto;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;min-height:0;background:var(--pane)}
+.title{display:flex;gap:1.2rem;align-items:center;padding:.5rem .9rem;border-bottom:1px solid var(--border);color:var(--dim);font-size:.74rem;background:var(--bg)}
+.title b{color:var(--prompt);font-weight:600}.title span:last-child{margin-left:auto}
+.panes{display:grid;grid-template-columns:240px 1fr;min-height:0}
+.side{border-right:1px solid var(--border);padding:.8rem .9rem;overflow:auto;background:var(--bg)}
+.side h3{font-size:.68rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:.7rem}
+.ag{display:block;width:100%;text-align:left;background:none;border:1px solid transparent;color:inherit;font:inherit;padding:.55rem .6rem;margin-bottom:.4rem;border-radius:4px;cursor:pointer;transition:background .15s,border-color .15s}
+.ag:hover,.ag.on{background:var(--pane-hi);border-color:var(--border)}
+.ag b{display:flex;align-items:center;gap:.5rem;font-weight:600}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok);animation:blink 2.4s infinite}
+.dot.idle{background:var(--dim);box-shadow:none;animation:none}
+.dot.run{background:var(--warn);box-shadow:0 0 8px var(--warn)}
+@keyframes blink{50%{opacity:.4}}
+.ag small{display:block;color:var(--dim);margin:.2rem 0 0 1.05rem;font-size:.72rem}
+.keys{margin-top:1.4rem;color:var(--dim);font-size:.72rem;line-height:1.9}.keys kbd{color:var(--fg);border:1px solid var(--border);border-radius:3px;padding:0 .3rem;font:inherit}
+.main{display:grid;grid-template-rows:1fr auto;min-height:0}
+#log{overflow:auto;padding:.9rem 1.2rem;white-space:pre-wrap;word-break:break-word;scroll-behavior:smooth}
+#log .ln{display:block;min-height:1.55em}
+.p{color:var(--prompt);font-weight:600}.d{color:var(--dim)}.o{color:var(--ok)}.w{color:var(--warn)}.i{color:var(--info)}.h{color:#fff;font-weight:600}
+.cmd{color:var(--info);cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px}.cmd:hover{color:#fff}
+.big{font-size:1.5rem;line-height:1.2;color:#fff;font-weight:300;letter-spacing:-.04em}
+.row{display:flex;gap:.8rem}.row .k{flex:0 0 11ch;color:var(--info)}
+.chips{display:flex;gap:.4rem;flex-wrap:wrap;padding:.5rem 1.2rem;border-top:1px dashed var(--border)}
+.chips button{background:none;border:1px solid var(--border);color:var(--dim);font:inherit;font-size:.74rem;padding:.2rem .6rem;border-radius:3px;cursor:pointer;transition:.15s}
+.chips button:hover{color:var(--bg);background:var(--prompt);border-color:var(--prompt)}
+.input{display:flex;gap:.6rem;padding:.7rem 1.2rem;border-top:1px solid var(--border);background:var(--pane-hi)}
+.input input{flex:1;background:none;border:0;color:#fff;font:inherit;outline:none;caret-color:var(--prompt);caret-shape:block}
+.status{display:flex;gap:1rem;background:var(--prompt);color:#1a0f0b;font-size:.72rem;font-weight:600;padding:.25rem .9rem}
+.status span.act{background:#1a0f0b;color:var(--prompt);padding:0 .5rem}
+.status span:last-child{margin-left:auto}
+@media(max-width:760px){.panes{grid-template-columns:1fr}.side{display:none}.title span:not(:first-child):not(:last-child){display:none}.status span:nth-child(n+3):not(:last-child){display:none}}
+@media (prefers-reduced-motion:reduce){.dot{animation:none}#log{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="win">
+  <div class="title"><b>shell</b><span>~/agency</span><span>session: visitor</span><span>3 agents · 0 alerts</span></div>
+  <div class="panes">
+    <aside class="side" aria-label="agents">
+      <h3>agents</h3>
+      <button class="ag" data-cmd="attach build"><b><i class="dot run" id="d1"></i>build-agent</b><small id="t1">staging 94%</small></button>
+      <button class="ag" data-cmd="attach host"><b><i class="dot" id="d2"></i>host-agent</b><small id="t2">uptime 99.98%</small></button>
+      <button class="ag" data-cmd="attach care"><b><i class="dot idle" id="d3"></i>care-agent</b><small id="t3">0 open tickets</small></button>
+      <div class="keys"><kbd>↑</kbd><kbd>↓</kbd> history<br><kbd>tab</kbd> complete<br><kbd>ctrl</kbd>+<kbd>l</kbd> clear</div>
+    </aside>
+    <section class="main">
+      <div id="log" role="log" aria-live="polite" tabindex="-1"></div>
+      <div>
+        <div class="chips" id="chips"></div>
+        <form class="input" id="f"><span class="p">visitor@shell ~ $</span><input id="in" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="command" autofocus></form>
+      </div>
+    </section>
+  </div>
+  <div class="status"><span class="act" id="win">0:readme</span><span>1:build</span><span>2:host</span><span>3:care</span><span>shell.example</span><span id="up">up 1,204d</span></div>
+</div>
+<script>
+const log=document.getElementById('log'),inp=document.getElementById('in'),reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const sp=(c,t)=>`<span class="${c}">${t}</span>`;
+const cm=c=>`<span class="cmd" data-cmd="${c}">${c}</span>`;
+const kv=(k,v)=>`<span class="row"><span class="k">${k}</span><span>${v}</span></span>`;
+const C={
+help:()=>[sp('h','commands'),kv('services','what we do, one line each'),kv('build','custom websites'),kv('host','managed hosting'),kv('care','after-launch care'),kv('pricing','the fee table'),kv('status','agents + telemetry'),kv('attach &lt;x&gt;','open an agent playbook'),kv('apply','how to start'),kv('clear','clear screen')],
+services:()=>[sp('h','3 agents running'),kv('build',`custom websites, fixed scope &nbsp;${cm('build')}`),kv('host',`managed hosting we operate &nbsp;${cm('host')}`),kv('care',`updates, edits, a named human &nbsp;${cm('care')}`)],
+build:()=>{win('1:build');return[sp('h','build-agent') +' '+sp('o','● running'),'',
+ kv('scope','fixed, quoted in writing before work starts'),kv('duration','4–8 weeks'),kv('you get','design, source in your repo, content migration, redirects'),kv('you own','the code and the content. always.'),kv('price',sp('w','from $6,500')+' · 40% deposit'),'',sp('d','next: ')+cm('host')+' '+cm('pricing')]},
+host:()=>{win('2:host');return[sp('h','host-agent')+' '+sp('o','● healthy'),'',
+ kv('edge','global cache, TLS auto-renewed'),kv('backups','daily, kept 35 days'),kv('checks','every 60s from 3 regions'),kv('status','public status page'),kv('exit','full export in 5 business days'),kv('price',sp('w','$79 / month')),'',sp('d','next: ')+cm('care')+' '+cm('pricing')]},
+care:()=>{win('3:care');return[sp('h','care-agent')+' '+sp('d','○ idle (waiting for you)'),'',
+ kv('patches','scheduled, not "when we get to it"'),kv('edits','3 hrs/mo, roll over 1 month'),kv('response','1 business day · urgent 2 hrs'),kv('report','one page, first Monday'),kv('price',sp('w','$249 / month')+' incl. hosting'),'',sp('d','next: ')+cm('pricing')+' '+cm('apply')]},
+pricing:()=>[sp('h','fees.tsv'),'',kv('build',sp('w','from $6,500')+'   fixed quote'),kv('host',sp('w','$79/mo')+'       domain, TLS, backups'),kv('care',sp('w','$249/mo')+'      host + 3 edit hrs'),'',sp('d','month-to-month after build · 30 days notice'),'',cm('apply')],
+status:()=>[sp('h','agents'),kv('build-agent',sp('w','running')+' staging 94%'),kv('host-agent',sp('o','healthy')+' uptime 99.98% · backups ok'),kv('care-agent',sp('d','idle')+' 0 open tickets'),'',sp('d','last incident: 4 min · 11 days ago · resolved')],
+agents:()=>C.status(),
+apply:()=>{win('0:readme');return[sp('h','apply'),'','email   '+sp('i','hello@shell.example'),'include: what the business does · current site (if any) · deadline','reply:   a person, within 2 business days','',sp('d','we open a limited number of builds per quarter.')]},
+about:()=>C.readme(),whoami:()=>C.readme(),
+readme:()=>[sp('big','shell'),'',"custom websites, hosted and cared for.",'',"we build the site "+sp('d','(build-agent)')+', run it '+sp('d','(host-agent)')+', and keep it fixed '+sp('d','(care-agent)')+'.','',sp('d','type ')+cm('help')+sp('d',' or click a command below.')],
+};
+function win(w){document.getElementById('win').textContent=w}
+let history_=[],hi=0,busy=false;
+function print(lines,done){busy=true;let i=0;(function n(){if(i>=lines.length){busy=false;done&&done();return}
+  const l=document.createElement('span');l.className='ln';l.innerHTML=lines[i++];log.appendChild(l);log.scrollTop=log.scrollHeight;
+  reduce?n():setTimeout(n,18)})()}
+function run(raw,quiet){const t=raw.trim();if(!t)return;
+  if(!quiet){const l=document.createElement('span');l.className='ln';l.innerHTML=sp('p','visitor@shell ~ $')+' '+t.replace(/</g,'&lt;');log.appendChild(l);history_.push(t);hi=history_.length}
+  const [c,...a]=t.split(/\s+/);
+  if(c==='clear'){log.innerHTML='';return}
+  if(c==='sudo'&&a.join(' ')==='hire us')return print([sp('o','permission granted.')+' send the brief to '+sp('i','hello@shell.example')+'.','']);
+  if(c==='attach'){const x=a[0];if(C[x])return print(C[x]().concat(['']));return print([sp('w','attach: usage: attach &lt;build|host|care&gt;'),''])}
+  if(C[c])return print(C[c]().concat(['']));
+  print([sp('w',`shell: command not found: ${c.replace(/</g,'&lt;')}`)+sp('d',". try 'help'"),'']);}
+document.getElementById('f').onsubmit=e=>{e.preventDefault();if(busy)return;run(inp.value);inp.value=''};
+inp.onkeydown=e=>{
+  if(e.key==='ArrowUp'&&hi>0){inp.value=history_[--hi];e.preventDefault()}
+  if(e.key==='ArrowDown'){hi=Math.min(history_.length,hi+1);inp.value=history_[hi]||'';e.preventDefault()}
+  if(e.key==='Tab'){e.preventDefault();const v=inp.value,m=Object.keys(C).filter(k=>k.startsWith(v)&&v);if(m.length===1)inp.value=m[0]}
+  if(e.ctrlKey&&e.key==='l'){e.preventDefault();log.innerHTML=''}};
+document.addEventListener('click',e=>{const t=e.target.closest('[data-cmd]');if(t&&!busy){run(t.dataset.cmd);inp.focus()}});
+['services','build','host','care','pricing','status','apply','help'].forEach(c=>{const b=document.createElement('button');b.dataset.cmd=c;b.textContent=c;chips.appendChild(b)});
+/* boot */
+const l0=document.createElement('span');l0.className='ln';log.appendChild(l0);
+const boot='cat README';let k=0;
+(function type(){l0.innerHTML=sp('p','visitor@shell ~ $')+' '+boot.slice(0,k);if(k++<boot.length)return reduce?type():setTimeout(type,45);
+  print(C.readme().concat(['']))})();
+/* telemetry */
+const up=[99.98,99.99,99.98,100.0];let n=0,s=94;
+setInterval(()=>{n++;s=s>=99?94:s+1;t1.textContent='staging '+s+'%';t2.textContent='uptime '+up[n%4].toFixed(2)+'%';
+  const d=new Date(0,0,0,0,0,n*1);document.getElementById('up').textContent='up 1,204d '+String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')},1400);
+</script>
+</body>
+</html>

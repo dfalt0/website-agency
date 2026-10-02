@@ -1,0 +1,16 @@
+:root {
+  --bg: #e3ecef;
+  --side: #14213d;
+  --side-2: #1d2f55;
+  --ink: #101a2e;
+  --white: #ffffff;
+  --amber: #f5a524;
+  --amber-d: #c97f00;
+  --mute: #6b7a90;
+  --line: #cdd9de;
+  --ok: #1f9d6b;
+  --sans: "Figtree", "Segoe UI", system-ui, sans-serif;
+  --mono: "Fragment Mono", ui-monospace, Consolas, monospace;
+  --bubble-radius: 20px;
+  --bubble-tail: 6px;
+}

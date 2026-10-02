@@ -1,0 +1,11 @@
+:root {
+  --traverse-black: #0d0d0c;
+  --traverse-yellow: #ffd60a;   /* route-marker yellow */
+  --traverse-white: #f1f1ec;
+  --traverse-grey: #2a2a27;
+  --traverse-grey-mid: #8b8b84;
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --panel-h: 100vh;
+  --radius: 0;
+}

@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Canvas — a studio laid out on one board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;800&family=Red+Hat+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --board:#1b1c1e; --dot:#34363a; --bar:#26272a; --bar-line:#3a3c40; --sel:#0a84ff; --white:#fff; --paper:#f1f1f0; --black:#0d0d0e; --yel:#ffd60a; --pink:#ff9ecb; --text:#e6e7e9; --dim:#8b8e95;
+  --sans:"Hanken Grotesk","Segoe UI",system-ui,sans-serif; --mono:"Red Hat Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--board);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.4;display:grid;grid-template-rows:44px 1fr;grid-template-columns:52px 1fr}
+.top{grid-column:1/-1;background:var(--bar);border-bottom:1px solid var(--bar-line);display:flex;align-items:center;justify-content:space-between;padding:0 14px 0 0;z-index:10}
+.top .l{display:flex;align-items:center;height:100%}
+.top .logo{width:52px;height:100%;display:grid;place-items:center;border-right:1px solid var(--bar-line);font-weight:800;font-size:18px;color:var(--yel)}
+.top .file{padding:0 16px;font-size:13px;color:var(--dim)}
+.top .file b{color:var(--text);font-weight:500}
+.top .r{display:flex;gap:10px;align-items:center;font-size:13px}
+.av{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:600;color:#000}
+.share{background:var(--sel);color:#fff;border-radius:6px;padding:6px 14px;font-weight:600;text-decoration:none}
+.share:hover{background:#2b95ff}
+.tools{background:var(--bar);border-right:1px solid var(--bar-line);display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:6px;z-index:9}
+.tools a{width:34px;height:34px;border-radius:7px;display:grid;place-items:center;color:var(--dim);text-decoration:none;font-family:var(--mono);font-size:12px}
+.tools a:hover,.tools a.on{background:#38393d;color:#fff}
+.tools a.on{background:var(--sel)}
+.tools hr{width:26px;border:0;border-top:1px solid var(--bar-line);margin:4px 0}
+/* the board */
+.view{position:relative;overflow:auto;cursor:grab;scrollbar-color:#4a4c52 transparent}
+.view.drag{cursor:grabbing}
+.board{position:relative;width:2500px;height:1500px;background-image:radial-gradient(var(--dot) 1.2px,transparent 1.3px);background-size:24px 24px}
+.fr{position:absolute;color:var(--black);box-shadow:0 0 0 1px #0004,0 18px 40px -18px #000a;cursor:default}
+.fr>.nm{position:absolute;left:0;top:-24px;font-family:var(--mono);font-size:11.5px;color:var(--dim);white-space:nowrap}
+.fr:hover>.nm{color:var(--sel)}
+.fr::after{content:"";position:absolute;inset:-1px;border:1.5px solid var(--sel);opacity:0;pointer-events:none;transition:opacity .15s}
+.fr:hover::after{opacity:1}
+.fr .h{position:absolute;width:7px;height:7px;background:#fff;border:1.5px solid var(--sel);opacity:0;transition:opacity .15s;z-index:2}
+.fr:hover .h{opacity:1}
+.h.a{left:-4px;top:-4px}.h.b{right:-4px;top:-4px}.h.c{left:-4px;bottom:-4px}.h.d{right:-4px;bottom:-4px}
+.fr .dim{position:absolute;left:50%;bottom:-26px;transform:translateX(-50%);background:var(--sel);color:#fff;font-family:var(--mono);font-size:10.5px;padding:2px 6px;border-radius:3px;opacity:0;transition:opacity .15s;white-space:nowrap}
+.fr:hover .dim{opacity:1}
+.pad{padding:28px;height:100%;display:flex;flex-direction:column}
+/* frame specifics */
+.f1{left:180px;top:130px;width:580px;height:380px;background:#fff}
+.f1 h1{font-size:54px;line-height:.95;letter-spacing:-.045em;font-weight:800;margin-top:12px}
+.f1 h1 u{text-decoration:none;background:var(--yel);padding:0 6px;margin-left:-6px}
+.f1 p{margin-top:16px;max-width:44ch;font-size:15px;color:#333}
+.kick{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#555}
+.row{margin-top:auto;display:flex;gap:10px}
+.btn{font-weight:600;font-size:14px;padding:11px 18px;border-radius:7px;text-decoration:none;display:inline-block;border:1.5px solid var(--black)}
+.btn.k{background:var(--black);color:#fff}
+.btn.k:hover{background:var(--sel);border-color:var(--sel)}
+.btn.o:hover{background:var(--black);color:#fff}
+.f2{left:870px;top:90px;width:380px;height:460px;background:var(--black);color:#fff}
+.f2 h2{font-size:30px;letter-spacing:-.035em;line-height:1;margin:10px 0 18px;font-weight:800}
+.f2 ul{list-style:none;display:grid;gap:0}
+.f2 li{display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid #ffffff22;font-size:14.5px}
+.f2 li::before{content:"";width:14px;height:14px;border:1.5px solid var(--yel);border-radius:3px;flex:none;background:linear-gradient(135deg,transparent 40%,var(--yel) 41% 60%,transparent 61%)}
+.f2 .pr{margin-top:auto;font-size:44px;font-weight:800;letter-spacing:-.04em}
+.f2 .pr small{font-size:13px;font-weight:400;color:#aaa;letter-spacing:0;font-family:var(--mono)}
+.f3{left:1350px;top:160px;width:460px;height:310px;background:var(--yel)}
+.f3 h2{font-size:30px;letter-spacing:-.035em;line-height:1;margin:10px 0 16px;font-weight:800}
+.stack{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;margin-bottom:14px}
+.stack span{border:1.5px solid var(--black);padding:6px 10px;border-radius:6px;background:#fff}
+.stack i{flex:1;border-top:1.5px dashed var(--black);min-width:10px}
+.f3 p{font-size:14.5px;max-width:38ch}
+.f3 .row{gap:6px;font-family:var(--mono);font-size:11px}
+.f3 .row span{background:var(--black);color:var(--yel);padding:3px 8px;border-radius:99px}
+.f4{left:1920px;top:110px;width:400px;height:330px;background:var(--paper)}
+.f4 h2{font-size:30px;letter-spacing:-.035em;line-height:1;margin:10px 0 14px;font-weight:800}
+.req{display:grid;gap:8px}
+.req div{background:#fff;border:1px solid #d7d7d5;border-radius:8px;padding:9px 12px;display:flex;justify-content:space-between;font-size:13.5px;gap:10px}
+.req div b{font-family:var(--mono);font-weight:500;font-size:11px;color:#2a8a4a;white-space:nowrap}
+.req div b.w{color:#a76b00}
+.f5{left:500px;top:720px;width:760px;height:400px;background:#fff}
+.f5 h2{font-size:36px;letter-spacing:-.04em;line-height:1;margin:10px 0 16px;font-weight:800}
+.tbl{width:100%;border-collapse:collapse;font-size:14.5px}
+.tbl th{font-family:var(--mono);font-weight:400;font-size:11px;letter-spacing:.06em;text-transform:uppercase;text-align:left;color:#666;padding:0 0 8px;border-bottom:1.5px solid var(--black)}
+.tbl td{padding:12px 0;border-bottom:1px solid #ddd;vertical-align:top}
+.tbl td:first-child{font-weight:800;font-size:18px;letter-spacing:-.02em;width:140px}
+.tbl td.p{font-family:var(--mono);text-align:right;font-weight:500;white-space:nowrap;width:140px}
+.tbl th:last-child{text-align:right}
+.f6{left:1390px;top:640px;width:440px;height:430px;background:#fff}
+.f6 h2{font-size:34px;letter-spacing:-.04em;line-height:1;margin:10px 0 18px;font-weight:800}
+.in{border:1.5px solid #bbb;border-radius:7px;padding:10px 12px;font-size:14px;color:#777;margin-bottom:10px}
+.in b{display:block;font-family:var(--mono);font-weight:400;font-size:10.5px;color:#333;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.f6 .btn{text-align:center;margin-top:auto}
+/* stickies */
+.note{position:absolute;width:190px;padding:14px 14px 18px;font-size:14px;font-weight:600;line-height:1.25;color:#1a1a1a;box-shadow:0 12px 24px -12px #000c;transform:rotate(-2.5deg)}
+.note small{display:block;margin-top:8px;font-family:var(--mono);font-weight:400;font-size:10.5px;color:#444}
+.n1{background:var(--yel);left:240px;top:600px}
+.n2{background:var(--pink);left:1870px;top:560px;transform:rotate(2deg)}
+.n3{background:#fff;left:780px;top:600px;transform:rotate(1.5deg);width:170px}
+/* connectors */
+svg.wires{position:absolute;inset:0;pointer-events:none}
+svg.wires path{fill:none;stroke:#7a7d85;stroke-width:1.6;stroke-dasharray:5 5}
+svg.wires text{fill:#9a9da5;font-family:var(--mono);font-size:11px}
+/* multiplayer cursors */
+.cur{position:absolute;pointer-events:none;animation:drift 9s ease-in-out infinite alternate}
+.cur svg{display:block;width:18px;height:18px}
+.cur span{position:absolute;left:14px;top:16px;font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:99px 99px 99px 2px;color:#fff;white-space:nowrap}
+.c1{left:690px;top:380px}.c1 span{background:#e0457b}.c1 svg path{fill:#e0457b}
+.c2{left:1620px;top:420px;animation-delay:-3s}.c2 span{background:#16a34a}.c2 svg path{fill:#16a34a}
+@keyframes drift{to{transform:translate(40px,26px)}}
+/* minimap */
+.mini{position:fixed;right:18px;bottom:18px;width:160px;height:96px;background:#26272acc;backdrop-filter:blur(8px);border:1px solid var(--bar-line);border-radius:8px;z-index:8;overflow:hidden}
+.mini i{position:absolute;background:#6c6f77;border-radius:1px}
+.mini u{position:absolute;border:1.5px solid var(--sel);background:#0a84ff22}
+.hint{position:fixed;left:72px;bottom:18px;background:var(--bar);border:1px solid var(--bar-line);border-radius:99px;padding:7px 14px;font-family:var(--mono);font-size:11.5px;color:var(--dim);z-index:8}
+@media (max-width:760px){.tools{display:none}body{grid-template-columns:1fr}.mini{display:none}.hint{left:12px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="l"><div class="logo">C</div><div class="file">Canvas / <b>Website studio — custom, hosted, kept</b></div></div>
+  <div class="r"><span class="av" style="background:#ff7fb0">M</span><span class="av" style="background:#6ee7a0">K</span><a class="share" href="#f6">Start a project</a></div>
+</header>
+<nav class="tools" aria-label="Frames">
+  <a class="on" href="#f1" title="Intro">01</a><a href="#f2" title="Build">02</a><a href="#f3" title="Host">03</a><a href="#f4" title="Care">04</a><hr><a href="#f5" title="Pricing">$</a><a href="#f6" title="Start">→</a>
+</nav>
+
+<main class="view" id="view">
+  <div class="board" id="board">
+    <svg class="wires" width="2500" height="1500" viewBox="0 0 2500 1500">
+      <path d="M760 320 C 810 320, 820 300, 870 300"/>
+      <path d="M1250 300 C 1300 300, 1300 320, 1350 320"/>
+      <path d="M1810 300 C 1850 300, 1870 280, 1920 280"/>
+      <path d="M1060 550 C 1060 640, 880 640, 880 720"/>
+      <path d="M1260 900 C 1320 900, 1330 860, 1390 860"/>
+      <text x="780" y="292">design</text><text x="1268" y="292">ship</text><text x="1830" y="272">keep</text><text x="1290" y="892">decide</text>
+    </svg>
+
+    <section class="fr f1" id="f1"><span class="nm">01 / Intro</span><i class="h a"></i><i class="h b"></i><i class="h c"></i><i class="h d"></i><span class="dim">580 × 380</span>
+      <div class="pad"><span class="kick">Websites · Hosting · Care</span>
+        <h1>Custom sites, <u>hosted</u> and looked after.</h1>
+        <p>We design and code your website, run it on our hosting, and make changes when you ask. One studio, one monthly line.</p>
+        <div class="row"><a class="btn k" href="#f6">Start a project</a><a class="btn o" href="#f5">See pricing</a></div></div></section>
+
+    <section class="fr f2" id="f2"><span class="nm">02 / Build</span><i class="h a"></i><i class="h b"></i><i class="h c"></i><i class="h d"></i><span class="dim">380 × 460</span>
+      <div class="pad"><span class="kick" style="color:#aaa">Step one</span><h2>We build it from scratch.</h2>
+        <ul><li>Design in the browser, not slides</li><li>Hand-written, fast code</li><li>Content migrated for you</li><li>Editable without calling us</li><li>You own the source</li></ul>
+        <div class="pr">$4,500<small> from, one-time</small></div></div></section>
+
+    <section class="fr f3" id="f3"><span class="nm">03 / Host</span><i class="h a"></i><i class="h b"></i><i class="h c"></i><i class="h d"></i><span class="dim">460 × 310</span>
+      <div class="pad"><span class="kick">Step two</span><h2>We run it. $49 a month.</h2>
+        <div class="stack"><span>DNS</span><i></i><span>Edge</span><i></i><span>Your site</span></div>
+        <p>SSL renewed, backups every night, uptime watched around the clock.</p>
+        <div class="row"><span>99.98% up</span><span>0.9s paint</span><span>cancel any time</span></div></div></section>
+
+    <section class="fr f4" id="f4"><span class="nm">04 / Care</span><i class="h a"></i><i class="h b"></i><i class="h c"></i><i class="h d"></i><span class="dim">400 × 330</span>
+      <div class="pad"><span class="kick">Step three</span><h2>We keep it current.</h2>
+        <div class="req"><div>Swap hero photo<b>SHIPPED</b></div><div>Add booking form<b class="w">IN REVIEW</b></div><div>Redirect old URLs<b>SHIPPED</b></div><div>Team page, 6 bios<b class="w">QUEUED</b></div></div>
+        <p style="margin-top:auto;font-size:13.5px;color:#444">$199/mo. Four changes a month, patches, quarterly review.</p></div></section>
+
+    <section class="fr f5" id="f5"><span class="nm">05 / Pricing</span><i class="h a"></i><i class="h b"></i><i class="h c"></i><i class="h d"></i><span class="dim">760 × 400</span>
+      <div class="pad"><span class="kick">What it costs</span><h2>Three lines. That's the invoice.</h2>
+        <table class="tbl"><thead><tr><th>Line</th><th>Covers</th><th>Price</th></tr></thead><tbody>
+          <tr><td>Build</td><td>Design, code, content migration, launch. Fixed price, written scope.</td><td class="p">from $4,500</td></tr>
+          <tr><td>Host</td><td>Edge network, SSL, nightly backups, uptime monitoring.</td><td class="p">$49 / mo</td></tr>
+          <tr><td>Care</td><td>Four change requests a month, security patches, quarterly review.</td><td class="p">$199 / mo</td></tr></tbody></table></div></section>
+
+    <section class="fr f6" id="f6"><span class="nm">06 / Start</span><i class="h a"></i><i class="h b"></i><i class="h c"></i><i class="h d"></i><span class="dim">440 × 430</span>
+      <div class="pad"><span class="kick">Your move</span><h2>Send us your site, or a sketch.</h2>
+        <div class="in"><b>Name</b>Your name</div><div class="in"><b>Current site (optional)</b>https://</div><div class="in"><b>What should it do?</b>Take bookings, show our work…</div>
+        <a class="btn k" href="mailto:hi@canvas.studio">Request a quote</a></div></section>
+
+    <div class="note n1">Ships in five weeks, typically.<small>— Mara, design</small></div>
+    <div class="note n2">Hosting is month-to-month. Leave and take your files.<small>— Kai, infrastructure</small></div>
+    <div class="note n3">Fixed price. In writing. Before we start.</div>
+
+    <div class="cur c1"><svg viewBox="0 0 18 18"><path d="M1 1l5 15 2.5-6L15 7.5z"/></svg><span>Mara — designing</span></div>
+    <div class="cur c2"><svg viewBox="0 0 18 18"><path d="M1 1l5 15 2.5-6L15 7.5z"/></svg><span>Kai — deploying</span></div>
+  </div>
+</main>
+
+<div class="hint">Drag the board to pan · scroll for more frames →</div>
+<div class="mini" id="mini"></div>
+
+<script>
+(function(){
+  var v=document.getElementById('view'),b=document.getElementById('board'),m=document.getElementById('mini');
+  // drag to pan (only from empty canvas or frames, never from links)
+  var d=null;
+  v.addEventListener('pointerdown',function(e){if(e.target.closest('a,input'))return;d={x:e.clientX,y:e.clientY,l:v.scrollLeft,t:v.scrollTop};v.classList.add('drag')});
+  window.addEventListener('pointermove',function(e){if(!d)return;v.scrollLeft=d.l-(e.clientX-d.x);v.scrollTop=d.t-(e.clientY-d.y)});
+  window.addEventListener('pointerup',function(){d=null;v.classList.remove('drag')});
+  // minimap
+  var W=b.offsetWidth,H=b.offsetHeight,sx=160/W,sy=96/H;
+  [].forEach.call(document.querySelectorAll('.fr'),function(f){
+    var i=document.createElement('i');i.style.cssText='left:'+f.offsetLeft*sx+'px;top:'+f.offsetTop*sy+'px;width:'+f.offsetWidth*sx+'px;height:'+f.offsetHeight*sy+'px';m.appendChild(i);
+  });
+  var u=document.createElement('u');m.appendChild(u);
+  function vp(){u.style.cssText='left:'+v.scrollLeft*sx+'px;top:'+v.scrollTop*sy+'px;width:'+v.clientWidth*sx+'px;height:'+v.clientHeight*sy+'px'}
+  v.addEventListener('scroll',vp);window.addEventListener('resize',vp);vp();
+  // jump links: smooth-scroll the board to frame
+  [].forEach.call(document.querySelectorAll('a[href^="#f"]'),function(a){
+    a.addEventListener('click',function(e){
+      e.preventDefault();var f=document.querySelector(a.getAttribute('href'));if(!f)return;
+      v.scrollTo({left:Math.max(0,f.offsetLeft-120),top:Math.max(0,f.offsetTop-90),behavior:'smooth'});
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strip — Websites, filmed in nine frames</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Bebas+Neue&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+@import url("tokens.css");
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--dark);color:#d8cdb6;font:400 1rem/1.5 var(--font-body);display:grid;grid-template-rows:auto 1fr auto}
+header{display:flex;justify-content:space-between;align-items:center;padding:1rem clamp(1rem,4vw,3rem)}
+.logo{font:400 2rem/1 var(--font-title);letter-spacing:.12em;color:var(--edge)}
+.logo small{font:400 .72rem var(--font-slate);color:#8a7c68;letter-spacing:.08em;margin-left:1rem}
+.ctl{display:flex;gap:.6rem;align-items:center;font:700 .85rem var(--font-slate);color:var(--edge)}
+.ctl button{width:2.4rem;height:2.4rem;border:1px solid #4a3d2f;background:none;color:var(--edge);cursor:pointer;font-size:1rem;transition:.15s}
+.ctl button:hover{background:var(--edge);color:var(--dark)}
+.ctl output{min-width:5.2rem;text-align:center}
+.reel{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;scrollbar-width:none;display:flex;align-items:center;scroll-behavior:smooth}
+.reel::-webkit-scrollbar{display:none}
+.film{position:relative;display:flex;gap:var(--gap);padding:54px calc(50vw - var(--frame-w)/2) 62px;background:var(--base);min-width:max-content;
+  box-shadow:0 0 0 1px #000, inset 0 10px 24px rgba(0,0,0,.5),inset 0 -10px 24px rgba(0,0,0,.5)}
+.film::before,.film::after{content:"";position:absolute;left:0;right:0;height:18px;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='34' height='18'><rect x='9' y='3' width='16' height='12' rx='3' fill='%23110d09'/></svg>") repeat-x}
+.film::before{top:12px}.film::after{bottom:12px}
+.frame{scroll-snap-align:center;flex:0 0 var(--frame-w);height:var(--frame-h);position:relative;background:var(--cell);color:var(--cell-ink);display:flex;flex-direction:column;
+  opacity:.5;filter:saturate(.6);transition:opacity .4s,transform .4s,filter .4s;cursor:pointer}
+.frame.on{opacity:1;filter:none;transform:translateY(-6px);cursor:default}
+.frame .no{position:absolute;left:0;bottom:-34px;font:700 .72rem var(--font-slate);color:var(--edge);letter-spacing:.1em;white-space:nowrap}
+.frame .edge{position:absolute;right:0;top:-34px;font:700 .68rem var(--font-slate);color:var(--edge);letter-spacing:.2em;white-space:nowrap;opacity:.8}
+.art{flex:1;min-height:0;border-bottom:1.5px solid var(--cell-ink);display:grid;place-items:center;padding:.8rem;background:
+  repeating-linear-gradient(0deg,transparent 0 23px,rgba(28,23,18,.07) 23px 24px),repeating-linear-gradient(90deg,transparent 0 23px,rgba(28,23,18,.07) 23px 24px)}
+.art svg{width:100%;height:100%;max-height:100%}
+.art svg *{vector-effect:non-scaling-stroke}
+.s{stroke:var(--cell-ink);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.h{stroke:var(--hi);fill:none;stroke-width:3}.hf{fill:var(--hi);stroke:none}
+.art text{font:700 14px var(--font-slate);fill:var(--cell-ink)}
+.slate{display:grid;grid-template-columns:auto 1fr;gap:.2rem 1rem;padding:.7rem 1rem 0;font:700 .68rem var(--font-slate);letter-spacing:.08em;text-transform:uppercase;color:var(--cell-soft)}
+.slate b{color:var(--cell-ink)}
+.cap{padding:.2rem 1rem .9rem}
+.cap h2{font:400 clamp(1.6rem,3vw,2.3rem)/1 var(--font-title);letter-spacing:.06em;margin:.2rem 0 .3rem}
+.cap p{font-size:.95rem;line-height:1.4;max-width:46ch}
+.cap p b{background:var(--hi);color:#111;padding:0 .25rem;font-weight:600}
+.leader{background:#cbbf9f}
+.leader .num{font:400 13rem/1 var(--font-title);fill:var(--cell-ink)}
+.credits{background:#0c0907;color:#e8dfca}
+.credits .art{border:0;background:none;display:block;padding:1.3rem 1.5rem .5rem;overflow:auto}
+.credits h2{font:400 2.4rem/1 var(--font-title);letter-spacing:.08em;color:var(--edge);margin-bottom:.8rem}
+.credits dl div{display:flex;gap:.6rem;align-items:baseline;font-size:.98rem;padding:.25rem 0}
+.credits dl div::after{content:"";order:1;flex:1;border-bottom:1px dotted #5a4c3b}
+.credits dt{order:0;color:#a89a82;font:400 .76rem var(--font-slate);text-transform:uppercase;letter-spacing:.1em}.credits dd{order:2;font-weight:600}
+.credits .cap{padding-top:0}
+.btn{display:inline-block;background:var(--edge);color:#150e07;padding:.7rem 1.3rem;font:700 .85rem var(--font-slate);letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:.2s}
+.btn:hover{background:#fff}
+footer{padding:.8rem clamp(1rem,4vw,3rem) 1rem}
+.scrub{position:relative;display:flex;justify-content:space-between;border-top:1px solid #3a3025;font:700 .66rem var(--font-slate);letter-spacing:.06em;color:#8a7c68}
+.scrub button{background:none;border:0;border-top:3px solid transparent;margin-top:-2px;padding:.55rem 0 0;color:inherit;font:inherit;cursor:pointer;flex:1;text-align:left;text-transform:uppercase;transition:.2s}
+.scrub button:hover{color:#fff}.scrub button.on{color:var(--edge);border-top-color:var(--edge)}
+.tc{position:absolute;right:0;top:-1.5rem;color:var(--edge);font-size:.76rem}
+.hint{font:400 .72rem var(--font-slate);color:#6c5f4d;text-align:center;margin-top:.5rem}
+@media(max-width:700px){:root{--frame-w:86vw;--frame-h:68vh}.scrub button{font-size:0;padding-top:.8rem}.scrub button.on{font-size:.62rem}.logo small{display:none}}
+@media (prefers-reduced-motion:reduce){.reel{scroll-behavior:auto}.frame{transition:none}}
+</style>
+</head>
+<body>
+<header><div class="logo">STRIP<small>Websites, filmed in nine frames</small></div>
+  <div class="ctl"><button id="pv" aria-label="Previous frame">◀</button><output id="ct">01 / 09</output><button id="nx" aria-label="Next frame">▶</button></div></header>
+
+<div class="reel" id="reel" tabindex="0" aria-label="Film strip, scroll sideways">
+<div class="film" id="film">
+
+<article class="frame leader"><span class="edge">STRIP 400 ▸ 12A ▸ 13 ▸</span>
+ <div class="art"><svg viewBox="0 0 400 260"><circle class="s" cx="200" cy="130" r="108"/><circle class="s" cx="200" cy="130" r="84"/><line class="s" x1="10" y1="130" x2="390" y2="130"/><line class="s" x1="200" y1="6" x2="200" y2="254"/><text class="num" id="cnt" x="200" y="214" text-anchor="middle" style="font:400 190px 'Bebas Neue';fill:#1c1712;stroke:none">3</text></svg></div>
+ <div class="slate"><span>Reel</span><b>Leader</b></div>
+ <div class="cap"><h2>A website is a story with a long third act.</h2><p>Scroll sideways. <b>Nine frames</b> from first call to year three.</p></div><span class="no">▸ 00</span></article>
+
+<article class="frame"><span class="edge">STRIP 400 ▸ 12A ▸ 13 ▸</span>
+ <div class="art"><svg viewBox="0 0 400 260"><path class="s" d="M20 230 H380"/><rect class="s" x="60" y="160" width="140" height="70" rx="6"/><path class="s" d="M80 160 C80 120 180 120 180 160"/><circle class="s" cx="130" cy="195" r="14"/><path class="h" d="M232 70 h110 a14 14 0 0 1 14 14 v40 a14 14 0 0 1 -14 14 h-70 l-24 22 v-22 h-16 a14 14 0 0 1 -14 -14 v-40 a14 14 0 0 1 14 -14z"/><line class="s" x1="250" y1="92" x2="336" y2="92"/><line class="s" x1="250" y1="112" x2="310" y2="112"/></svg></div>
+ <div class="slate"><span>Scene</span><b>01 · INT. YOUR SHOP — DAY</b><span>Shot</span><b>Two-shot, phone</b></div>
+ <div class="cap"><h2>The call</h2><p>You tell us what the business does and what the old site costs you. We say yes — or we say who to call instead.</p></div><span class="no">▸ 01 &nbsp;DAY 0</span></article>
+
+<article class="frame"><span class="edge">STRIP 400 ▸ 12A ▸ 13 ▸</span>
+ <div class="art"><svg viewBox="0 0 400 260"><rect class="s" x="110" y="24" width="180" height="214" rx="4"/><line class="s" x1="134" y1="58" x2="230" y2="58"/><line class="s" x1="134" y1="80" x2="266" y2="80"/><line class="s" x1="134" y1="100" x2="250" y2="100"/><text x="134" y="152" style="font:700 32px 'Courier Prime'">$6,500</text><path class="h" d="M130 166 H262"/><text x="134" y="196" style="font-size:12px">FIXED · IN WRITING</text><path class="s" d="M300 220 L350 150 L362 158 L312 228 Z"/></svg></div>
+ <div class="slate"><span>Scene</span><b>02 · INT. YOUR OFFICE — DAY</b><span>Shot</span><b>Insert, document</b></div>
+ <div class="cap"><h2>The quote</h2><p>One page, fixed price, in writing. Builds <b>from $6,500</b>. Forty per cent to start.</p></div><span class="no">▸ 02 &nbsp;DAY 3</span></article>
+
+<article class="frame"><span class="edge">STRIP 400 ▸ 12A ▸ 13 ▸</span>
+ <div class="art"><svg viewBox="0 0 400 260"><rect class="s" x="40" y="24" width="320" height="212" rx="8"/><line class="s" x1="40" y1="56" x2="360" y2="56"/><circle class="s" cx="62" cy="40" r="5"/><circle class="s" cx="80" cy="40" r="5"/><rect class="h" x="64" y="76" width="150" height="90"/><line class="s" x1="64" y1="186" x2="214" y2="186"/><line class="s" x1="64" y1="204" x2="180" y2="204"/><rect class="s" x="240" y="76" width="96" height="42"/><rect class="s" x="240" y="130" width="96" height="42"/><path class="s" d="M300 190 l0 34 l10-8 l8 16 l8-4 l-8-16 l12 0z"/></svg></div>
+ <div class="slate"><span>Scene</span><b>03 · INT. OUR STUDIO — NIGHT</b><span>Shot</span><b>Over-the-shoulder, screen</b></div>
+ <div class="cap"><h2>The cut</h2><p>Design and code written for you. Four to eight weeks. No templates in the frame.</p></div><span class="no">▸ 03 &nbsp;WK 2</span></article>
+
+<article class="frame"><span class="edge">STRIP 400 ▸ 12A ▸ 13 ▸</span>
+ <div class="art"><svg viewBox="0 0 400 260"><rect class="s" x="30" y="50" width="220" height="150" rx="6"/><line class="s" x1="30" y1="76" x2="250" y2="76"/><rect class="s" x="50" y="94" width="90" height="60"/><line class="s" x1="156" y1="100" x2="230" y2="100"/><line class="s" x1="156" y1="120" x2="210" y2="120"/><circle class="h" cx="290" cy="130" r="42"/><line class="h" x1="320" y1="160" x2="366" y2="210"/><text x="262" y="134" style="font-size:12px">staging</text></svg></div>
+ <div class="slate"><span>Scene</span><b>04 · INT. STAGING SITE — DAY</b><span>Shot</span><b>Close-up, magnify</b></div>
+ <div class="cap"><h2>Rehearsal</h2><p>A private link. You click everything and tell us what's wrong while it's cheap to fix.</p></div><span class="no">▸ 04 &nbsp;WK 5</span></article>
+
+<article class="frame"><span class="edge">STRIP 400 ▸ 12A ▸ 13 ▸</span>
+ <div class="art"><svg viewBox="0 0 400 260"><circle class="h" cx="310" cy="64" r="26"/><path class="s" d="M0 200 H400"/><rect class="s" x="90" y="70" width="110" height="34" rx="3"/><rect class="s" x="90" y="108" width="110" height="34" rx="3"/><rect class="s" x="90" y="146" width="110" height="34" rx="3"/><circle class="hf" cx="106" cy="87" r="4"/><circle class="hf" cx="106" cy="125" r="4"/><circle class="hf" cx="106" cy="163" r="4"/><line class="s" x1="130" y1="87" x2="184" y2="87"/><line class="s" x1="130" y1="125" x2="170" y2="125"/><line class="s" x1="130" y1="163" x2="184" y2="163"/><path class="s" d="M60 230 Q200 214 340 230"/></svg></div>
+ <div class="slate"><span>Scene</span><b>05 · EXT. THE INTERNET — DUSK</b><span>Shot</span><b>Wide, locked off</b></div>
+ <div class="cap"><h2>Launch night</h2><p>Weekday cut-over, never a Friday. Hosting begins: edge cache, TLS, daily backups. <b>$79 a month.</b></p></div><span class="no">▸ 05 &nbsp;WK 7</span></article>
+
+<article class="frame"><span class="edge">STRIP 400 ▸ 12A ▸ 13 ▸</span>
+ <div class="art"><svg viewBox="0 0 400 260"><circle class="s" cx="130" cy="130" r="82"/><line class="s" x1="130" y1="130" x2="130" y2="76"/><line class="h" x1="130" y1="130" x2="176" y2="130"/><circle class="hf" cx="130" cy="130" r="5"/><path class="s" d="M262 190 h72 c-10-14-12-34-12-52 a24 24 0 0 0 -48 0 c0 18-2 38-12 52z"/><path class="s" d="M290 200 a8 8 0 0 0 16 0"/><path class="h" d="M312 76 l16 18 l32-40"/></svg></div>
+ <div class="slate"><span>Scene</span><b>06 · INT. EVERYWHERE — 03:00</b><span>Shot</span><b>Insert, clock → bell</b></div>
+ <div class="cap"><h2>03:00</h2><p>A form stops sending. The alert reaches a person. It's fixed before the shop opens. <b>Urgent: two hours.</b></p></div><span class="no">▸ 06 &nbsp;MO 4</span></article>
+
+<article class="frame"><span class="edge">STRIP 400 ▸ 12A ▸ 13 ▸</span>
+ <div class="art"><svg viewBox="0 0 400 260"><line class="s" x1="50" y1="220" x2="360" y2="220"/><line class="s" x1="50" y1="30" x2="50" y2="220"/><rect class="s" x="80" y="160" width="36" height="60"/><rect class="s" x="136" y="136" width="36" height="84"/><rect class="s" x="192" y="112" width="36" height="108"/><rect class="h" x="248" y="76" width="36" height="144"/><path class="s" d="M80 150 L150 120 L210 92 L266 58 L330 44" stroke-dasharray="4 6"/><text x="300" y="30" style="font-size:12px">REPORT 06</text></svg></div>
+ <div class="slate"><span>Scene</span><b>07 · INT. YOUR OFFICE — DAY</b><span>Shot</span><b>Insert, report</b></div>
+ <div class="cap"><h2>Month six</h2><p>One page: what changed, what we fixed, what's next. Care is <b>$249 a month</b>, three edit hours included.</p></div><span class="no">▸ 07 &nbsp;MO 6</span></article>
+
+<article class="frame credits"><span class="edge">STRIP 400 ▸ 12A ▸ 13 ▸</span>
+ <div class="art"><h2>Credits</h2><dl><div><dt>Build</dt><dd>from $6,500</dd></div><div><dt>Host</dt><dd>$79 / month</dd></div><div><dt>Care</dt><dd>$249 / month</dd></div><div><dt>Terms</dt><dd>month-to-month</dd></div><div><dt>If you leave</dt><dd>full export, 5 days</dd></div></dl></div>
+ <div class="cap"><a class="btn" href="mailto:hello@strip.example">Roll camera →</a></div><span class="no">▸ 08 &nbsp;YR 3 · THE SEQUEL</span></article>
+
+</div></div>
+
+<footer>
+  <div class="scrub" id="scrub"><span class="tc" id="tc">00:00:00</span></div>
+  <div class="hint">scroll · drag · ← → · click a frame</div>
+</footer>
+
+<script>
+const reel=document.getElementById('reel'),frames=[...document.querySelectorAll('.frame')],ct=document.getElementById('ct'),scrub=document.getElementById('scrub');
+const labels=['Leader','Day 0','Day 3','Wk 2','Wk 5','Wk 7','03:00','Mo 6','Credits'],tcs=['00:00:00','00:00:00','00:00:03','00:02:00','00:05:00','00:07:00','04:03:00','06:00:00','36:00:00'];
+let cur=0;
+labels.forEach((l,i)=>{const b=document.createElement('button');b.textContent=l;b.onclick=()=>go(i);scrub.appendChild(b)});
+const btns=[...scrub.querySelectorAll('button')];
+function go(i){cur=Math.max(0,Math.min(frames.length-1,i));const f=frames[cur];reel.scrollTo({left:f.offsetLeft+f.offsetWidth/2-reel.clientWidth/2,behavior:'smooth'})}
+function upd(){const mid=reel.scrollLeft+reel.clientWidth/2;let best=0,bd=1e9;
+  frames.forEach((f,i)=>{const d=Math.abs(f.offsetLeft+f.offsetWidth/2-mid);if(d<bd){bd=d;best=i}});
+  cur=best;frames.forEach((f,i)=>f.classList.toggle('on',i===best));btns.forEach((b,i)=>b.classList.toggle('on',i===best));
+  ct.textContent=String(best+1).padStart(2,'0')+' / 09';document.getElementById('tc').textContent='TC '+tcs[best]}
+reel.addEventListener('scroll',upd,{passive:true});
+reel.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){e.preventDefault();reel.style.scrollBehavior='auto';reel.scrollLeft+=e.deltaY;clearTimeout(reel._t);reel._t=setTimeout(()=>reel.style.scrollBehavior='',120)}},{passive:false});
+frames.forEach((f,i)=>f.onclick=()=>go(i));
+pv.onclick=()=>go(cur-1);nx.onclick=()=>go(cur+1);
+addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(cur+1);if(e.key==='ArrowLeft')go(cur-1)});
+/* drag to pan */
+let dn=false,sx=0,sl=0;reel.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&!e.target.closest('a')){dn=true;sx=e.clientX;sl=reel.scrollLeft}});
+addEventListener('pointerup',()=>dn=false);addEventListener('pointermove',e=>{if(dn){reel.style.scrollBehavior='auto';reel.scrollLeft=sl-(e.clientX-sx)}});
+/* countdown */
+let c=3;setInterval(()=>{if(cur===0){c=c<=1?3:c-1;document.getElementById('cnt').textContent=c}},1000);
+addEventListener('load',()=>{go(0);upd()});addEventListener('resize',upd);upd();
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+:root {
+  --schematic-blueprint: #0b3b6b;
+  --schematic-blueprint-dark: #0a3260;
+  --schematic-line: #d6e9ff;
+  --schematic-dim: #8fb6dd;
+  --schematic-highlight: #8fe3ff;
+  --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --line-weight-object: 1.4px;
+  --line-weight-thin: 0.8px;
+  --grid-minor: 20px;
+  --grid-major: 100px;
+  --radius: 0;
+}

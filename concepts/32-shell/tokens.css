@@ -1,0 +1,19 @@
+/* Shell — multiplexed terminal tokens */
+:root {
+  --bg: #0d1012;
+  --pane: #101417;
+  --pane-hi: #161b1f;
+  --border: #2a3137;
+  --fg: #c9d1d3;
+  --dim: #6b777d;
+  --prompt: #ff6b4a;
+  --ok: #8fd694;
+  --warn: #f2b84b;
+  --info: #6fa8b5;
+  --sel: #ff6b4a22;
+
+  --font-mono: "Martian Mono", "JetBrains Mono", ui-monospace, "Cascadia Mono", monospace;
+  --fs: 0.84rem;
+  --lh: 1.55;
+  --radius: 6px;
+}

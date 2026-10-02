@@ -1,0 +1,13 @@
+:root {
+  --briefing-paper: #0b0b09;
+  --briefing-block: #12120f;
+  --briefing-ink: #d9d6c8;
+  --briefing-dim: #7d7b70;
+  --briefing-rule: #2a2a25;
+  --briefing-amber: #e9b93a;   /* single highlight */
+  --briefing-ok: #9bc59b;
+  --briefing-no: #c76a5a;
+  --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --measure: 70ch;
+  --radius: 0;
+}
