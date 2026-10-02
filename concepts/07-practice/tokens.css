@@ -1,0 +1,12 @@
+:root {
+  --bg: #F8F9FB;
+  --ink: #1A2332;
+  --mute: #5C6778;
+  --line: #D5DBE4;
+  --accent: #1F4B7A;
+  --soft: #EEF2F7;
+  --card: #FFFFFF;
+  --font-heading: "Source Serif 4", Georgia, serif;
+  --font-body: "Source Sans 3", system-ui, sans-serif;
+  --radius: 0.5rem;
+}

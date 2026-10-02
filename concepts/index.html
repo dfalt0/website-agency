@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nodus — design concept previews</title>
+  <style>
+    :root {
+      --bg: #080A08;
+      --fg: #E2E8E2;
+      --muted: #8A948A;
+      --line: #1A1F1A;
+      --accent: #22C55E;
+      --card: #0C0F0C;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.45;
+    }
+    main {
+      max-width: 72rem;
+      margin: 0 auto;
+      padding: 3rem 1.25rem 4rem;
+    }
+    h1 {
+      font-family: "Instrument Serif", Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: -0.02em;
+      margin: 0 0 0.35rem;
+    }
+    h2 {
+      font-family: "Instrument Serif", Georgia, serif;
+      font-weight: 400;
+      font-size: 1.45rem;
+      letter-spacing: -0.02em;
+      margin: 2.25rem 0 0.85rem;
+      color: var(--fg);
+    }
+    .sub { color: var(--muted); margin: 0 0 1.5rem; max-width: 42rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+      gap: 0.75rem;
+    }
+    a.card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: var(--card);
+      border: 0.5px solid var(--line);
+      padding: 1rem 1.1rem;
+      transition: border-color 160ms ease, transform 160ms ease;
+    }
+    a.card:hover {
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+    a.card.trad { border-color: #2a332a; }
+    .id {
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    .name { font-size: 1.05rem; }
+    .arch { font-size: 0.8rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Design concepts</h1>
+    <p class="sub">45 alternate brand + website directions. Start with the traditional set (06–15) if you want calmer, familiar brochure sites.</p>
+
+    <h2>01–05 · Original studio</h2>
+    <div class="grid" id="g1"></div>
+
+    <h2>06–15 · Traditional brochure</h2>
+    <p class="sub">Simpler layouts for people who don’t want big, bold, experimental design.</p>
+    <div class="grid" id="g2"></div>
+
+    <h2>16–45 · Experimental layouts</h2>
+    <div class="grid" id="g3"></div>
+  </main>
+  <script>
+    const groups = {
+      g1: [
+        ["01-harbor", "Harbor", "Classic studio"],
+        ["02-typefoundry", "Typefoundry", "Classic studio"],
+        ["03-signal", "Signal", "Classic studio"],
+        ["04-kiln", "Kiln", "Classic studio"],
+        ["05-ledger", "Ledger", "Classic studio"],
+      ],
+      g2: [
+        ["06-atelier", "Atelier", "Traditional brochure"],
+        ["07-practice", "Practice", "Traditional brochure"],
+        ["08-storefront", "Storefront", "Traditional brochure"],
+        ["09-bureau", "Bureau", "Traditional brochure"],
+        ["10-partner", "Partner", "Traditional brochure"],
+        ["11-commons", "Commons", "Traditional brochure"],
+        ["12-workshop", "Workshop", "Traditional brochure"],
+        ["13-clinic", "Clinic", "Traditional brochure"],
+        ["14-firm", "Firm", "Traditional brochure"],
+        ["15-cornerstone", "Cornerstone", "Traditional brochure"],
+      ],
+      g3: [
+        ["16-specimen", "Specimen", "Split macro essay"],
+        ["17-briefing", "Briefing", "Operator briefing"],
+        ["18-overlay", "Overlay", "Scene + overlays"],
+        ["19-theater", "Theater", "Demo theater"],
+        ["20-sponsor", "Sponsor", "Capital manifesto"],
+        ["21-traverse", "Traverse", "Horizontal strip"],
+        ["22-spread", "Spread", "Magazine spreads"],
+        ["23-rail", "Rail", "TOC rail essay"],
+        ["24-chapters", "Chapters", "Snap chapters"],
+        ["25-schematic", "Schematic", "Blueprint sheets"],
+        ["26-wall", "Wall", "Ops status wall"],
+        ["27-poster", "Poster", "Type posters"],
+        ["28-compare", "Compare", "Before/after scrubber"],
+        ["29-catalog", "Catalog", "SKU catalog"],
+        ["30-thread", "Thread", "Chat narrative"],
+        ["31-canvas", "Canvas", "Artboard frames"],
+        ["32-letter", "Letter", "Letterhead"],
+        ["33-notebook", "Notebook", "Lab notebook"],
+        ["34-cutaway", "Cutaway", "Cross-section"],
+        ["35-scope", "Scope", "Scope calculator"],
+        ["36-docket", "Docket", "Case-file tabs"],
+        ["37-parcel", "Parcel", "Zoning board"],
+        ["38-spine", "Spine", "Marker timeline"],
+        ["39-fork", "Fork", "Dual-audience toggle"],
+        ["40-monolith", "Monolith", "Dense essay"],
+        ["41-stage", "Stage", "Spotlight stage"],
+        ["42-shell", "Shell", "CLI shell"],
+        ["43-strip", "Strip", "Filmstrip"],
+        ["44-bench", "Bench", "Pegboard bench"],
+        ["45-directory", "Directory", "A–Z directory"],
+      ],
+    };
+    for (const [id, list] of Object.entries(groups)) {
+      const grid = document.getElementById(id);
+      for (const [slug, name, arch] of list) {
+        const a = document.createElement("a");
+        a.className = "card" + (id === "g2" ? " trad" : "");
+        a.href = `./${slug}/preview`;
+        a.innerHTML = `<div class="id">${slug}</div><div class="name">${name}</div><div class="arch">${arch}</div>`;
+        grid.appendChild(a);
+      }
+    }
+  </script>
+</body>
+</html>

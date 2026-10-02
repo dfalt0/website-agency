@@ -1,0 +1,12 @@
+:root {
+  --bg: #F3F4F6;
+  --ink: #111827;
+  --mute: #6B7280;
+  --line: #D1D5DB;
+  --accent: #2563EB;
+  --soft: #E5E7EB;
+  --card: #FFFFFF;
+  --font-heading: "IBM Plex Serif", Georgia, serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --radius: 0.5rem;
+}

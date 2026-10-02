@@ -1,0 +1,12 @@
+:root {
+  --bg: #FAFAFA;
+  --ink: #111111;
+  --mute: #666666;
+  --line: #E0E0E0;
+  --accent: #111111;
+  --soft: #F0F0F0;
+  --card: #FFFFFF;
+  --font-heading: "Playfair Display", Georgia, serif;
+  --font-body: "Source Sans 3", system-ui, sans-serif;
+  --radius: 0.5rem;
+}

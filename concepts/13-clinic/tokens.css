@@ -1,0 +1,12 @@
+:root {
+  --bg: #F7FBFC;
+  --ink: #1B2A2F;
+  --mute: #5F737A;
+  --line: #C9DCE0;
+  --accent: #0D7377;
+  --soft: #E8F3F4;
+  --card: #FFFFFF;
+  --font-heading: "Cormorant Garamond", Georgia, serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+  --radius: 0.5rem;
+}

@@ -1,0 +1,12 @@
+:root {
+  --bg: #F5F7FA;
+  --ink: #1E293B;
+  --mute: #64748B;
+  --line: #CBD5E1;
+  --accent: #0F766E;
+  --soft: #E2E8F0;
+  --card: #FFFFFF;
+  --font-heading: "Literata", Georgia, serif;
+  --font-body: "Outfit", system-ui, sans-serif;
+  --radius: 0.5rem;
+}

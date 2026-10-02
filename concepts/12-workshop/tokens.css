@@ -1,0 +1,12 @@
+:root {
+  --bg: #F4F0EA;
+  --ink: #2C241C;
+  --mute: #6F6358;
+  --line: #D9CFC3;
+  --accent: #8B4513;
+  --soft: #EBE4DA;
+  --card: #FCFAF7;
+  --font-heading: "Libre Baskerville", Georgia, serif;
+  --font-body: "Karla", system-ui, sans-serif;
+  --radius: 0.5rem;
+}
