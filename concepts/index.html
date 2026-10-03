@@ -22,7 +22,7 @@
       line-height: 1.45;
     }
     main {
-      max-width: 72rem;
+      max-width: 78rem;
       margin: 0 auto;
       padding: 3rem 1.25rem 4rem;
     }
@@ -44,43 +44,62 @@
     .sub { color: var(--muted); margin: 0 0 1.5rem; max-width: 42rem; }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-      gap: 0.75rem;
+      grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
+      gap: 1rem;
     }
     a.card {
-      display: block;
+      display: flex;
+      flex-direction: column;
       text-decoration: none;
       color: inherit;
       background: var(--card);
       border: 0.5px solid var(--line);
-      padding: 1rem 1.1rem;
+      overflow: hidden;
       transition: border-color 160ms ease, transform 160ms ease;
     }
     a.card:hover {
       border-color: var(--accent);
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+    }
+    a.card:hover .thumb img {
+      transform: scale(1.03);
     }
     a.card.trad { border-color: #2a332a; }
+    .thumb {
+      aspect-ratio: 16 / 10;
+      background: #111411;
+      border-bottom: 0.5px solid var(--line);
+      overflow: hidden;
+    }
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+      transition: transform 220ms ease;
+    }
+    .meta { padding: 0.9rem 1rem 1.05rem; }
     .id {
       font-family: "JetBrains Mono", ui-monospace, monospace;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--muted);
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.3rem;
     }
     .name { font-size: 1.05rem; }
-    .arch { font-size: 0.8rem; color: var(--muted); margin-top: 0.35rem; }
+    .arch { font-size: 0.8rem; color: var(--muted); margin-top: 0.3rem; }
   </style>
 </head>
 <body>
   <main>
     <h1>Design concepts</h1>
-    <p class="sub">45 alternate brand + website directions. Start with the traditional set (06–15) if you want calmer, familiar brochure sites.</p>
+    <p class="sub">45 alternate brand + website directions. Each card shows a live preview snapshot — click through to open the full page.</p>
 
     <h2>01–05 · Original studio</h2>
     <div class="grid" id="g1"></div>
 
-    <h2>06–15 · Traditional brochure</h2>
-    <p class="sub">Calmer traditional sites — each with a different familiar page structure (not recolors).</p>
+    <h2>06–15 · Traditional</h2>
+    <p class="sub">Calmer traditional sites — each with a different familiar page structure.</p>
     <div class="grid" id="g2"></div>
 
     <h2>16–45 · Experimental layouts</h2>
@@ -146,7 +165,15 @@
         const a = document.createElement("a");
         a.className = "card" + (id === "g2" ? " trad" : "");
         a.href = `./${slug}/preview`;
-        a.innerHTML = `<div class="id">${slug}</div><div class="name">${name}</div><div class="arch">${arch}</div>`;
+        a.innerHTML = `
+          <div class="thumb">
+            <img src="./_thumbs/${slug}.jpg" alt="${name} preview" loading="lazy" width="960" height="600" />
+          </div>
+          <div class="meta">
+            <div class="id">${slug}</div>
+            <div class="name">${name}</div>
+            <div class="arch">${arch}</div>
+          </div>`;
         grid.appendChild(a);
       }
     }

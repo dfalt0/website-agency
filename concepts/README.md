@@ -64,4 +64,6 @@ Then open the index at `http://127.0.0.1:3001/` or e.g. `http://127.0.0.1:3001/0
 
 Each folder: `preview.html`, `DESIGN.md`, `copy.md`, `tokens.css`.
 
+Homepage thumbnails live in `concepts/_thumbs/<slug>.jpg` and are shown on `concepts/index.html`.
+
 Batch fingerprints (experimental set): `concepts/_v2/README-batch-{a,b,c}.md`
